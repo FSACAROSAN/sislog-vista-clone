@@ -42,29 +42,4 @@ export const EmpresaEditDialog: React.FC<EmpresaEditDialogProps> = ({
   );
 };
 
-interface EmpresaNewDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSuccess: () => void;
-}
-
-export const EmpresaNewDialog: React.FC<EmpresaNewDialogProps> = ({
-  open,
-  onOpenChange,
-  onSuccess,
-}) => {
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle>Crear Empresa</DialogTitle>
-          <DialogDescription>
-            Ingrese la información de la nueva empresa a continuación.
-          </DialogDescription>
-        </DialogHeader>
-        <EmpresaForm onSuccess={onSuccess} />
-        <DialogClose className="hidden" />
-      </DialogContent>
-    </Dialog>
-  );
-};
+export default EmpresaEditDialog;

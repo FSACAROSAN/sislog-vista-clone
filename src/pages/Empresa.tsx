@@ -1,10 +1,9 @@
-
 import React from 'react';
 import PageHeader from '@/components/PageHeader';
 import { Building2, Plus, AlertCircle } from 'lucide-react';
 import { useEmpresas } from '@/hooks/useEmpresas';
 import EmpresaTable from '@/components/empresa/EmpresaTable';
-import { EmpresaEditDialog, EmpresaNewDialog } from '@/components/empresa/EmpresaDialogs';
+import { EmpresaEditDialog, EmpresaNewDialog } from '@/components/empresa';
 import {
   Card,
   CardContent,
@@ -78,7 +77,7 @@ const EmpresaPage = () => {
         </Card>
       </div>
 
-      {/* Edit Dialog */}
+      {/* Dialogs */}
       <EmpresaEditDialog
         open={openEditDialog}
         onOpenChange={setOpenEditDialog}
@@ -86,7 +85,6 @@ const EmpresaPage = () => {
         onSuccess={handleFormSuccess}
       />
 
-      {/* New Dialog */}
       <EmpresaNewDialog
         open={openNewDialog}
         onOpenChange={setOpenNewDialog}
