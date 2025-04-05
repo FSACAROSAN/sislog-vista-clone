@@ -32,10 +32,38 @@ const SidebarSubItem: React.FC<SidebarItemProps> = ({ icon, label, active = fals
   );
 };
 
+interface SidebarCategoryProps {
+  label: string;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}
+
+const SidebarCategory: React.FC<SidebarCategoryProps> = ({ label, children, defaultOpen = false }) => {
+  const [isOpen, setIsOpen] = React.useState(defaultOpen);
+
+  return (
+    <div className="mb-2">
+      <button 
+        className="w-full flex justify-between items-center px-3 py-2 text-gray-500 hover:bg-gray-100 rounded-md"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span className="font-medium text-sm">{label}</span>
+        <ChevronDown 
+          size={16} 
+          className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} 
+        />
+      </button>
+      
+      {isOpen && (
+        <div className="mt-1 ml-2 space-y-1 border-l border-gray-200 pl-2">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const Sidebar: React.FC = () => {
-  const [generalOpen, setGeneralOpen] = React.useState(true);
-  const [operacionalesOpen, setOperacionalesOpen] = React.useState(true);
-  const [regionalesOpen, setRegionalesOpen] = React.useState(true);
   const { signOut } = useAuth();
   const location = useLocation();
 
@@ -48,7 +76,7 @@ const Sidebar: React.FC = () => {
         <span className="font-bold text-xl">SISLOG</span>
       </div>
       
-      <div className="flex-1 overflow-auto py-4">
+      <div className="flex-1 overflow-auto py-4 px-3">
         <SidebarItem 
           icon={<LayoutDashboard size={18} />} 
           label="Dashboard principal" 
@@ -56,53 +84,58 @@ const Sidebar: React.FC = () => {
           path="/"
         />
         
-        <div className="relative">
-          <button 
-            className="sidebar-item w-full flex justify-between"
-            onClick={() => setGeneralOpen(!generalOpen)}
-          >
-            <div className="flex items-center gap-3">
-              <Settings size={18} />
-              <span>Configuración</span>
-            </div>
-            <ChevronDown 
-              size={16} 
-              className={`transition-transform ${generalOpen ? 'rotate-180' : ''}`} 
+        <div className="mt-4">
+          <SidebarCategory label="General" defaultOpen={true}>
+            <SidebarSubItem 
+              icon={<Building2 size={16} />} 
+              label="Empresa" 
+              active={location.pathname === '/empresa'} 
+              path="/empresa"
             />
-          </button>
+            <SidebarSubItem 
+              icon={<Users size={16} />} 
+              label="Terceros" 
+            />
+            <SidebarSubItem 
+              icon={<Package2 size={16} />} 
+              label="Productos" 
+            />
+          </SidebarCategory>
           
-          {generalOpen && (
-            <div className="mt-1">
-              <div className="sidebar-category">General</div>
-              <SidebarSubItem 
-                icon={<Building2 size={16} />} 
-                label="Empresa" 
-                active={location.pathname === '/empresa'} 
-                path="/empresa"
-              />
-              <SidebarSubItem icon={<Users size={16} />} label="Terceros" />
-              <SidebarSubItem icon={<Package2 size={16} />} label="Productos" />
-              
-              <div className="sidebar-category">Operacionales</div>
-              <SidebarSubItem icon={<Warehouse size={16} />} label="Centro Logístico" />
-              <SidebarSubItem icon={<Warehouse size={16} />} label="Bodegas" />
-              <SidebarSubItem icon={<PackageOpen size={16} />} label="Stand" />
-              
-              <div className="sidebar-category">Regionales</div>
-              <SidebarSubItem 
-                icon={<Map size={16} />} 
-                label="Países" 
-                active={location.pathname === '/paises'} 
-                path="/paises"
-              />
-              <SidebarSubItem icon={<Map size={16} />} label="Ciudades" />
-            </div>
-          )}
+          <SidebarCategory label="Operacionales" defaultOpen={true}>
+            <SidebarSubItem 
+              icon={<Warehouse size={16} />} 
+              label="Centro Logístico" 
+            />
+            <SidebarSubItem 
+              icon={<Warehouse size={16} />} 
+              label="Bodegas" 
+            />
+            <SidebarSubItem 
+              icon={<PackageOpen size={16} />} 
+              label="Stand" 
+            />
+          </SidebarCategory>
+          
+          <SidebarCategory label="Regionales" defaultOpen={true}>
+            <SidebarSubItem 
+              icon={<Map size={16} />} 
+              label="Países" 
+              active={location.pathname === '/paises'} 
+              path="/paises"
+            />
+            <SidebarSubItem 
+              icon={<Map size={16} />} 
+              label="Ciudades" 
+            />
+          </SidebarCategory>
         </div>
         
-        <SidebarItem icon={<Truck size={18} />} label="Logística" />
-        <SidebarItem icon={<Package2 size={18} />} label="Contenedores" />
-        <SidebarItem icon={<ClipboardList size={18} />} label="Reportes" />
+        <div className="mt-4">
+          <SidebarItem icon={<Truck size={18} />} label="Logística" />
+          <SidebarItem icon={<Package2 size={18} />} label="Contenedores" />
+          <SidebarItem icon={<ClipboardList size={18} />} label="Reportes" />
+        </div>
       </div>
       
       <div className="p-4 border-t border-gray-200">
