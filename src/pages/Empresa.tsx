@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PageHeader from '@/components/PageHeader';
-import { Building2, Plus, AlertCircle } from 'lucide-react';
+import { Building2, AlertCircle } from 'lucide-react';
 import { useEmpresas } from '@/hooks/useEmpresas';
 import EmpresaTable from '@/components/empresa/EmpresaTable';
 import { EmpresaEditDialog, EmpresaNewDialog } from '@/components/empresa';
@@ -13,11 +13,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog } from '@/components/ui/dialog';
 
 const EmpresaPage = () => {
   const {
@@ -60,14 +56,6 @@ const EmpresaPage = () => {
                 Lista de empresas en el sistema
               </CardDescription>
             </div>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="ml-auto" onClick={() => setOpenNewDialog(true)}>
-                  <Plus className="mr-2 h-4 w-4" />
-                  Nueva Empresa
-                </Button>
-              </DialogTrigger>
-            </Dialog>
           </CardHeader>
           <CardContent>
             <EmpresaTable 
@@ -76,6 +64,8 @@ const EmpresaPage = () => {
               onEdit={handleEdit}
               onDelete={handleDelete}
               formatDate={formatDate}
+              onRefresh={handleFormSuccess}
+              openNewDialog={() => setOpenNewDialog(true)}
             />
           </CardContent>
         </Card>
