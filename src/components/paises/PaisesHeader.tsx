@@ -1,9 +1,10 @@
+
 import React from 'react';
-import { Map, Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Map } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import PaisForm from './PaisForm';
 import { Pais } from '@/types/pais';
+
 interface PaisesHeaderProps {
   isDialogOpen: boolean;
   setIsDialogOpen: (open: boolean) => void;
@@ -11,6 +12,7 @@ interface PaisesHeaderProps {
   setSelectedPais: (pais: Pais | null) => void;
   onSuccess: () => void;
 }
+
 const PaisesHeader: React.FC<PaisesHeaderProps> = ({
   isDialogOpen,
   setIsDialogOpen,
@@ -18,18 +20,12 @@ const PaisesHeader: React.FC<PaisesHeaderProps> = ({
   setSelectedPais,
   onSuccess
 }) => {
-  return <div className="flex justify-between items-center mb-6">
+  return (
+    <div className="flex justify-between items-center mb-6">
       <div>
-        
         
       </div>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
-          <Button className="gap-2">
-            <Plus size={16} />
-            Nuevo País
-          </Button>
-        </DialogTrigger>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
             <DialogTitle>
@@ -37,12 +33,14 @@ const PaisesHeader: React.FC<PaisesHeaderProps> = ({
             </DialogTitle>
           </DialogHeader>
           <PaisForm pais={selectedPais} onSuccess={() => {
-          setIsDialogOpen(false);
-          setSelectedPais(null);
-          onSuccess();
-        }} />
+            setIsDialogOpen(false);
+            setSelectedPais(null);
+            onSuccess();
+          }} />
         </DialogContent>
       </Dialog>
-    </div>;
+    </div>
+  );
 };
+
 export default PaisesHeader;

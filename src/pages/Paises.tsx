@@ -44,6 +44,7 @@ const PaisesPage: React.FC = () => {
             setSearchTerm={setSearchTerm}
             loading={loading}
             onRefresh={fetchPaises}
+            openDialog={() => setIsDialogOpen(true)}
           />
 
           <PaisesTable 
