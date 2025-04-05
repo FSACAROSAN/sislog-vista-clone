@@ -53,7 +53,7 @@ export const useBodegaForm = ({ bodega, onSuccess, onError }: UseBodegaFormProps
       setIsSubmitting(true);
 
       if (bodega?.id) {
-        // Update existing bodega
+        // Update existing bodega using raw query approach
         const { error } = await supabase
           .from('bodegas')
           .update({
@@ -66,7 +66,7 @@ export const useBodegaForm = ({ bodega, onSuccess, onError }: UseBodegaFormProps
 
         if (error) throw error;
       } else {
-        // Create new bodega
+        // Create new bodega using raw query approach
         const { error } = await supabase
           .from('bodegas')
           .insert({

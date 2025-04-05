@@ -15,7 +15,7 @@ export const useBodegas = () => {
   const fetchBodegas = async () => {
     try {
       setLoading(true);
-      // Fetch bodegas with centro_logistico information
+      // Fetch bodegas using raw query approach
       const { data: bodegasData, error: bodegasError } = await supabase
         .from('bodegas')
         .select('*');
