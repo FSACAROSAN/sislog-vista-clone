@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Search, ArrowUpDown } from 'lucide-react';
+import { Search, FileDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
@@ -30,9 +30,9 @@ const PaisesSearch: React.FC<PaisesSearchProps> = ({
         />
       </div>
       <div>
-        <Button variant="outline" onClick={onRefresh} disabled={loading}>
-          <ArrowUpDown size={16} className="mr-2" />
-          Actualizar
+        <Button variant="outline" onClick={onRefresh} disabled={loading} className="gap-2">
+          <FileDown size={16} />
+          Exportar
         </Button>
       </div>
     </div>

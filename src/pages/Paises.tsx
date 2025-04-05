@@ -30,22 +30,24 @@ const PaisesPage: React.FC = () => {
       />
       
       <div className="container py-6 flex-1 overflow-auto">
-        <PaisesHeader 
-          isDialogOpen={isDialogOpen}
-          setIsDialogOpen={setIsDialogOpen}
-          selectedPais={selectedPais}
-          setSelectedPais={setSelectedPais}
-          onSuccess={fetchPaises}
-        />
-
-        <div className="bg-white p-6 rounded-lg shadow mb-6">
+        <div className="flex justify-between items-center mb-6">
+          <PaisesHeader 
+            isDialogOpen={isDialogOpen}
+            setIsDialogOpen={setIsDialogOpen}
+            selectedPais={selectedPais}
+            setSelectedPais={setSelectedPais}
+            onSuccess={fetchPaises}
+          />
+          
           <PaisesSearch 
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             loading={loading}
             onRefresh={fetchPaises}
           />
+        </div>
 
+        <div className="bg-white p-6 rounded-lg shadow mb-6">
           <PaisesTable 
             paises={paises}
             loading={loading}
