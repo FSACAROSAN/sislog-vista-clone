@@ -15,25 +15,32 @@ export const useCiudades = () => {
   const fetchCiudades = async () => {
     try {
       setLoading(true);
+      // Using raw query instead of join
       const { data, error } = await supabase
         .from('ciudades')
-        .select(`
-          *,
-          paises (
-            nombre_es
-          )
-        `)
-        .order('nombre', { ascending: true });
+        .select('*');
 
       if (error) throw error;
       
+      // Fetch paises to get nombres
+      const { data: paisesData, error: paisesError } = await supabase
+        .from('paises')
+        .select('id, nombre_es');
+        
+      if (paisesError) throw paisesError;
+      
+      // Create a map of pais_id to nombre_es
+      const paisesMap = new Map(
+        paisesData.map((pais: any) => [pais.id, pais.nombre_es])
+      );
+      
       // Transform the data to include the pais_nombre
-      const formattedCiudades = data.map(ciudad => ({
+      const formattedCiudades = data.map((ciudad: any) => ({
         ...ciudad,
-        pais_nombre: ciudad.paises?.nombre_es
+        pais_nombre: paisesMap.get(ciudad.pais_id)
       }));
       
-      setCiudades(formattedCiudades as unknown as Ciudad[]);
+      setCiudades(formattedCiudades as Ciudad[]);
     } catch (error: any) {
       console.error('Error fetching ciudades:', error);
       toast({

@@ -41,7 +41,7 @@ export const useCiudadForm = ({ ciudad, onSuccess, onError }: UseCiudadFormProps
             pais_id: values.pais_id,
             estado: values.estado,
             updated_at: new Date().toISOString(),
-          } as any)
+          })
           .eq('id', ciudad.id);
 
         if (error) throw error;
@@ -53,7 +53,7 @@ export const useCiudadForm = ({ ciudad, onSuccess, onError }: UseCiudadFormProps
             nombre: values.nombre,
             pais_id: values.pais_id,
             estado: values.estado,
-          } as any);
+          });
 
         if (error) throw error;
       }
