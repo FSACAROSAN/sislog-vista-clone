@@ -27,6 +27,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface TarifasGeneralesTableProps {
   tarifas: TarifaGeneral[];
@@ -50,6 +51,7 @@ const TarifasGeneralesTable: React.FC<TarifasGeneralesTableProps> = ({
   onDelete 
 }) => {
   const [openAlert, setOpenAlert] = React.useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   return (
     <div className="rounded-md border">
@@ -58,14 +60,14 @@ const TarifasGeneralesTable: React.FC<TarifasGeneralesTableProps> = ({
           <TableRow>
             <TableHead>Nombre</TableHead>
             <TableHead>Precio</TableHead>
-            <TableHead>Estado</TableHead>
+            {!isMobile && <TableHead>Estado</TableHead>}
             <TableHead className="text-right">Acciones</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {loading ? (
             <TableRow>
-              <TableCell colSpan={4} className="text-center py-4">
+              <TableCell colSpan={isMobile ? 3 : 4} className="text-center py-4">
                 <div className="flex justify-center">
                   <div className="animate-spin h-6 w-6 border-4 border-sislog-primary border-t-transparent rounded-full"></div>
                 </div>
@@ -73,23 +75,36 @@ const TarifasGeneralesTable: React.FC<TarifasGeneralesTableProps> = ({
             </TableRow>
           ) : tarifas.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={4} className="text-center py-4">
+              <TableCell colSpan={isMobile ? 3 : 4} className="text-center py-4">
                 No se encontraron tarifas generales
               </TableCell>
             </TableRow>
           ) : (
             tarifas.map((tarifa) => (
               <TableRow key={tarifa.id}>
-                <TableCell className="font-medium">{tarifa.nombre}</TableCell>
-                <TableCell>{formatCurrency(tarifa.precio)}</TableCell>
-                <TableCell>
-                  <span className={`px-2 py-1 rounded-full text-xs ${
-                    tarifa.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                  }`}>
-                    {tarifa.estado || 'Activo'}
-                  </span>
+                <TableCell className="font-medium">
+                  {tarifa.nombre}
+                  {isMobile && (
+                    <div className="mt-1">
+                      <span className={`inline-block px-2 py-1 rounded-full text-xs ${
+                        tarifa.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      }`}>
+                        {tarifa.estado || 'Activo'}
+                      </span>
+                    </div>
+                  )}
                 </TableCell>
-                <TableCell className="text-right">
+                <TableCell>{formatCurrency(tarifa.precio)}</TableCell>
+                {!isMobile && (
+                  <TableCell>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      tarifa.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    }`}>
+                      {tarifa.estado || 'Activo'}
+                    </span>
+                  </TableCell>
+                )}
+                <TableCell className="text-right responsive-dropdown">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon">
@@ -112,14 +127,14 @@ const TarifasGeneralesTable: React.FC<TarifasGeneralesTableProps> = ({
                   </DropdownMenu>
 
                   <AlertDialog open={openAlert === tarifa.id} onOpenChange={() => setOpenAlert(null)}>
-                    <AlertDialogContent>
+                    <AlertDialogContent className="max-w-[90vw] md:max-w-md">
                       <AlertDialogHeader>
                         <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
                         <AlertDialogDescription>
                           Esta acción no se puede deshacer. Esto eliminará permanentemente la tarifa {tarifa.nombre}.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
-                      <AlertDialogFooter>
+                      <AlertDialogFooter className="flex-col sm:flex-row gap-2">
                         <AlertDialogCancel>Cancelar</AlertDialogCancel>
                         <AlertDialogAction
                           className="bg-red-500 text-white hover:bg-red-600"

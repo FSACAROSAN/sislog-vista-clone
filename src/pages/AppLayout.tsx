@@ -26,13 +26,13 @@ const AppLayout: React.FC = () => {
 
   return (
     <div className="flex h-screen overflow-hidden bg-sislog-background">
-      {/* Mobile sidebar toggle button */}
+      {/* Mobile sidebar toggle button - Improved positioning and styling */}
       {isMobile && (
         <button 
           onClick={toggleSidebar} 
-          className="fixed z-50 top-4 left-4 p-2 bg-white rounded-md shadow-md text-gray-600"
+          className="fixed z-50 top-4 left-4 p-2.5 bg-sislog-primary text-white rounded-md shadow-md"
         >
-          {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       )}
       

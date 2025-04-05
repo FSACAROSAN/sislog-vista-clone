@@ -80,4 +80,17 @@
   .progress-bar {
     @apply h-2 rounded-full bg-sislog-primary;
   }
+
+  /* Responsive table classes */
+  .responsive-table-container {
+    @apply w-full overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0;
+  }
+  
+  .responsive-table-container table {
+    @apply min-w-full;
+  }
+  
+  .responsive-dropdown {
+    @apply relative z-10;
+  }
 }
