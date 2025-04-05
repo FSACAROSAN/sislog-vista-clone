@@ -18,18 +18,21 @@ export const useTarifasGenerales = () => {
     try {
       setLoading(true);
       
-      let query = supabase
-        .from('tarifas_generales')
+      // Using any to bypass the TypeScript error since tarifas_generales exists in the database
+      // but not in the TypeScript definitions
+      const query = supabase
+        .from('tarifas_generales' as any)
         .select('*');
       
       if (searchTerm) {
-        query = query.ilike('nombre', `%${searchTerm}%`);
+        query.ilike('nombre', `%${searchTerm}%`);
       }
       
       const { data, error } = await query.order('nombre');
       
       if (error) throw error;
-      setTarifas(data || []);
+      // Cast the result to TarifaGeneral[] since we know the structure
+      setTarifas(data as unknown as TarifaGeneral[]);
     } catch (error: any) {
       console.error('Error fetching tarifas:', error);
       toast({
@@ -47,7 +50,7 @@ export const useTarifasGenerales = () => {
       setLoading(true);
       
       const { error } = await supabase
-        .from('tarifas_generales')
+        .from('tarifas_generales' as any)
         .delete()
         .eq('id', id);
       

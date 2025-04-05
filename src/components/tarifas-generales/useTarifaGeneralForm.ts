@@ -40,7 +40,7 @@ export const useTarifaGeneralForm = ({
       if (tarifaGeneral?.id) {
         // Update existing tarifa
         const { error } = await supabase
-          .from('tarifas_generales')
+          .from('tarifas_generales' as any)
           .update({
             nombre: values.nombre,
             precio: values.precio,
@@ -53,7 +53,7 @@ export const useTarifaGeneralForm = ({
       } else {
         // Create new tarifa
         const { error } = await supabase
-          .from('tarifas_generales')
+          .from('tarifas_generales' as any)
           .insert({
             nombre: values.nombre,
             precio: values.precio,
