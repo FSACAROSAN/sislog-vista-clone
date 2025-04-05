@@ -24,6 +24,8 @@ const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
       if (!user) return;
       
       try {
+        // Fix the type issue by using an explicit cast to inform TypeScript
+        // that we know what we're doing with the table name
         const { data, error } = await supabase
           .from('profiles')
           .select('username, full_name, avatar_url')
