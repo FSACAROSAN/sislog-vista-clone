@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import {
@@ -42,12 +41,13 @@ export const TarifaGeneralPrecioField: React.FC = () => {
   const { control, setValue, watch } = useFormContext<TarifaGeneralFormValues>();
   const precio = watch('precio');
   
-  // Format currency for display
+  // Format currency for display with support for large numbers
   const formatCurrency = (value: number): string => {
     return new Intl.NumberFormat('es-ES', {
       style: 'currency',
       currency: 'EUR',
-      minimumFractionDigits: 2
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     }).format(value || 0).replace('€', '').trim();
   };
 
@@ -55,8 +55,20 @@ export const TarifaGeneralPrecioField: React.FC = () => {
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Remove non-numeric characters for processing
     const rawValue = e.target.value.replace(/[^\d.,]/g, '');
+    
+    // Handle cases with multiple commas/dots (keep only the last one)
+    const parts = rawValue.split(/[,.]/);
+    let processedValue = rawValue;
+    
+    if (parts.length > 2) {
+      // If there are multiple separators, keep only the last one
+      const integerPart = parts.slice(0, -1).join('');
+      const decimalPart = parts[parts.length - 1];
+      processedValue = `${integerPart},${decimalPart}`;
+    }
+    
     // Convert comma to dot for calculation
-    const normalizedValue = rawValue.replace(',', '.');
+    const normalizedValue = processedValue.replace(',', '.');
     // Parse to float
     const numericValue = parseFloat(normalizedValue);
     
@@ -81,6 +93,7 @@ export const TarifaGeneralPrecioField: React.FC = () => {
               onChange={handlePriceChange}
               onBlur={field.onBlur}
               name={field.name}
+              className="text-right"
             />
           </FormControl>
           <FormMessage />
