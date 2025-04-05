@@ -3,9 +3,14 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, MapPin, 
-  LogOut, Truck, ClipboardList, PackageOpen
+  LogOut, Truck, ClipboardList, PackageOpen, ChevronDown
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -55,55 +60,62 @@ const Sidebar: React.FC = () => {
           path="/"
         />
         
-        <SidebarItem 
-          icon={<Settings size={18} />} 
-          label="Configuración" 
-          active={isConfigActive}
-          path={isConfigActive ? location.pathname : '/empresa'}
-        />
-        
-        {isConfigActive && (
-          <div className="pl-12 pr-4 mt-1">
-            <div className="flex flex-col space-y-1">
-              <SidebarSubItem 
-                icon={<Building2 size={16} />} 
-                label="Empresa" 
-                active={location.pathname === '/empresa'} 
-                path="/empresa"
-              />
-              <SidebarSubItem 
-                icon={<Map size={16} />} 
-                label="Países" 
-                active={location.pathname === '/paises'} 
-                path="/paises"
-              />
-              <SidebarSubItem 
-                icon={<MapPin size={16} />} 
-                label="Ciudades" 
-                active={location.pathname === '/ciudades'} 
-                path="/ciudades"
-              />
-              <SidebarSubItem 
-                icon={<Warehouse size={16} />} 
-                label="Centro Logístico" 
-                active={location.pathname === '/centro-logistico'} 
-                path="/centro-logistico"
-              />
-              <SidebarSubItem 
-                icon={<Warehouse size={16} />} 
-                label="Bodegas" 
-                active={location.pathname === '/bodegas'} 
-                path="/bodegas"
-              />
-              <SidebarSubItem 
-                icon={<PackageOpen size={16} />} 
-                label="Stands" 
-                active={location.pathname === '/stands'} 
-                path="/stands"
-              />
+        <Collapsible
+          defaultOpen={isConfigActive}
+          className="w-full"
+        >
+          <CollapsibleTrigger className="w-full">
+            <div className={`sidebar-item ${isConfigActive ? 'active' : ''} justify-between`}>
+              <div className="flex items-center">
+                <Settings size={18} />
+                <span>Configuración</span>
+              </div>
+              <ChevronDown size={16} className="transition-transform duration-200" />
             </div>
-          </div>
-        )}
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="pl-12 pr-4 mt-1">
+              <div className="flex flex-col space-y-1">
+                <SidebarSubItem 
+                  icon={<Building2 size={16} />} 
+                  label="Empresa" 
+                  active={location.pathname === '/empresa'} 
+                  path="/empresa"
+                />
+                <SidebarSubItem 
+                  icon={<Map size={16} />} 
+                  label="Países" 
+                  active={location.pathname === '/paises'} 
+                  path="/paises"
+                />
+                <SidebarSubItem 
+                  icon={<MapPin size={16} />} 
+                  label="Ciudades" 
+                  active={location.pathname === '/ciudades'} 
+                  path="/ciudades"
+                />
+                <SidebarSubItem 
+                  icon={<Warehouse size={16} />} 
+                  label="Centro Logístico" 
+                  active={location.pathname === '/centro-logistico'} 
+                  path="/centro-logistico"
+                />
+                <SidebarSubItem 
+                  icon={<Warehouse size={16} />} 
+                  label="Bodegas" 
+                  active={location.pathname === '/bodegas'} 
+                  path="/bodegas"
+                />
+                <SidebarSubItem 
+                  icon={<PackageOpen size={16} />} 
+                  label="Stands" 
+                  active={location.pathname === '/stands'} 
+                  path="/stands"
+                />
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
 
         <SidebarItem 
           icon={<Truck size={18} />} 
