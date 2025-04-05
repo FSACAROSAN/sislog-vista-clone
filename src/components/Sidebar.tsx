@@ -2,8 +2,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, PackageOpen, 
-  ChevronDown, LogOut, Truck, ClipboardList
+  LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, MapPin, 
+  ChevronDown, LogOut, Truck, ClipboardList, PackageOpen
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
@@ -124,7 +124,12 @@ const Sidebar: React.FC = () => {
                             active={location.pathname === '/paises'} 
                             path="/paises"
                           />
-                          <SidebarSubItem icon={<Map size={16} />} label="Ciudades" />
+                          <SidebarSubItem 
+                            icon={<MapPin size={16} />} 
+                            label="Ciudades" 
+                            active={location.pathname === '/ciudades'} 
+                            path="/ciudades"
+                          />
                         </div>
                       </AccordionContent>
                     </AccordionItem>

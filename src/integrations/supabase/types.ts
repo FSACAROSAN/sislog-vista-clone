@@ -9,6 +9,41 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ciudades: {
+        Row: {
+          created_at: string | null
+          estado: string | null
+          id: string
+          nombre: string
+          pais_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          estado?: string | null
+          id?: string
+          nombre: string
+          pais_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          estado?: string | null
+          id?: string
+          nombre?: string
+          pais_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ciudades_pais_id_fkey"
+            columns: ["pais_id"]
+            isOneToOne: false
+            referencedRelation: "paises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       empresas: {
         Row: {
           correo: string | null

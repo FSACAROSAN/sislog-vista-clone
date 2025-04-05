@@ -13,6 +13,7 @@ import Auth from "./pages/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Empresa from "./pages/Empresa";
 import Paises from "./pages/Paises";
+import Ciudades from "./pages/Ciudades";
 
 const App = () => {
   // Create a client
@@ -36,6 +37,7 @@ const App = () => {
                   <Route index element={<Index />} />
                   <Route path="empresa" element={<Empresa />} />
                   <Route path="paises" element={<Paises />} />
+                  <Route path="ciudades" element={<Ciudades />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
