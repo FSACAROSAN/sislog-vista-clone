@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Edit, Trash2, ArrowUpDown, Plus } from 'lucide-react';
+import { Edit, Trash2, ArrowUpDown, Plus, MoreHorizontal } from 'lucide-react';
 import { Empresa } from '@/types/empresa';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,6 +12,22 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface EmpresaTableProps {
   empresas: Empresa[];
@@ -32,6 +48,8 @@ const EmpresaTable: React.FC<EmpresaTableProps> = ({
   onRefresh,
   openNewDialog
 }) => {
+  const [openAlert, setOpenAlert] = React.useState<string | null>(null);
+
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -98,22 +116,49 @@ const EmpresaTable: React.FC<EmpresaTableProps> = ({
                   </TableCell>
                   <TableCell>{formatDate(empresa.fecha_creacion)}</TableCell>
                   <TableCell className="text-right">
-                    <div className="flex justify-end items-center space-x-2">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => onEdit(empresa)}
-                      >
-                        <Edit size={16} />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => onDelete(empresa.id)}
-                      >
-                        <Trash2 size={16} />
-                      </Button>
-                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal size={16} />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-40">
+                        <DropdownMenuItem onClick={() => onEdit(empresa)} className="cursor-pointer">
+                          <Edit size={16} className="mr-2 text-gray-500" />
+                          <span>Editar</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={() => setOpenAlert(empresa.id)} 
+                          className="cursor-pointer text-red-600 focus:text-red-600"
+                        >
+                          <Trash2 size={16} className="mr-2 text-red-500" />
+                          <span>Eliminar</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    <AlertDialog open={openAlert === empresa.id} onOpenChange={() => setOpenAlert(null)}>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Esta acción no se puede deshacer. Esto eliminará permanentemente la empresa {empresa.nombre}.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                          <AlertDialogAction
+                            className="bg-red-500 text-white hover:bg-red-600"
+                            onClick={() => {
+                              onDelete(empresa.id);
+                              setOpenAlert(null);
+                            }}
+                          >
+                            Eliminar
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </TableCell>
                 </TableRow>
               ))}
