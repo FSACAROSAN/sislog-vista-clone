@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PageHeader from '@/components/PageHeader';
 import { Building2, Plus, AlertCircle } from 'lucide-react';
@@ -14,6 +15,7 @@ import {
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
+  Dialog,
   DialogTrigger,
 } from '@/components/ui/dialog';
 
@@ -58,12 +60,14 @@ const EmpresaPage = () => {
                 Lista de empresas en el sistema
               </CardDescription>
             </div>
-            <DialogTrigger asChild onClick={() => setOpenNewDialog(true)}>
-              <Button className="ml-auto">
-                <Plus className="mr-2 h-4 w-4" />
-                Nueva Empresa
-              </Button>
-            </DialogTrigger>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="ml-auto" onClick={() => setOpenNewDialog(true)}>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Nueva Empresa
+                </Button>
+              </DialogTrigger>
+            </Dialog>
           </CardHeader>
           <CardContent>
             <EmpresaTable 
