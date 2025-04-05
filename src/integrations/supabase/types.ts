@@ -9,6 +9,41 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      bodegas: {
+        Row: {
+          centro_logistico_id: string
+          created_at: string | null
+          estado: string | null
+          id: string
+          nombre: string
+          updated_at: string | null
+        }
+        Insert: {
+          centro_logistico_id: string
+          created_at?: string | null
+          estado?: string | null
+          id?: string
+          nombre: string
+          updated_at?: string | null
+        }
+        Update: {
+          centro_logistico_id?: string
+          created_at?: string | null
+          estado?: string | null
+          id?: string
+          nombre?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bodegas_centro_logistico_id_fkey"
+            columns: ["centro_logistico_id"]
+            isOneToOne: false
+            referencedRelation: "centro_logistico"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       centro_logistico: {
         Row: {
           ciudad_id: string

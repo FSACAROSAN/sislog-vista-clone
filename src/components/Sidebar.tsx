@@ -108,7 +108,12 @@ const Sidebar: React.FC = () => {
                             active={location.pathname === '/centro-logistico'} 
                             path="/centro-logistico"
                           />
-                          <SidebarSubItem icon={<Warehouse size={16} />} label="Bodegas" />
+                          <SidebarSubItem 
+                            icon={<Warehouse size={16} />} 
+                            label="Bodegas" 
+                            active={location.pathname === '/bodegas'} 
+                            path="/bodegas"
+                          />
                           <SidebarSubItem icon={<PackageOpen size={16} />} label="Stand" />
                         </div>
                       </AccordionContent>
