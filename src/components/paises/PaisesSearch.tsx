@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { Search } from 'lucide-react';
+import { Search, ArrowUpDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 interface PaisesSearchProps {
   searchTerm: string;
@@ -17,7 +18,7 @@ const PaisesSearch: React.FC<PaisesSearchProps> = ({
   onRefresh
 }) => {
   return (
-    <div className="mb-4">
+    <div className="flex justify-between items-center mb-4">
       <div className="relative w-full max-w-sm">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
         <Input
@@ -27,6 +28,12 @@ const PaisesSearch: React.FC<PaisesSearchProps> = ({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+      </div>
+      <div>
+        <Button variant="outline" onClick={onRefresh} disabled={loading}>
+          <ArrowUpDown size={16} className="mr-2" />
+          Actualizar
+        </Button>
       </div>
     </div>
   );
