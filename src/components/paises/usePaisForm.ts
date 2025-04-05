@@ -1,22 +1,41 @@
 
 import { useState } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import { useForm, UseFormReturn } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
 import { Pais } from '@/types/pais';
-import { PaisFormValues } from './schema';
+import { PaisFormValues, paisFormSchema } from './schema';
 
 interface UsePaisFormProps {
-  pais?: Pais | null;
-  form: UseFormReturn<PaisFormValues>;
+  pais: Pais | null;
   onSuccess?: () => void;
+  onError?: (error: any) => void;
 }
 
-export const usePaisForm = ({ pais, form, onSuccess }: UsePaisFormProps) => {
+export const usePaisForm = ({ pais, onSuccess, onError }: UsePaisFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { toast } = useToast();
+  
+  // Initialize the form with default values from the pais object if it exists
+  const form = useForm<PaisFormValues>({
+    resolver: zodResolver(paisFormSchema),
+    defaultValues: pais ? {
+      nombre_es: pais.nombre_es,
+      nombre_en: pais.nombre_en,
+      iso2: pais.iso2,
+      iso3: pais.iso3,
+      codigo: pais.codigo,
+      estado: pais.estado || 'Activo',
+    } : {
+      nombre_es: '',
+      nombre_en: '',
+      iso2: '',
+      iso3: '',
+      codigo: 0,
+      estado: 'Activo',
+    }
+  });
 
-  const handleSubmit = async (values: PaisFormValues) => {
+  const onSubmit = async (values: PaisFormValues) => {
     try {
       setIsSubmitting(true);
 
@@ -36,11 +55,6 @@ export const usePaisForm = ({ pais, form, onSuccess }: UsePaisFormProps) => {
           .eq('id', pais.id);
 
         if (error) throw error;
-
-        toast({
-          title: 'Éxito',
-          description: 'País actualizado correctamente',
-        });
       } else {
         // Create new país
         const { error } = await supabase
@@ -55,30 +69,20 @@ export const usePaisForm = ({ pais, form, onSuccess }: UsePaisFormProps) => {
           } as any);
 
         if (error) throw error;
-
-        toast({
-          title: 'Éxito',
-          description: 'País creado correctamente',
-        });
       }
 
-      form.reset();
-      onSuccess?.();
-
+      if (onSuccess) onSuccess();
     } catch (error: any) {
       console.error('Error saving país:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Error al guardar el país',
-        variant: 'destructive',
-      });
+      if (onError) onError(error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return {
+    form,
     isSubmitting,
-    handleSubmit,
+    onSubmit
   };
 };

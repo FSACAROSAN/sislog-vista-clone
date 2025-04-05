@@ -149,3 +149,16 @@ export const PaisStatusField: React.FC = () => {
     />
   );
 };
+
+// Create a composite component that includes all form fields
+const PaisFormFields: React.FC = () => {
+  return (
+    <div className="space-y-6">
+      <PaisNameFields />
+      <PaisCodeFields />
+      <PaisStatusField />
+    </div>
+  );
+};
+
+export default PaisFormFields;
