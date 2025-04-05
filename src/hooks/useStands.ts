@@ -16,17 +16,34 @@ export const useStands = () => {
     try {
       setLoading(true);
       
-      // Use raw SQL query to get stands and join with bodegas
-      const { data, error } = await supabase.query(`
-        SELECT s.id, s.nombre, s.bodega_id, s.estado, s.created_at, s.updated_at, b.nombre as bodega_nombre
-        FROM stands s
-        LEFT JOIN bodegas b ON s.bodega_id = b.id
-        ORDER BY s.nombre
-      `);
+      // Use the from() method with select() to get stands data
+      const { data, error } = await supabase
+        .from('stands')
+        .select(`
+          id, 
+          nombre, 
+          bodega_id, 
+          estado, 
+          created_at, 
+          updated_at,
+          bodegas (nombre)
+        `)
+        .order('nombre');
 
       if (error) throw error;
       
-      setStands(data as Stand[]);
+      // Transform the data to match the Stand type structure
+      const transformedData = data.map(item => ({
+        id: item.id,
+        nombre: item.nombre,
+        bodega_id: item.bodega_id,
+        bodega_nombre: item.bodegas?.nombre,
+        estado: item.estado,
+        created_at: item.created_at,
+        updated_at: item.updated_at
+      }));
+      
+      setStands(transformedData as Stand[]);
     } catch (error: any) {
       console.error('Error fetching stands:', error);
       toast({
@@ -41,24 +58,19 @@ export const useStands = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      // Use raw SQL query to delete stand
-      const { error } = await supabase.rpc('delete_stand', { 
-        p_id: id 
-      });
+      // Use the from() method with delete() to delete a stand
+      const { error } = await supabase
+        .from('stands')
+        .delete()
+        .eq('id', id);
 
-      if (error) {
-        // Fallback to direct SQL query if RPC fails
-        const { error: fallbackError } = await supabase.query(`
-          DELETE FROM stands WHERE id = $1
-        `, [id]);
-
-        if (fallbackError) throw fallbackError;
-      }
+      if (error) throw error;
 
       toast({
         title: 'Éxito',
         description: 'Stand eliminado correctamente',
       });
+      
       fetchStands();
     } catch (error: any) {
       console.error('Error deleting stand:', error);
