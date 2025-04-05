@@ -35,8 +35,8 @@ const EmpresaPage = () => {
         <Card className="mb-6">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Empresas Registraa</CardTitle>
-              <CardDescription>Lista de empesas en el sistema</CardDescription>
+              
+              
             </div>
           </CardHeader>
           <CardContent>
