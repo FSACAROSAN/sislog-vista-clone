@@ -40,6 +40,7 @@ export const TarifaGeneralNameField: React.FC = () => {
 export const TarifaGeneralPrecioField: React.FC = () => {
   const { control, setValue, watch } = useFormContext<TarifaGeneralFormValues>();
   const precio = watch('precio');
+  const [inputValue, setInputValue] = React.useState('');
   
   // Format currency for display with support for large numbers
   const formatCurrency = (value: number): string => {
@@ -51,14 +52,25 @@ export const TarifaGeneralPrecioField: React.FC = () => {
     }).format(value || 0).replace('€', '').trim();
   };
 
-  // Handle input change
+  // Initialize the input value when component mounts or precio changes
+  React.useEffect(() => {
+    if (precio) {
+      setInputValue(formatCurrency(precio));
+    }
+  }, [precio]);
+
+  // Handle input change - store raw input while typing
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Remove non-numeric characters for processing
+    // Just store the raw value while typing (only allowing numbers, dots and commas)
     const rawValue = e.target.value.replace(/[^\d.,]/g, '');
-    
+    setInputValue(rawValue);
+  };
+  
+  // Format and set the value on blur
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     // Handle cases with multiple commas/dots (keep only the last one)
-    const parts = rawValue.split(/[,.]/);
-    let processedValue = rawValue;
+    const parts = inputValue.split(/[,.]/);
+    let processedValue = inputValue;
     
     if (parts.length > 2) {
       // If there are multiple separators, keep only the last one
@@ -74,8 +86,10 @@ export const TarifaGeneralPrecioField: React.FC = () => {
     
     if (!isNaN(numericValue)) {
       setValue('precio', numericValue);
-    } else if (rawValue === '' || rawValue === '.' || rawValue === ',') {
+      setInputValue(formatCurrency(numericValue));
+    } else if (inputValue === '' || inputValue === '.' || inputValue === ',') {
       setValue('precio', 0);
+      setInputValue(formatCurrency(0));
     }
   };
   
@@ -88,10 +102,10 @@ export const TarifaGeneralPrecioField: React.FC = () => {
           <FormLabel>Precio*</FormLabel>
           <FormControl>
             <Input 
-              placeholder="Ej: 100,00"
-              value={formatCurrency(field.value)}
+              placeholder="Ej: 1.000.000,00"
+              value={inputValue}
               onChange={handlePriceChange}
-              onBlur={field.onBlur}
+              onBlur={handleBlur}
               name={field.name}
               className="text-right"
             />
