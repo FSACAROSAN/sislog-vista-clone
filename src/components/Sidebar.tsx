@@ -1,12 +1,11 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
   LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, PackageOpen, 
-  ChevronDown, LogOut, Truck, ClipboardList, Clock
+  ChevronDown, LogOut, Truck, ClipboardList
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -26,40 +25,17 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, label, active = false, 
 
 const SidebarSubItem: React.FC<SidebarItemProps> = ({ icon, label, active = false, path = "#" }) => {
   return (
-    <Link to={path} className={`flex items-center gap-3 px-4 py-2 text-gray-600 hover:bg-blue-50 rounded-md text-sm transition-colors w-full`}>
+    <Link to={path} className={`sidebar-subitem ${active ? 'active' : ''}`}>
       {icon}
       <span>{label}</span>
     </Link>
   );
 };
 
-const SubMenuCategory: React.FC<{ title: string, children: React.ReactNode, isOpen: boolean, onToggle: () => void }> = ({ 
-  title, 
-  children, 
-  isOpen, 
-  onToggle 
-}) => {
-  return (
-    <Collapsible open={isOpen} onOpenChange={onToggle} className="w-full">
-      <CollapsibleTrigger className="flex items-center justify-between w-full px-4 py-2 text-sm font-medium text-gray-500 hover:bg-blue-50 rounded-md">
-        <span>{title}</span>
-        <ChevronDown 
-          size={16} 
-          className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} 
-        />
-      </CollapsibleTrigger>
-      <CollapsibleContent className="bg-blue-50/50 rounded-md mb-1 mt-1">
-        {children}
-      </CollapsibleContent>
-    </Collapsible>
-  );
-};
-
 const Sidebar: React.FC = () => {
-  const [configOpen, setConfigOpen] = useState(true);
-  const [generalOpen, setGeneralOpen] = useState(true);
-  const [operacionalesOpen, setOperacionalesOpen] = useState(false);
-  const [regionalesOpen, setRegionalesOpen] = useState(false);
+  const [generalOpen, setGeneralOpen] = React.useState(true);
+  const [operacionalesOpen, setOperacionalesOpen] = React.useState(true);
+  const [regionalesOpen, setRegionalesOpen] = React.useState(true);
   const { signOut } = useAuth();
 
   return (
@@ -71,7 +47,7 @@ const Sidebar: React.FC = () => {
         <span className="font-bold text-xl">SISLOG</span>
       </div>
       
-      <div className="flex-1 overflow-auto py-4 px-2">
+      <div className="flex-1 overflow-auto py-4">
         <SidebarItem 
           icon={<LayoutDashboard size={18} />} 
           label="Dashboard principal" 
@@ -79,50 +55,38 @@ const Sidebar: React.FC = () => {
           path="/"
         />
         
-        <div className="my-2">
-          <Collapsible open={configOpen} onOpenChange={() => setConfigOpen(!configOpen)} className="w-full">
-            <CollapsibleTrigger className="sidebar-item w-full flex justify-between">
-              <div className="flex items-center gap-3">
-                <Settings size={18} />
-                <span>Configuración</span>
-              </div>
-              <ChevronDown 
-                size={16} 
-                className={`transition-transform ${configOpen ? 'rotate-180' : ''}`} 
-              />
-            </CollapsibleTrigger>
-            
-            <CollapsibleContent className="mt-1 space-y-1">
-              <SubMenuCategory 
-                title="General" 
-                isOpen={generalOpen} 
-                onToggle={() => setGeneralOpen(!generalOpen)}
-              >
-                <SidebarSubItem icon={<Building2 size={16} />} label="Empresa" />
-                <SidebarSubItem icon={<Users size={16} />} label="Terceros" />
-                <SidebarSubItem icon={<Package2 size={16} />} label="Productos" />
-              </SubMenuCategory>
+        <div className="relative">
+          <button 
+            className="sidebar-item w-full flex justify-between"
+            onClick={() => setGeneralOpen(!generalOpen)}
+          >
+            <div className="flex items-center gap-3">
+              <Settings size={18} />
+              <span>Configuración</span>
+            </div>
+            <ChevronDown 
+              size={16} 
+              className={`transition-transform ${generalOpen ? 'rotate-180' : ''}`} 
+            />
+          </button>
+          
+          {generalOpen && (
+            <div className="mt-1">
+              <div className="sidebar-category">General</div>
+              <SidebarSubItem icon={<Building2 size={16} />} label="Empresa" />
+              <SidebarSubItem icon={<Users size={16} />} label="Terceros" />
+              <SidebarSubItem icon={<Package2 size={16} />} label="Productos" />
               
-              <SubMenuCategory 
-                title="Operacionales" 
-                isOpen={operacionalesOpen} 
-                onToggle={() => setOperacionalesOpen(!operacionalesOpen)}
-              >
-                <SidebarSubItem icon={<Warehouse size={16} />} label="Centro Logístico" />
-                <SidebarSubItem icon={<Warehouse size={16} />} label="Bodegas" />
-                <SidebarSubItem icon={<Clock size={16} />} label="Stand" />
-              </SubMenuCategory>
+              <div className="sidebar-category">Operacionales</div>
+              <SidebarSubItem icon={<Warehouse size={16} />} label="Centro Logístico" />
+              <SidebarSubItem icon={<Warehouse size={16} />} label="Bodegas" />
+              <SidebarSubItem icon={<PackageOpen size={16} />} label="Stand" />
               
-              <SubMenuCategory 
-                title="Regionales" 
-                isOpen={regionalesOpen} 
-                onToggle={() => setRegionalesOpen(!regionalesOpen)}
-              >
-                <SidebarSubItem icon={<Map size={16} />} label="Países" />
-                <SidebarSubItem icon={<Map size={16} />} label="Ciudades" />
-              </SubMenuCategory>
-            </CollapsibleContent>
-          </Collapsible>
+              <div className="sidebar-category">Regionales</div>
+              <SidebarSubItem icon={<Map size={16} />} label="Países" />
+              <SidebarSubItem icon={<Map size={16} />} label="Ciudades" />
+            </div>
+          )}
         </div>
         
         <SidebarItem icon={<Truck size={18} />} label="Logística" />
