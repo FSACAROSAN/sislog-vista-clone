@@ -3,8 +3,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
   LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, PackageOpen, 
-  ChevronDown, LogOut, Truck, ClipboardList, Files
+  ChevronDown, LogOut, Truck, ClipboardList
 } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -35,6 +36,7 @@ const Sidebar: React.FC = () => {
   const [generalOpen, setGeneralOpen] = React.useState(true);
   const [operacionalesOpen, setOperacionalesOpen] = React.useState(true);
   const [regionalesOpen, setRegionalesOpen] = React.useState(true);
+  const { signOut } = useAuth();
 
   return (
     <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
@@ -93,7 +95,10 @@ const Sidebar: React.FC = () => {
       </div>
       
       <div className="p-4 border-t border-gray-200">
-        <button className="sidebar-item w-full text-red-500">
+        <button 
+          className="sidebar-item w-full text-red-500"
+          onClick={signOut}
+        >
           <LogOut size={18} />
           <span>Cerrar sesión</span>
         </button>
