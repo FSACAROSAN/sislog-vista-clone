@@ -75,7 +75,7 @@ const PaisForm: React.FC<PaisFormProps> = ({ pais, onSuccess }) => {
             codigo: values.codigo,
             estado: values.estado,
             updated_at: new Date().toISOString(),
-          })
+          } as any)
           .eq('id', pais.id);
 
         if (error) throw error;
@@ -95,7 +95,7 @@ const PaisForm: React.FC<PaisFormProps> = ({ pais, onSuccess }) => {
             iso3: values.iso3.toUpperCase(),
             codigo: values.codigo,
             estado: values.estado,
-          });
+          } as any);
 
         if (error) throw error;
 

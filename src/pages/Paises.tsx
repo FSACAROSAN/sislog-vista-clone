@@ -59,7 +59,8 @@ const PaisesPage: React.FC = () => {
 
       if (error) throw error;
       
-      setPaises(data as Pais[]);
+      // Cast the data to our Pais type
+      setPaises(data as unknown as Pais[]);
     } catch (error: any) {
       console.error('Error fetching paises:', error);
       toast({
