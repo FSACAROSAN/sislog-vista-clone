@@ -89,7 +89,12 @@ const Sidebar: React.FC = () => {
               <SidebarSubItem icon={<PackageOpen size={16} />} label="Stand" />
               
               <div className="sidebar-category">Regionales</div>
-              <SidebarSubItem icon={<Map size={16} />} label="Países" />
+              <SidebarSubItem 
+                icon={<Map size={16} />} 
+                label="Países" 
+                active={location.pathname === '/paises'} 
+                path="/paises"
+              />
               <SidebarSubItem icon={<Map size={16} />} label="Ciudades" />
             </div>
           )}

@@ -42,6 +42,42 @@ export type Database = {
         }
         Relationships: []
       }
+      paises: {
+        Row: {
+          codigo: number
+          created_at: string | null
+          estado: string | null
+          id: string
+          iso2: string
+          iso3: string
+          nombre_en: string
+          nombre_es: string
+          updated_at: string | null
+        }
+        Insert: {
+          codigo: number
+          created_at?: string | null
+          estado?: string | null
+          id?: string
+          iso2: string
+          iso3: string
+          nombre_en: string
+          nombre_es: string
+          updated_at?: string | null
+        }
+        Update: {
+          codigo?: number
+          created_at?: string | null
+          estado?: string | null
+          id?: string
+          iso2?: string
+          iso3?: string
+          nombre_en?: string
+          nombre_es?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
