@@ -220,6 +220,41 @@ export type Database = {
         }
         Relationships: []
       }
+      stands: {
+        Row: {
+          bodega_id: string
+          created_at: string | null
+          estado: string | null
+          id: string
+          nombre: string
+          updated_at: string | null
+        }
+        Insert: {
+          bodega_id: string
+          created_at?: string | null
+          estado?: string | null
+          id?: string
+          nombre: string
+          updated_at?: string | null
+        }
+        Update: {
+          bodega_id?: string
+          created_at?: string | null
+          estado?: string | null
+          id?: string
+          nombre?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stands_bodega_id_fkey"
+            columns: ["bodega_id"]
+            isOneToOne: false
+            referencedRelation: "bodegas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

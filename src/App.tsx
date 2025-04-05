@@ -16,6 +16,7 @@ import Paises from "./pages/Paises";
 import Ciudades from "./pages/Ciudades";
 import CentroLogisticoPage from "./pages/CentroLogistico";
 import BodegasPage from "./pages/Bodegas";
+import StandsPage from "./pages/Stands";
 
 const App = () => {
   // Create a client
@@ -42,6 +43,7 @@ const App = () => {
                   <Route path="ciudades" element={<Ciudades />} />
                   <Route path="centro-logistico" element={<CentroLogisticoPage />} />
                   <Route path="bodegas" element={<BodegasPage />} />
+                  <Route path="stands" element={<StandsPage />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
