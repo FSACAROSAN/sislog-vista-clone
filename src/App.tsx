@@ -14,6 +14,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Empresa from "./pages/Empresa";
 import Paises from "./pages/Paises";
 import Ciudades from "./pages/Ciudades";
+import CentroLogisticoPage from "./pages/CentroLogistico";
 
 const App = () => {
   // Create a client
@@ -38,6 +39,7 @@ const App = () => {
                   <Route path="empresa" element={<Empresa />} />
                   <Route path="paises" element={<Paises />} />
                   <Route path="ciudades" element={<Ciudades />} />
+                  <Route path="centro-logistico" element={<CentroLogisticoPage />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
