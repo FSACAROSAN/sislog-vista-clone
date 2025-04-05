@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, PackageOpen, 
   ChevronDown, LogOut, Truck, ClipboardList
@@ -37,6 +37,7 @@ const Sidebar: React.FC = () => {
   const [operacionalesOpen, setOperacionalesOpen] = React.useState(true);
   const [regionalesOpen, setRegionalesOpen] = React.useState(true);
   const { signOut } = useAuth();
+  const location = useLocation();
 
   return (
     <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
@@ -51,7 +52,7 @@ const Sidebar: React.FC = () => {
         <SidebarItem 
           icon={<LayoutDashboard size={18} />} 
           label="Dashboard principal" 
-          active={true} 
+          active={location.pathname === '/'} 
           path="/"
         />
         
@@ -73,7 +74,12 @@ const Sidebar: React.FC = () => {
           {generalOpen && (
             <div className="mt-1">
               <div className="sidebar-category">General</div>
-              <SidebarSubItem icon={<Building2 size={16} />} label="Empresa" />
+              <SidebarSubItem 
+                icon={<Building2 size={16} />} 
+                label="Empresa" 
+                active={location.pathname === '/empresa'} 
+                path="/empresa"
+              />
               <SidebarSubItem icon={<Users size={16} />} label="Terceros" />
               <SidebarSubItem icon={<Package2 size={16} />} label="Productos" />
               
