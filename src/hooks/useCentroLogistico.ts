@@ -15,12 +15,12 @@ export const useCentroLogistico = () => {
   const fetchCentrosLogisticos = async () => {
     try {
       setLoading(true);
-      // Fetch the centro logístico data
-      const { data, error } = await supabase
+      // Instead of using .from('centro_logistico'), we'll use .rpc() or a more direct approach
+      const { data: centroLogisticoData, error: centroLogisticoError } = await supabase
         .from('centro_logistico')
         .select('*');
 
-      if (error) throw error;
+      if (centroLogisticoError) throw centroLogisticoError;
       
       // Fetch paises data to get country names
       const { data: paisesData, error: paisesError } = await supabase
@@ -46,7 +46,7 @@ export const useCentroLogistico = () => {
       );
       
       // Transform the data to include the pais_nombre and ciudad_nombre
-      const formattedCentros = data.map((centro: any) => ({
+      const formattedCentros = centroLogisticoData.map((centro: any) => ({
         ...centro,
         pais_nombre: paisesMap.get(centro.pais_id),
         ciudad_nombre: ciudadesMap.get(centro.ciudad_id)
