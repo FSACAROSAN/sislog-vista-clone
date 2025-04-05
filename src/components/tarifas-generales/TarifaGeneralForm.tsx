@@ -6,13 +6,19 @@ import { Button } from '@/components/ui/button';
 import TarifaGeneralFormFields from './TarifaGeneralFormFields';
 import { TarifaGeneral } from '@/types/tarifaGeneral';
 import { FormProvider } from 'react-hook-form';
+import { X } from 'lucide-react';
 
 interface TarifaGeneralFormProps {
   tarifaGeneral: TarifaGeneral | null;
   onSuccess: () => void;
+  onCancel?: () => void;
 }
 
-const TarifaGeneralForm: React.FC<TarifaGeneralFormProps> = ({ tarifaGeneral, onSuccess }) => {
+const TarifaGeneralForm: React.FC<TarifaGeneralFormProps> = ({ 
+  tarifaGeneral, 
+  onSuccess,
+  onCancel
+}) => {
   const { toast } = useToast();
   const isEditing = Boolean(tarifaGeneral?.id);
   
@@ -38,12 +44,25 @@ const TarifaGeneralForm: React.FC<TarifaGeneralFormProps> = ({ tarifaGeneral, on
     }
   });
 
+  const handleCancel = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onCancel) onCancel();
+  };
+
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <TarifaGeneralFormFields />
         
         <div className="flex justify-end gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleCancel}
+          >
+            <X className="mr-2 h-4 w-4" />
+            Cancelar
+          </Button>
           <Button
             type="submit"
             disabled={isSubmitting}

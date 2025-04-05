@@ -39,7 +39,33 @@ export const TarifaGeneralNameField: React.FC = () => {
 };
 
 export const TarifaGeneralPrecioField: React.FC = () => {
-  const { control } = useFormContext<TarifaGeneralFormValues>();
+  const { control, setValue, watch } = useFormContext<TarifaGeneralFormValues>();
+  const precio = watch('precio');
+  
+  // Format currency for display
+  const formatCurrency = (value: number): string => {
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 2
+    }).format(value || 0).replace('€', '').trim();
+  };
+
+  // Handle input change
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Remove non-numeric characters for processing
+    const rawValue = e.target.value.replace(/[^\d.,]/g, '');
+    // Convert comma to dot for calculation
+    const normalizedValue = rawValue.replace(',', '.');
+    // Parse to float
+    const numericValue = parseFloat(normalizedValue);
+    
+    if (!isNaN(numericValue)) {
+      setValue('precio', numericValue);
+    } else if (rawValue === '' || rawValue === '.' || rawValue === ',') {
+      setValue('precio', 0);
+    }
+  };
   
   return (
     <FormField
@@ -50,11 +76,11 @@ export const TarifaGeneralPrecioField: React.FC = () => {
           <FormLabel>Precio*</FormLabel>
           <FormControl>
             <Input 
-              type="number" 
-              placeholder="Ej: 100.00" 
-              {...field} 
-              onChange={(e) => field.onChange(parseFloat(e.target.value))}
-              step="0.01"
+              placeholder="Ej: 100,00"
+              value={formatCurrency(field.value)}
+              onChange={handlePriceChange}
+              onBlur={field.onBlur}
+              name={field.name}
             />
           </FormControl>
           <FormMessage />

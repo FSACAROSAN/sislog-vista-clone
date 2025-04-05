@@ -28,11 +28,18 @@ const TarifasGeneralesHeader: React.FC<TarifasGeneralesHeaderProps> = ({
               {selectedTarifaGeneral ? 'Editar Tarifa General' : 'Agregar Nueva Tarifa General'}
             </DialogTitle>
           </DialogHeader>
-          <TarifaGeneralForm tarifaGeneral={selectedTarifaGeneral} onSuccess={() => {
-            setIsDialogOpen(false);
-            setSelectedTarifaGeneral(null);
-            onSuccess();
-          }} />
+          <TarifaGeneralForm 
+            tarifaGeneral={selectedTarifaGeneral} 
+            onSuccess={() => {
+              setIsDialogOpen(false);
+              setSelectedTarifaGeneral(null);
+              onSuccess();
+            }}
+            onCancel={() => {
+              setIsDialogOpen(false);
+              setSelectedTarifaGeneral(null);
+            }}
+          />
         </DialogContent>
       </Dialog>
     </div>
