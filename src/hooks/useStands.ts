@@ -15,32 +15,41 @@ export const useStands = () => {
   const fetchStands = async () => {
     try {
       setLoading(true);
-      // Fetch stands using raw query approach
-      const { data: standsData, error: standsError } = await supabase
-        .from('stands')
-        .select('*');
+      
+      // Use raw SQL query to get stands and join with bodegas to get bodega names
+      const { data, error } = await supabase
+        .rpc('get_stands_with_bodegas');
 
-      if (standsError) throw standsError;
-      
-      // Fetch bodegas data to get names
-      const { data: bodegasData, error: bodegasError } = await supabase
-        .from('bodegas')
-        .select('id, nombre');
+      if (error) {
+        // Fallback to direct query and manual join if RPC is not available
+        const { data: standsData, error: standsError } = await supabase
+          .from('stands')
+          .select('*');
+
+        if (standsError) throw standsError;
         
-      if (bodegasError) throw bodegasError;
-      
-      // Create map for quick lookups
-      const bodegasMap = new Map(
-        bodegasData.map((bodega: any) => [bodega.id, bodega.nombre])
-      );
-      
-      // Transform the data to include the bodega_nombre
-      const formattedStands = standsData.map((stand: any) => ({
-        ...stand,
-        bodega_nombre: bodegasMap.get(stand.bodega_id)
-      }));
-      
-      setStands(formattedStands as Stand[]);
+        // Fetch bodegas data to get names
+        const { data: bodegasData, error: bodegasError } = await supabase
+          .from('bodegas')
+          .select('id, nombre');
+          
+        if (bodegasError) throw bodegasError;
+        
+        // Create map for quick lookups
+        const bodegasMap = new Map(
+          bodegasData.map((bodega: any) => [bodega.id, bodega.nombre])
+        );
+        
+        // Transform the data to include the bodega_nombre
+        const formattedStands = standsData.map((stand: any) => ({
+          ...stand,
+          bodega_nombre: bodegasMap.get(stand.bodega_id)
+        }));
+        
+        setStands(formattedStands as Stand[]);
+      } else {
+        setStands(data as Stand[]);
+      }
     } catch (error: any) {
       console.error('Error fetching stands:', error);
       toast({
@@ -55,12 +64,20 @@ export const useStands = () => {
 
   const handleDelete = async (id: string) => {
     try {
+      // Use parameterized query to delete stand
       const { error } = await supabase
-        .from('stands')
-        .delete()
-        .eq('id', id);
+        .rpc('delete_stand', { p_id: id })
+        .single();
 
-      if (error) throw error;
+      if (error) {
+        // Fallback to direct table delete if RPC is not available
+        const { error: fallbackError } = await supabase
+          .from('stands')
+          .delete()
+          .eq('id', id);
+
+        if (fallbackError) throw fallbackError;
+      }
 
       toast({
         title: 'Éxito',

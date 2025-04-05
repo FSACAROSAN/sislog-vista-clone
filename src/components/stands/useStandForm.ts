@@ -55,27 +55,50 @@ export const useStandForm = ({ stand, onSuccess, onError }: UseStandFormProps) =
       if (stand?.id) {
         // Update existing stand using raw query approach
         const { error } = await supabase
-          .from('stands')
-          .update({
-            nombre: values.nombre,
-            bodega_id: values.bodega_id,
-            estado: values.estado,
-            updated_at: new Date().toISOString(),
+          .rpc('update_stand', {
+            p_id: stand.id,
+            p_nombre: values.nombre,
+            p_bodega_id: values.bodega_id,
+            p_estado: values.estado
           })
-          .eq('id', stand.id);
+          .single();
 
-        if (error) throw error;
+        if (error) {
+          // Fallback to direct table update if RPC is not available
+          const { error: fallbackError } = await supabase
+            .from('stands')
+            .update({
+              nombre: values.nombre,
+              bodega_id: values.bodega_id,
+              estado: values.estado,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', stand.id);
+
+          if (fallbackError) throw fallbackError;
+        }
       } else {
         // Create new stand using raw query approach
         const { error } = await supabase
-          .from('stands')
-          .insert({
-            nombre: values.nombre,
-            bodega_id: values.bodega_id,
-            estado: values.estado,
-          });
+          .rpc('insert_stand', {
+            p_nombre: values.nombre,
+            p_bodega_id: values.bodega_id,
+            p_estado: values.estado
+          })
+          .single();
 
-        if (error) throw error;
+        if (error) {
+          // Fallback to direct table insert if RPC is not available
+          const { error: fallbackError } = await supabase
+            .from('stands')
+            .insert({
+              nombre: values.nombre,
+              bodega_id: values.bodega_id,
+              estado: values.estado,
+            });
+
+          if (fallbackError) throw fallbackError;
+        }
       }
 
       if (onSuccess) onSuccess();
