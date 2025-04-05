@@ -3,15 +3,9 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, MapPin, 
-  ChevronDown, LogOut, Truck, ClipboardList, PackageOpen
+  LogOut, Truck, ClipboardList, PackageOpen
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { 
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger
-} from "@/components/ui/accordion";
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -67,21 +61,6 @@ const Sidebar: React.FC = () => {
           active={isConfigActive}
           path={isConfigActive ? location.pathname : '/empresa'}
         />
-
-        <SidebarItem 
-          icon={<Truck size={18} />} 
-          label="Logística" 
-        />
-        
-        <SidebarItem 
-          icon={<Package2 size={18} />} 
-          label="Contenedores" 
-        />
-        
-        <SidebarItem 
-          icon={<ClipboardList size={18} />} 
-          label="Reportes" 
-        />
         
         {isConfigActive && (
           <div className="pl-12 pr-4 mt-1">
@@ -125,6 +104,21 @@ const Sidebar: React.FC = () => {
             </div>
           </div>
         )}
+
+        <SidebarItem 
+          icon={<Truck size={18} />} 
+          label="Logística" 
+        />
+        
+        <SidebarItem 
+          icon={<Package2 size={18} />} 
+          label="Contenedores" 
+        />
+        
+        <SidebarItem 
+          icon={<ClipboardList size={18} />} 
+          label="Reportes" 
+        />
       </div>
       
       <div className="p-4 border-t border-gray-200">
