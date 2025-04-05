@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, MapPin, 
@@ -61,105 +61,70 @@ const Sidebar: React.FC = () => {
           path="/"
         />
         
-        <div className="px-4 py-2">
-          <Accordion type="multiple" className="space-y-1">
-            <AccordionItem value="configuracion" className="border-none">
-              <div className="relative">
-                <AccordionTrigger className="py-2 flex items-center gap-3 hover:bg-gray-100 rounded-md px-2">
-                  <div className="flex items-center gap-3">
-                    <Settings size={18} />
-                    <span className="text-sm">Configuración</span>
-                  </div>
-                </AccordionTrigger>
-                
-                <AccordionContent className="pt-2 pb-0">
-                  <Accordion type="multiple" className="pl-2">
-                    {/* General Submenu */}
-                    <AccordionItem value="general" className="border-none">
-                      <AccordionTrigger className="py-1 flex items-center gap-3 hover:bg-gray-100 rounded-md px-2">
-                        <div className="flex items-center">
-                          <span className="text-sm text-gray-600">General</span>
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="pl-2 pt-1 pb-0">
-                        <div className="flex flex-col space-y-1">
-                          <SidebarSubItem 
-                            icon={<Building2 size={16} />} 
-                            label="Empresa" 
-                            active={location.pathname === '/empresa'} 
-                            path="/empresa"
-                          />
-                          <SidebarSubItem icon={<Users size={16} />} label="Terceros" />
-                          <SidebarSubItem icon={<Package2 size={16} />} label="Productos" />
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                    
-                    {/* Operacionales Submenu */}
-                    <AccordionItem value="operacionales" className="border-none">
-                      <AccordionTrigger className="py-1 flex items-center gap-3 hover:bg-gray-100 rounded-md px-2">
-                        <div className="flex items-center">
-                          <span className="text-sm text-gray-600">Operacionales</span>
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="pl-2 pt-1 pb-0">
-                        <div className="flex flex-col space-y-1">
-                          <SidebarSubItem 
-                            icon={<Warehouse size={16} />} 
-                            label="Centro Logístico" 
-                            active={location.pathname === '/centro-logistico'} 
-                            path="/centro-logistico"
-                          />
-                          <SidebarSubItem 
-                            icon={<Warehouse size={16} />} 
-                            label="Bodegas" 
-                            active={location.pathname === '/bodegas'} 
-                            path="/bodegas"
-                          />
-                          <SidebarSubItem 
-                            icon={<PackageOpen size={16} />} 
-                            label="Stands" 
-                            active={location.pathname === '/stands'} 
-                            path="/stands"
-                          />
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                    
-                    {/* Regionales Submenu */}
-                    <AccordionItem value="regionales" className="border-none">
-                      <AccordionTrigger className="py-1 flex items-center gap-3 hover:bg-gray-100 rounded-md px-2">
-                        <div className="flex items-center">
-                          <span className="text-sm text-gray-600">Regionales</span>
-                        </div>
-                      </AccordionTrigger>
-                      <AccordionContent className="pl-2 pt-1 pb-0">
-                        <div className="flex flex-col space-y-1">
-                          <SidebarSubItem 
-                            icon={<Map size={16} />} 
-                            label="Países" 
-                            active={location.pathname === '/paises'} 
-                            path="/paises"
-                          />
-                          <SidebarSubItem 
-                            icon={<MapPin size={16} />} 
-                            label="Ciudades" 
-                            active={location.pathname === '/ciudades'} 
-                            path="/ciudades"
-                          />
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                </AccordionContent>
-              </div>
-            </AccordionItem>
-          </Accordion>
-        </div>
+        <SidebarItem 
+          icon={<Settings size={18} />} 
+          label="Configuración" 
+          active={isConfigActive}
+          path={isConfigActive ? location.pathname : '/empresa'}
+        />
+
+        <SidebarItem 
+          icon={<Truck size={18} />} 
+          label="Logística" 
+        />
         
-        <SidebarItem icon={<Truck size={18} />} label="Logística" />
-        <SidebarItem icon={<Package2 size={18} />} label="Contenedores" />
-        <SidebarItem icon={<ClipboardList size={18} />} label="Reportes" />
+        <SidebarItem 
+          icon={<Package2 size={18} />} 
+          label="Contenedores" 
+        />
+        
+        <SidebarItem 
+          icon={<ClipboardList size={18} />} 
+          label="Reportes" 
+        />
+        
+        {isConfigActive && (
+          <div className="pl-12 pr-4 mt-1">
+            <div className="flex flex-col space-y-1">
+              <SidebarSubItem 
+                icon={<Building2 size={16} />} 
+                label="Empresa" 
+                active={location.pathname === '/empresa'} 
+                path="/empresa"
+              />
+              <SidebarSubItem 
+                icon={<Map size={16} />} 
+                label="Países" 
+                active={location.pathname === '/paises'} 
+                path="/paises"
+              />
+              <SidebarSubItem 
+                icon={<MapPin size={16} />} 
+                label="Ciudades" 
+                active={location.pathname === '/ciudades'} 
+                path="/ciudades"
+              />
+              <SidebarSubItem 
+                icon={<Warehouse size={16} />} 
+                label="Centro Logístico" 
+                active={location.pathname === '/centro-logistico'} 
+                path="/centro-logistico"
+              />
+              <SidebarSubItem 
+                icon={<Warehouse size={16} />} 
+                label="Bodegas" 
+                active={location.pathname === '/bodegas'} 
+                path="/bodegas"
+              />
+              <SidebarSubItem 
+                icon={<PackageOpen size={16} />} 
+                label="Stands" 
+                active={location.pathname === '/stands'} 
+                path="/stands"
+              />
+            </div>
+          </div>
+        )}
       </div>
       
       <div className="p-4 border-t border-gray-200">
