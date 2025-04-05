@@ -93,4 +93,14 @@
   .responsive-dropdown {
     @apply relative z-10;
   }
+  
+  /* Mobile toggle button specific styles */
+  .mobile-sidebar-toggle {
+    @apply fixed z-50 top-4 left-4 p-1.5 bg-sislog-primary text-white rounded-md shadow-md;
+    height: 32px;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
