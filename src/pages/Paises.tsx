@@ -5,7 +5,8 @@ import PaisesHeader from '@/components/paises/PaisesHeader';
 import PaisesSearch from '@/components/paises/PaisesSearch';
 import PaisesTable from '@/components/paises/PaisesTable';
 import PageHeader from '@/components/PageHeader';
-import { Map } from 'lucide-react';
+import { Map, FileDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const PaisesPage: React.FC = () => {
   const {
@@ -38,16 +39,20 @@ const PaisesPage: React.FC = () => {
             setSelectedPais={setSelectedPais}
             onSuccess={fetchPaises}
           />
-          
+          <Button variant="outline">
+            <FileDown size={16} className="mr-2" />
+            Exportar
+          </Button>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow mb-6">
           <PaisesSearch 
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
             loading={loading}
             onRefresh={fetchPaises}
           />
-        </div>
 
-        <div className="bg-white p-6 rounded-lg shadow mb-6">
           <PaisesTable 
             paises={paises}
             loading={loading}
