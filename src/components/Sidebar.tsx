@@ -59,19 +59,25 @@ const Sidebar: React.FC = () => {
           path="/"
         />
         
+        <SidebarItem 
+          icon={<Settings size={18} />} 
+          label="Configuración" 
+          active={['/empresa', '/paises', '/ciudades', '/centro-logistico', '/bodegas', '/stands'].includes(location.pathname)} 
+          path="#configuracion"
+        />
+        
         <div className="px-4 py-2">
-          <Accordion type="multiple" defaultValue={["configuracion"]} className="space-y-1">
+          <Accordion type="multiple" className="space-y-1">
             <AccordionItem value="configuracion" className="border-none">
               <div className="relative">
                 <AccordionTrigger className="py-2 flex items-center gap-3 hover:bg-gray-100 rounded-md px-2">
                   <div className="flex items-center gap-3">
-                    <Settings size={18} />
-                    <span className="text-sm">Configuración</span>
+                    <span className="text-sm pl-7">Menú de configuración</span>
                   </div>
                 </AccordionTrigger>
                 
                 <AccordionContent className="pt-2 pb-0">
-                  <Accordion type="multiple" defaultValue={["general", "operacionales", "regionales"]} className="pl-2">
+                  <Accordion type="multiple" className="pl-2">
                     {/* General Submenu */}
                     <AccordionItem value="general" className="border-none">
                       <AccordionTrigger className="py-1 flex items-center gap-3 hover:bg-gray-100 rounded-md px-2">
