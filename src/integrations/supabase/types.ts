@@ -9,6 +9,51 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      centro_logistico: {
+        Row: {
+          ciudad_id: string
+          created_at: string | null
+          estado: string | null
+          id: string
+          nombre: string
+          pais_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          ciudad_id: string
+          created_at?: string | null
+          estado?: string | null
+          id?: string
+          nombre: string
+          pais_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          ciudad_id?: string
+          created_at?: string | null
+          estado?: string | null
+          id?: string
+          nombre?: string
+          pais_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "centro_logistico_ciudad_id_fkey"
+            columns: ["ciudad_id"]
+            isOneToOne: false
+            referencedRelation: "ciudades"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "centro_logistico_pais_id_fkey"
+            columns: ["pais_id"]
+            isOneToOne: false
+            referencedRelation: "paises"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ciudades: {
         Row: {
           created_at: string | null

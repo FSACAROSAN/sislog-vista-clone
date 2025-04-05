@@ -102,7 +102,12 @@ const Sidebar: React.FC = () => {
                       </AccordionTrigger>
                       <AccordionContent className="pl-2 pt-1 pb-0">
                         <div className="flex flex-col space-y-1">
-                          <SidebarSubItem icon={<Warehouse size={16} />} label="Centro Logístico" />
+                          <SidebarSubItem 
+                            icon={<Warehouse size={16} />} 
+                            label="Centro Logístico" 
+                            active={location.pathname === '/centro-logistico'} 
+                            path="/centro-logistico"
+                          />
                           <SidebarSubItem icon={<Warehouse size={16} />} label="Bodegas" />
                           <SidebarSubItem icon={<PackageOpen size={16} />} label="Stand" />
                         </div>
