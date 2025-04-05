@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import PageHeader from '@/components/PageHeader';
-import { Building2, Plus, Edit, Trash2 } from 'lucide-react';
+import { Building2, Plus, Edit, Trash2, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Empresa } from '@/types/empresa';
@@ -32,11 +32,13 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 const EmpresaPage = () => {
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
   const [selectedEmpresa, setSelectedEmpresa] = useState<Empresa | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openNewDialog, setOpenNewDialog] = useState(false);
   const { toast } = useToast();
@@ -45,15 +47,24 @@ const EmpresaPage = () => {
   const fetchEmpresas = async () => {
     try {
       setLoading(true);
+      setError(null);
+      
+      console.log('Fetching empresas...');
       const { data, error } = await supabase
         .from('empresas')
         .select('*')
         .order('nombre', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+      
+      console.log('Empresas fetched:', data);
       setEmpresas(data || []);
     } catch (error: any) {
       console.error('Error fetching empresas:', error);
+      setError('Error al cargar las empresas. Por favor, intente de nuevo.');
       toast({
         title: 'Error',
         description: 'Error al cargar las empresas',
@@ -130,6 +141,14 @@ const EmpresaPage = () => {
       />
       
       <div className="container py-6">
+        {error && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+        
         <Card className="mb-6">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
@@ -164,59 +183,61 @@ const EmpresaPage = () => {
               </div>
             ) : empresas.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
-                No hay empresas registradas.
+                No hay empresas registradas. Haga clic en "Nueva Empresa" para agregar una.
               </div>
             ) : (
-              <Table>
-                <TableCaption>Lista de empresas registradas</TableCaption>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Nombre</TableHead>
-                    <TableHead>Correo</TableHead>
-                    <TableHead>Teléfono</TableHead>
-                    <TableHead>Estado</TableHead>
-                    <TableHead>Fecha Creación</TableHead>
-                    <TableHead className="text-right">Acciones</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {empresas.map((empresa) => (
-                    <TableRow key={empresa.id}>
-                      <TableCell className="font-medium">{empresa.nombre}</TableCell>
-                      <TableCell>{empresa.correo || '-'}</TableCell>
-                      <TableCell>{empresa.telefono || '-'}</TableCell>
-                      <TableCell>
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          empresa.estado === 'Activo' 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
-                          {empresa.estado}
-                        </span>
-                      </TableCell>
-                      <TableCell>{formatDate(empresa.fecha_creacion)}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end items-center space-x-2">
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => handleEdit(empresa)}
-                          >
-                            <Edit size={16} />
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => handleDelete(empresa.id)}
-                          >
-                            <Trash2 size={16} />
-                          </Button>
-                        </div>
-                      </TableCell>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableCaption>Lista de empresas registradas</TableCaption>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Nombre</TableHead>
+                      <TableHead>Correo</TableHead>
+                      <TableHead>Teléfono</TableHead>
+                      <TableHead>Estado</TableHead>
+                      <TableHead>Fecha Creación</TableHead>
+                      <TableHead className="text-right">Acciones</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {empresas.map((empresa) => (
+                      <TableRow key={empresa.id}>
+                        <TableCell className="font-medium">{empresa.nombre}</TableCell>
+                        <TableCell>{empresa.correo || '-'}</TableCell>
+                        <TableCell>{empresa.telefono || '-'}</TableCell>
+                        <TableCell>
+                          <span className={`px-2 py-1 rounded-full text-xs ${
+                            empresa.estado === 'Activo' 
+                              ? 'bg-green-100 text-green-800' 
+                              : 'bg-red-100 text-red-800'
+                          }`}>
+                            {empresa.estado || 'Inactivo'}
+                          </span>
+                        </TableCell>
+                        <TableCell>{formatDate(empresa.fecha_creacion)}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end items-center space-x-2">
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              onClick={() => handleEdit(empresa)}
+                            >
+                              <Edit size={16} />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              onClick={() => handleDelete(empresa.id)}
+                            >
+                              <Trash2 size={16} />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             )}
           </CardContent>
         </Card>
@@ -231,7 +252,9 @@ const EmpresaPage = () => {
               Actualice la información de la empresa a continuación.
             </DialogDescription>
           </DialogHeader>
-          <EmpresaForm empresa={selectedEmpresa} onSuccess={handleFormSuccess} />
+          {selectedEmpresa && (
+            <EmpresaForm empresa={selectedEmpresa} onSuccess={handleFormSuccess} />
+          )}
           <DialogClose className="hidden" />
         </DialogContent>
       </Dialog>
