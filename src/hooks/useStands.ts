@@ -16,40 +16,17 @@ export const useStands = () => {
     try {
       setLoading(true);
       
-      // Use raw SQL query to get stands and join with bodegas to get bodega names
-      const { data, error } = await supabase
-        .rpc('get_stands_with_bodegas');
+      // Use raw SQL query to get stands and join with bodegas
+      const { data, error } = await supabase.query(`
+        SELECT s.id, s.nombre, s.bodega_id, s.estado, s.created_at, s.updated_at, b.nombre as bodega_nombre
+        FROM stands s
+        LEFT JOIN bodegas b ON s.bodega_id = b.id
+        ORDER BY s.nombre
+      `);
 
-      if (error) {
-        // Fallback to direct query and manual join if RPC is not available
-        const { data: standsData, error: standsError } = await supabase
-          .from('stands')
-          .select('*');
-
-        if (standsError) throw standsError;
-        
-        // Fetch bodegas data to get names
-        const { data: bodegasData, error: bodegasError } = await supabase
-          .from('bodegas')
-          .select('id, nombre');
-          
-        if (bodegasError) throw bodegasError;
-        
-        // Create map for quick lookups
-        const bodegasMap = new Map(
-          bodegasData.map((bodega: any) => [bodega.id, bodega.nombre])
-        );
-        
-        // Transform the data to include the bodega_nombre
-        const formattedStands = standsData.map((stand: any) => ({
-          ...stand,
-          bodega_nombre: bodegasMap.get(stand.bodega_id)
-        }));
-        
-        setStands(formattedStands as Stand[]);
-      } else {
-        setStands(data as Stand[]);
-      }
+      if (error) throw error;
+      
+      setStands(data as Stand[]);
     } catch (error: any) {
       console.error('Error fetching stands:', error);
       toast({
@@ -64,17 +41,16 @@ export const useStands = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      // Use parameterized query to delete stand
-      const { error } = await supabase
-        .rpc('delete_stand', { p_id: id })
-        .single();
+      // Use raw SQL query to delete stand
+      const { error } = await supabase.rpc('delete_stand', { 
+        p_id: id 
+      });
 
       if (error) {
-        // Fallback to direct table delete if RPC is not available
-        const { error: fallbackError } = await supabase
-          .from('stands')
-          .delete()
-          .eq('id', id);
+        // Fallback to direct SQL query if RPC fails
+        const { error: fallbackError } = await supabase.query(`
+          DELETE FROM stands WHERE id = $1
+        `, [id]);
 
         if (fallbackError) throw fallbackError;
       }

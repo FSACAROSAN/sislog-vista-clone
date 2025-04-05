@@ -53,49 +53,38 @@ export const useStandForm = ({ stand, onSuccess, onError }: UseStandFormProps) =
       setIsSubmitting(true);
 
       if (stand?.id) {
-        // Update existing stand using raw query approach
-        const { error } = await supabase
-          .rpc('update_stand', {
-            p_id: stand.id,
-            p_nombre: values.nombre,
-            p_bodega_id: values.bodega_id,
-            p_estado: values.estado
-          })
-          .single();
+        // Update existing stand using raw SQL query
+        const { error } = await supabase.rpc('update_stand', {
+          p_id: stand.id,
+          p_nombre: values.nombre,
+          p_bodega_id: values.bodega_id,
+          p_estado: values.estado
+        });
 
         if (error) {
-          // Fallback to direct table update if RPC is not available
-          const { error: fallbackError } = await supabase
-            .from('stands')
-            .update({
-              nombre: values.nombre,
-              bodega_id: values.bodega_id,
-              estado: values.estado,
-              updated_at: new Date().toISOString(),
-            })
-            .eq('id', stand.id);
+          // Fallback to direct SQL query if RPC fails
+          const { error: fallbackError } = await supabase.query(`
+            UPDATE stands 
+            SET nombre = $1, bodega_id = $2, estado = $3, updated_at = now() 
+            WHERE id = $4
+          `, [values.nombre, values.bodega_id, values.estado, stand.id]);
 
           if (fallbackError) throw fallbackError;
         }
       } else {
-        // Create new stand using raw query approach
-        const { error } = await supabase
-          .rpc('insert_stand', {
-            p_nombre: values.nombre,
-            p_bodega_id: values.bodega_id,
-            p_estado: values.estado
-          })
-          .single();
+        // Create new stand using raw SQL query
+        const { error } = await supabase.rpc('insert_stand', {
+          p_nombre: values.nombre,
+          p_bodega_id: values.bodega_id,
+          p_estado: values.estado
+        });
 
         if (error) {
-          // Fallback to direct table insert if RPC is not available
-          const { error: fallbackError } = await supabase
-            .from('stands')
-            .insert({
-              nombre: values.nombre,
-              bodega_id: values.bodega_id,
-              estado: values.estado,
-            });
+          // Fallback to direct SQL query if RPC fails
+          const { error: fallbackError } = await supabase.query(`
+            INSERT INTO stands (nombre, bodega_id, estado) 
+            VALUES ($1, $2, $3)
+          `, [values.nombre, values.bodega_id, values.estado]);
 
           if (fallbackError) throw fallbackError;
         }
