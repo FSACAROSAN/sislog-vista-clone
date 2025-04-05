@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, MapPin, 
@@ -41,6 +41,8 @@ const SidebarSubItem: React.FC<SidebarItemProps> = ({ icon, label, active = fals
 const Sidebar: React.FC = () => {
   const { signOut } = useAuth();
   const location = useLocation();
+  
+  const isConfigActive = ['/empresa', '/paises', '/ciudades', '/centro-logistico', '/bodegas', '/stands'].includes(location.pathname);
 
   return (
     <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
@@ -59,20 +61,14 @@ const Sidebar: React.FC = () => {
           path="/"
         />
         
-        <SidebarItem 
-          icon={<Settings size={18} />} 
-          label="Configuración" 
-          active={['/empresa', '/paises', '/ciudades', '/centro-logistico', '/bodegas', '/stands'].includes(location.pathname)} 
-          path="#configuracion"
-        />
-        
         <div className="px-4 py-2">
           <Accordion type="multiple" className="space-y-1">
             <AccordionItem value="configuracion" className="border-none">
               <div className="relative">
                 <AccordionTrigger className="py-2 flex items-center gap-3 hover:bg-gray-100 rounded-md px-2">
                   <div className="flex items-center gap-3">
-                    <span className="text-sm pl-7">Menú de configuración</span>
+                    <Settings size={18} />
+                    <span className="text-sm">Configuración</span>
                   </div>
                 </AccordionTrigger>
                 
