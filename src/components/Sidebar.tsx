@@ -61,7 +61,7 @@ const Sidebar: React.FC = () => {
         />
         
         <Collapsible
-          defaultOpen={isConfigActive}
+          defaultOpen={false}
           className="w-full"
         >
           <CollapsibleTrigger className="w-full">
@@ -101,7 +101,7 @@ const Sidebar: React.FC = () => {
                   path="/centro-logistico"
                 />
                 <SidebarSubItem 
-                  icon={<Warehouse size={16} />} 
+                  icon={<img src="/lovable-uploads/93a7ddd3-b268-4cb6-93ca-eb23d2e21690.png" className="w-4 h-4" alt="Bodega" />} 
                   label="Bodegas" 
                   active={location.pathname === '/bodegas'} 
                   path="/bodegas"
