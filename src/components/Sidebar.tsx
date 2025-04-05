@@ -1,14 +1,17 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, MapPin, LogOut, Truck, ClipboardList, PackageOpen, ChevronDown } from 'lucide-react';
+import { LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, MapPin, LogOut, Truck, ClipboardList, PackageOpen, ChevronDown, Receipt, Tag } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+
 interface SidebarItemProps {
   icon: React.ReactNode;
   label: string;
   active?: boolean;
   path?: string;
 }
+
 const SidebarItem: React.FC<SidebarItemProps> = ({
   icon,
   label,
@@ -20,6 +23,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       <span>{label}</span>
     </Link>;
 };
+
 const SidebarSubItem: React.FC<SidebarItemProps> = ({
   icon,
   label,
@@ -31,12 +35,16 @@ const SidebarSubItem: React.FC<SidebarItemProps> = ({
       <span>{label}</span>
     </Link>;
 };
+
 const Sidebar: React.FC = () => {
   const {
     signOut
   } = useAuth();
   const location = useLocation();
+  
   const isConfigActive = ['/empresa', '/paises', '/ciudades', '/centro-logistico', '/bodegas', '/stands'].includes(location.pathname);
+  const isFacturacionActive = ['/tarifas-generales'].includes(location.pathname);
+
   return <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
       <div className="p-4 border-b border-gray-200 flex items-center">
         <div className="h-8 w-8 bg-sislog-primary rounded-md flex items-center justify-center mr-2">
@@ -48,7 +56,7 @@ const Sidebar: React.FC = () => {
       <div className="flex-1 overflow-auto py-4">
         <SidebarItem icon={<LayoutDashboard size={18} />} label="Dashboard principal" active={location.pathname === '/'} path="/" />
         
-        <Collapsible defaultOpen={false} className="w-full">
+        <Collapsible className="w-full">
           <CollapsibleTrigger className="w-full">
             <div className={`sidebar-item ${isConfigActive ? 'active' : ''} justify-between`}>
               <div className="flex items-center">
@@ -72,6 +80,25 @@ const Sidebar: React.FC = () => {
           </CollapsibleContent>
         </Collapsible>
 
+        <Collapsible className="w-full">
+          <CollapsibleTrigger className="w-full">
+            <div className={`sidebar-item ${isFacturacionActive ? 'active' : ''} justify-between`}>
+              <div className="flex items-center">
+                <Receipt size={18} />
+                <span className="px-[10px]">Facturación</span>
+              </div>
+              <ChevronDown size={16} className="transition-transform duration-200" />
+            </div>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="pl-12 pr-4 mt-1">
+              <div className="flex flex-col space-y-1">
+                <SidebarSubItem icon={<Tag size={16} />} label="Tarifas Generales" active={location.pathname === '/tarifas-generales'} path="/tarifas-generales" />
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
+
         <SidebarItem icon={<Truck size={18} />} label="Logística" />
         
         <SidebarItem icon={<Package2 size={18} />} label="Contenedores" />
@@ -87,4 +114,5 @@ const Sidebar: React.FC = () => {
       </div>
     </div>;
 };
+
 export default Sidebar;

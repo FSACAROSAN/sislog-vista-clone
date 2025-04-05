@@ -255,6 +255,33 @@ export type Database = {
           },
         ]
       }
+      tarifas_generales: {
+        Row: {
+          created_at: string | null
+          estado: string | null
+          id: string
+          nombre: string
+          precio: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          estado?: string | null
+          id?: string
+          nombre: string
+          precio: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          estado?: string | null
+          id?: string
+          nombre?: string
+          precio?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

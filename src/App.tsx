@@ -17,6 +17,7 @@ import Ciudades from "./pages/Ciudades";
 import CentroLogisticoPage from "./pages/CentroLogistico";
 import BodegasPage from "./pages/Bodegas";
 import StandsPage from "./pages/Stands";
+import TarifasGenerales from "./pages/TarifasGenerales";
 
 const App = () => {
   // Create a client
@@ -44,6 +45,7 @@ const App = () => {
                   <Route path="centro-logistico" element={<CentroLogisticoPage />} />
                   <Route path="bodegas" element={<BodegasPage />} />
                   <Route path="stands" element={<StandsPage />} />
+                  <Route path="tarifas-generales" element={<TarifasGenerales />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Routes>
