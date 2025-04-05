@@ -1,11 +1,13 @@
 
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import { useAuth } from '@/contexts/AuthContext';
+import { Map } from 'lucide-react';
 
 const AppLayout: React.FC = () => {
   const { loading } = useAuth();
+  const location = useLocation();
 
   if (loading) {
     return (

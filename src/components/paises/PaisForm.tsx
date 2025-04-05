@@ -1,63 +1,57 @@
 
 import React from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Pais } from '@/types/pais';
-import { Button } from '@/components/ui/button';
-import { Form } from '@/components/ui/form';
-import { Loader2 } from 'lucide-react';
-import { paisFormSchema, PaisFormValues } from './schema';
-import { PaisNameFields, PaisCodeFields, PaisStatusField } from './PaisFormFields';
+import { useToast } from '@/hooks/use-toast';
 import { usePaisForm } from './usePaisForm';
+import { Button } from '@/components/ui/button';
+import PaisFormFields from './PaisFormFields';
+import { Pais } from '@/types/pais';
+import { FormProvider } from 'react-hook-form';
 
 interface PaisFormProps {
-  pais?: Pais | null;
-  onSuccess?: () => void;
+  pais: Pais | null;
+  onSuccess: () => void;
 }
 
 const PaisForm: React.FC<PaisFormProps> = ({ pais, onSuccess }) => {
-  const defaultValues: PaisFormValues = {
-    nombre_es: pais?.nombre_es || '',
-    nombre_en: pais?.nombre_en || '',
-    iso2: pais?.iso2 || '',
-    iso3: pais?.iso3 || '',
-    codigo: pais?.codigo || 0,
-    estado: pais?.estado || 'Activo',
-  };
-
-  const form = useForm<PaisFormValues>({
-    resolver: zodResolver(paisFormSchema),
-    defaultValues,
-  });
-
-  const { isSubmitting, handleSubmit } = usePaisForm({ 
-    pais, 
-    form, 
-    onSuccess 
+  const { toast } = useToast();
+  const isEditing = Boolean(pais?.id);
+  
+  const {
+    form,
+    isSubmitting,
+    onSubmit
+  } = usePaisForm({
+    pais,
+    onSuccess: () => {
+      toast({
+        title: `País ${isEditing ? 'actualizado' : 'creado'} con éxito`,
+        description: `El país ha sido ${isEditing ? 'actualizado' : 'creado'} correctamente.`,
+      });
+      onSuccess();
+    },
+    onError: (error) => {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: error.message || 'Ha ocurrido un error. Inténtelo de nuevo.',
+      });
+    }
   });
 
   return (
     <FormProvider {...form}>
-      <Form>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-          <PaisNameFields />
-          <PaisCodeFields />
-          <PaisStatusField />
-
-          <div className="flex justify-end gap-2">
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Guardando...
-                </>
-              ) : (
-                pais?.id ? 'Actualizar país' : 'Crear país'
-              )}
-            </Button>
-          </div>
-        </form>
-      </Form>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <PaisFormFields />
+        
+        <div className="flex justify-end gap-2">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isEditing ? 'Guardar cambios' : 'Crear país'}
+          </Button>
+        </div>
+      </form>
     </FormProvider>
   );
 };
