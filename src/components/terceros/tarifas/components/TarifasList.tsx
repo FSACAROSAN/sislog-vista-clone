@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Loader2, Edit, Trash } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -19,6 +18,18 @@ interface TarifasListProps {
   onEdit: (tarifa: TerceroTarifa) => void;
   onDelete: (id: string) => void;
 }
+
+/**
+ * Formats a number as a currency with the pattern $ 999,999,999,999.99
+ */
+const formatCurrency = (value: number): string => {
+  return new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(value);
+};
 
 const TarifasList: React.FC<TarifasListProps> = ({
   tarifas,
@@ -49,7 +60,6 @@ const TarifasList: React.FC<TarifasListProps> = ({
         <TableHeader>
           <TableRow>
             <TableHead>Nombre</TableHead>
-            <TableHead>Tipo</TableHead>
             <TableHead className="text-right">Valor</TableHead>
             <TableHead className="w-[100px]">Acciones</TableHead>
           </TableRow>
@@ -58,17 +68,8 @@ const TarifasList: React.FC<TarifasListProps> = ({
           {tarifas.map((tarifa) => (
             <TableRow key={tarifa.id}>
               <TableCell className="font-medium">{tarifa.nombre}</TableCell>
-              <TableCell>
-                {tarifa.tarifa_general ? (
-                  <Badge variant="outline">
-                    {tarifa.tarifa_general.nombre}
-                  </Badge>
-                ) : (
-                  <Badge variant="secondary">Personalizada</Badge>
-                )}
-              </TableCell>
               <TableCell className="text-right">
-                ${Number(tarifa.valor_tarifa).toFixed(2)}
+                {formatCurrency(Number(tarifa.valor_tarifa))}
               </TableCell>
               <TableCell>
                 <div className="flex space-x-2">
