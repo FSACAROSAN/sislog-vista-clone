@@ -1,11 +1,13 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useTerceros } from '@/hooks/useTerceros';
 import TercerosHeader from '@/components/terceros/TercerosHeader';
 import TercerosSearch from '@/components/terceros/TercerosSearch';
 import TercerosTable from '@/components/terceros/TercerosTable';
 import PageHeader from '@/components/PageHeader';
 import { UserCircle } from 'lucide-react';
+import TerceroTarifasDialog from '@/components/terceros/tarifas/TerceroTarifasDialog';
+import { Tercero } from '@/types/tercero';
 
 const TercerosPage: React.FC = () => {
   const {
@@ -25,6 +27,19 @@ const TercerosPage: React.FC = () => {
     handlePageChange,
     handlePageSizeChange
   } = useTerceros();
+
+  const [isTarifasDialogOpen, setIsTarifasDialogOpen] = useState(false);
+  const [selectedTerceroForTarifas, setSelectedTerceroForTarifas] = useState<Tercero | null>(null);
+
+  const handleManageTarifas = (tercero: Tercero) => {
+    setSelectedTerceroForTarifas(tercero);
+    setIsTarifasDialogOpen(true);
+  };
+
+  const closeTarifasDialog = () => {
+    setIsTarifasDialogOpen(false);
+    setSelectedTerceroForTarifas(null);
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -60,6 +75,7 @@ const TercerosPage: React.FC = () => {
               setIsDialogOpen(true);
             }}
             onDelete={handleDelete}
+            onManageTarifas={handleManageTarifas}
             totalItems={totalItems}
             currentPage={currentPage}
             pageSize={pageSize}
@@ -68,6 +84,13 @@ const TercerosPage: React.FC = () => {
           />
         </div>
       </div>
+
+      {/* Tarifas Dialog */}
+      <TerceroTarifasDialog 
+        isOpen={isTarifasDialogOpen}
+        onClose={closeTarifasDialog}
+        tercero={selectedTerceroForTarifas}
+      />
     </div>
   );
 };

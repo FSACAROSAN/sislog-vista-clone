@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, Edit, Trash, Loader2 } from 'lucide-react';
+import { MoreHorizontal, Edit, Trash, Loader2, Tag } from 'lucide-react';
 import TablePagination from '@/components/ui/table-pagination';
 import { Badge } from '@/components/ui/badge';
 import { Tercero } from '@/types/tercero';
@@ -25,6 +25,7 @@ interface TercerosTableProps {
   loading: boolean;
   onEdit: (tercero: Tercero) => void;
   onDelete: (id: string) => void;
+  onManageTarifas: (tercero: Tercero) => void;
   totalItems: number;
   currentPage: number;
   pageSize: number;
@@ -37,6 +38,7 @@ const TercerosTable: React.FC<TercerosTableProps> = ({
   loading,
   onEdit,
   onDelete,
+  onManageTarifas,
   totalItems,
   currentPage,
   pageSize,
@@ -115,6 +117,10 @@ const TercerosTable: React.FC<TercerosTableProps> = ({
                         <DropdownMenuItem onClick={() => onEdit(tercero)}>
                           <Edit className="h-4 w-4 mr-2" />
                           Editar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => onManageTarifas(tercero)}>
+                          <Tag className="h-4 w-4 mr-2" />
+                          Tarifas
                         </DropdownMenuItem>
                         <DropdownMenuItem 
                           onClick={() => {

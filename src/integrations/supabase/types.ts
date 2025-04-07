@@ -228,6 +228,51 @@ export type Database = {
           },
         ]
       }
+      ge_tercero_tarifas: {
+        Row: {
+          created_at: string | null
+          id: string
+          nombre: string
+          tarifa_general_id: string | null
+          tercero_id: string
+          updated_at: string | null
+          valor_tarifa: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          nombre: string
+          tarifa_general_id?: string | null
+          tercero_id: string
+          updated_at?: string | null
+          valor_tarifa: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          nombre?: string
+          tarifa_general_id?: string | null
+          tercero_id?: string
+          updated_at?: string | null
+          valor_tarifa?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ge_tercero_tarifas_tarifa_general_id_fkey"
+            columns: ["tarifa_general_id"]
+            isOneToOne: false
+            referencedRelation: "tarifas_generales"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ge_tercero_tarifas_tercero_id_fkey"
+            columns: ["tercero_id"]
+            isOneToOne: false
+            referencedRelation: "ge_tercero"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ge_tercero_tipo_documento: {
         Row: {
           codigo: string
