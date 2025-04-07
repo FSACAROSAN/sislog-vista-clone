@@ -13,7 +13,7 @@ export const useTiposDocumento = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('ge_tercero_tipo_documento')
+        .from('ge_tercero_tipo_documento' as any)
         .select('*')
         .order('orden', { ascending: true }) as any;
 

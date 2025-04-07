@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal, Edit, Trash, Loader2 } from 'lucide-react';
-import { TablePagination } from '@/components/ui/table-pagination';
+import TablePagination from '@/components/ui/table-pagination';
 import { Badge } from '@/components/ui/badge';
 import { Tercero } from '@/types/tercero';
 

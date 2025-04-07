@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -19,17 +18,16 @@ export const useTerceros = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('ge_tercero')
+        .from('ge_tercero' as any)
         .select(`
           *,
           tipo_documento:ge_tercero_tipo_documento(*)
-        `)
-        .order('nombre', { ascending: true }) as any;
+        `) as any;
 
       if (error) throw error;
       
       // Store all terceros for filtering
-      setAllTerceros(data as unknown as Tercero[]);
+      setAllTerceros(data as Tercero[]);
     } catch (error: any) {
       console.error('Error fetching terceros:', error);
       toast({
@@ -45,7 +43,7 @@ export const useTerceros = () => {
   const handleDelete = async (id: string) => {
     try {
       const { error } = await supabase
-        .from('ge_tercero')
+        .from('ge_tercero' as any)
         .delete()
         .eq('id', id) as any;
 

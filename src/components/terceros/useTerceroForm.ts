@@ -53,7 +53,7 @@ export const useTerceroForm = ({ onSuccess, initialData }: UseTerceroFormProps) 
       if (initialData?.id) {
         // Update existing tercero
         const { error } = await supabase
-          .from("ge_tercero")
+          .from('ge_tercero' as any)
           .update({
             nombre: data.nombre,
             documento: data.documento,
@@ -72,7 +72,7 @@ export const useTerceroForm = ({ onSuccess, initialData }: UseTerceroFormProps) 
             tipo_documento_id: data.tipo_documento_id,
             updated_at: new Date().toISOString(),
           })
-          .eq("id", initialData.id);
+          .eq("id", initialData.id) as any;
 
         if (error) throw error;
 
@@ -82,23 +82,25 @@ export const useTerceroForm = ({ onSuccess, initialData }: UseTerceroFormProps) 
         });
       } else {
         // Create new tercero
-        const { error } = await supabase.from("ge_tercero").insert({
-          nombre: data.nombre,
-          documento: data.documento,
-          dv: data.dv || null,
-          direccion: data.direccion || null,
-          email_tercero: data.email_tercero || null,
-          telefono_1_tercero: data.telefono_1_tercero || null,
-          telefono_2_tercero: data.telefono_2_tercero || null,
-          nombre_contacto: data.nombre_contacto || null,
-          telefono_contacto: data.telefono_contacto || null,
-          email_contacto: data.email_contacto || null,
-          cliente: data.cliente,
-          transporte: data.transporte,
-          proveedor: data.proveedor,
-          estado: data.estado,
-          tipo_documento_id: data.tipo_documento_id,
-        });
+        const { error } = await supabase
+          .from('ge_tercero' as any)
+          .insert({
+            nombre: data.nombre,
+            documento: data.documento,
+            dv: data.dv || null,
+            direccion: data.direccion || null,
+            email_tercero: data.email_tercero || null,
+            telefono_1_tercero: data.telefono_1_tercero || null,
+            telefono_2_tercero: data.telefono_2_tercero || null,
+            nombre_contacto: data.nombre_contacto || null,
+            telefono_contacto: data.telefono_contacto || null,
+            email_contacto: data.email_contacto || null,
+            cliente: data.cliente,
+            transporte: data.transporte,
+            proveedor: data.proveedor,
+            estado: data.estado,
+            tipo_documento_id: data.tipo_documento_id,
+          }) as any;
 
         if (error) throw error;
 
