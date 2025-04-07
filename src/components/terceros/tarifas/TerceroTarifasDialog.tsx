@@ -119,6 +119,7 @@ const TerceroTarifasDialog: React.FC<TerceroTarifasDialogProps> = ({
             initialData={selectedTarifa}
             loading={loading}
             onCancel={handleCancel}
+            existingTarifas={tarifas}
           />
         ) : (
           <>

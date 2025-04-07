@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -24,6 +24,7 @@ import { tarifaFormSchema, TarifaFormValues } from './schema';
 import { TerceroTarifa } from '@/types/terceroTarifa';
 import { TarifaGeneral } from '@/types/tarifaGeneral';
 import { UUID } from '@/types/common';
+import { useToast } from '@/hooks/use-toast';
 
 interface TerceroTarifaFormProps {
   terceroId: UUID;
@@ -32,6 +33,7 @@ interface TerceroTarifaFormProps {
   initialData?: TerceroTarifa | null;
   loading: boolean;
   onCancel: () => void;
+  existingTarifas: TerceroTarifa[];
 }
 
 const TerceroTarifaForm: React.FC<TerceroTarifaFormProps> = ({
@@ -40,8 +42,12 @@ const TerceroTarifaForm: React.FC<TerceroTarifaFormProps> = ({
   onSubmit,
   initialData,
   loading,
-  onCancel
+  onCancel,
+  existingTarifas
 }) => {
+  const { toast } = useToast();
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   const form = useForm<TarifaFormValues>({
     resolver: zodResolver(tarifaFormSchema),
     defaultValues: initialData
@@ -65,6 +71,9 @@ const TerceroTarifaForm: React.FC<TerceroTarifaFormProps> = ({
         if (tarifaSeleccionada) {
           form.setValue('nombre', tarifaSeleccionada.nombre);
         }
+        
+        // Clear any previous submit errors when tarifa changes
+        setSubmitError(null);
       }
     });
     
@@ -81,12 +90,38 @@ const TerceroTarifaForm: React.FC<TerceroTarifaFormProps> = ({
   };
 
   const handleSubmit = async (data: TarifaFormValues) => {
+    // Check if this is a duplicate tarifa_general_id
+    if (data.tarifa_general_id && data.tarifa_general_id !== 'ninguna') {
+      const isDuplicate = existingTarifas.some(
+        tarifa => 
+          tarifa.tarifa_general_id === data.tarifa_general_id && 
+          (!initialData || tarifa.id !== initialData.id)
+      );
+
+      if (isDuplicate) {
+        setSubmitError('Este tercero ya tiene asignada esta tarifa general.');
+        toast({
+          title: 'Error',
+          description: 'Este tercero ya tiene asignada esta tarifa general.',
+          variant: 'destructive',
+        });
+        return;
+      }
+    }
+
+    setSubmitError(null);
     await onSubmit(data);
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        {submitError && (
+          <div className="bg-destructive/15 text-destructive text-sm p-3 rounded-md">
+            {submitError}
+          </div>
+        )}
+
         <FormField
           control={form.control}
           name="tarifa_general_id"
