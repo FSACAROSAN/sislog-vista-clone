@@ -3,10 +3,16 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useToast } from '@/hooks/use-toast';
-import { TarifaFormValues, tarifaFormSchema } from '../schema';
+import { 
+  TarifaFormValues, 
+  createTarifaFormSchemaWithValidation 
+} from '../schema';
 import { TerceroTarifa } from '@/types/terceroTarifa';
 import { TarifaGeneral } from '@/types/tarifaGeneral';
 
+/**
+ * Props for the useTerceroTarifaForm hook
+ */
 export interface UseTerceroTarifaFormProps {
   initialData?: TerceroTarifa | null;
   tarifasGenerales: TarifaGeneral[];
@@ -14,6 +20,10 @@ export interface UseTerceroTarifaFormProps {
   onSubmit: (data: TarifaFormValues) => Promise<void>;
 }
 
+/**
+ * Custom hook for managing the tercero tarifa form
+ * Handles form state, validation, and submission
+ */
 const useTerceroTarifaForm = ({
   initialData,
   tarifasGenerales,
@@ -23,8 +33,15 @@ const useTerceroTarifaForm = ({
   const { toast } = useToast();
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  // Create a schema with validation against existing tarifas
+  const schema = createTarifaFormSchemaWithValidation(
+    existingTarifas,
+    initialData?.id
+  );
+
+  // Initialize the form with react-hook-form
   const form = useForm<TarifaFormValues>({
-    resolver: zodResolver(tarifaFormSchema),
+    resolver: zodResolver(schema),
     defaultValues: initialData
       ? {
           nombre: initialData.nombre,
@@ -38,7 +55,9 @@ const useTerceroTarifaForm = ({
         },
   });
 
-  // Función para formatear el valor como moneda
+  /**
+   * Format a number as Colombian currency
+   */
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('es-CO', {
       style: 'currency',
@@ -47,7 +66,7 @@ const useTerceroTarifaForm = ({
     }).format(value);
   };
 
-  // Efecto para actualizar el nombre cuando se selecciona una tarifa general
+  // Effect to update the nombre when a tarifa_general_id is selected
   useEffect(() => {
     const subscription = form.watch((value, { name }) => {
       if (name === 'tarifa_general_id' && value.tarifa_general_id && value.tarifa_general_id !== 'ninguna') {
@@ -64,28 +83,21 @@ const useTerceroTarifaForm = ({
     return () => subscription.unsubscribe();
   }, [form, tarifasGenerales]);
 
+  /**
+   * Handle form submission
+   */
   const handleSubmit = async (data: TarifaFormValues) => {
-    // Check if this is a duplicate tarifa_general_id
-    if (data.tarifa_general_id && data.tarifa_general_id !== 'ninguna') {
-      const isDuplicate = existingTarifas.some(
-        tarifa => 
-          tarifa.tarifa_general_id === data.tarifa_general_id && 
-          (!initialData || tarifa.id !== initialData.id)
-      );
-
-      if (isDuplicate) {
-        setSubmitError('Este tercero ya tiene asignada esta tarifa general.');
-        toast({
-          title: 'Error',
-          description: 'Este tercero ya tiene asignada esta tarifa general.',
-          variant: 'destructive',
-        });
-        return;
-      }
+    try {
+      setSubmitError(null);
+      await onSubmit(data);
+    } catch (error: any) {
+      setSubmitError(error.message || 'Error al guardar la tarifa');
+      toast({
+        title: 'Error',
+        description: error.message || 'Error al guardar la tarifa',
+        variant: 'destructive',
+      });
     }
-
-    setSubmitError(null);
-    await onSubmit(data);
   };
 
   return {

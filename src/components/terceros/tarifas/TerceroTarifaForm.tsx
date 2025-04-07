@@ -15,6 +15,9 @@ import {
   useTerceroTarifaForm
 } from './form';
 
+/**
+ * Props for the TerceroTarifaForm component
+ */
 interface TerceroTarifaFormProps {
   terceroId: UUID;
   tarifasGenerales: TarifaGeneral[];
@@ -25,6 +28,10 @@ interface TerceroTarifaFormProps {
   existingTarifas: TerceroTarifa[];
 }
 
+/**
+ * Form component for creating or editing a tercero tarifa
+ * Manages the form state and submission for tarifa data
+ */
 const TerceroTarifaForm: React.FC<TerceroTarifaFormProps> = ({
   tarifasGenerales,
   onSubmit,
@@ -33,6 +40,7 @@ const TerceroTarifaForm: React.FC<TerceroTarifaFormProps> = ({
   onCancel,
   existingTarifas
 }) => {
+  // Use the custom hook to manage form state and logic
   const { form, submitError, formatCurrency, handleSubmit } = useTerceroTarifaForm({
     initialData,
     tarifasGenerales,
@@ -43,22 +51,27 @@ const TerceroTarifaForm: React.FC<TerceroTarifaFormProps> = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        {/* Display form-level error messages */}
         <FormErrorMessage message={submitError} />
 
+        {/* Select for tarifa general */}
         <TarifaGeneralSelect 
           form={form} 
           tarifasGenerales={tarifasGenerales} 
           loading={loading} 
         />
 
+        {/* Input for tarifa name */}
         <TarifaNombreInput form={form} loading={loading} />
 
+        {/* Input for tarifa value */}
         <TarifaValorInput 
           form={form} 
           loading={loading} 
           formatCurrency={formatCurrency} 
         />
 
+        {/* Form action buttons */}
         <FormActions onCancel={onCancel} loading={loading} />
       </form>
     </Form>
