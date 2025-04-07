@@ -90,6 +90,15 @@
     @apply min-w-full;
   }
   
+  /* Reduce table row height by 30% */
+  .responsive-table-container th {
+    @apply h-8; /* Reduced from h-12 */
+  }
+  
+  .responsive-table-container td {
+    @apply py-2; /* Reduced from p-4 to py-2 */
+  }
+  
   .responsive-dropdown {
     @apply relative z-10;
   }
@@ -103,4 +112,22 @@
     align-items: center;
     justify-content: center;
   }
+  
+  /* Pagination styles */
+  .pagination-container {
+    @apply flex items-center justify-between mt-4 px-2;
+  }
+  
+  .row-selector {
+    @apply text-sm text-gray-500 flex items-center gap-2;
+  }
+  
+  .row-selector select {
+    @apply rounded border px-2 py-1 text-sm;
+  }
+  
+  .pagination-info {
+    @apply text-sm text-gray-500;
+  }
 }
+

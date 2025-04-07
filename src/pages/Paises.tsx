@@ -10,6 +10,7 @@ import { Map } from 'lucide-react';
 const PaisesPage: React.FC = () => {
   const {
     paises,
+    totalItems,
     loading,
     searchTerm,
     setSearchTerm,
@@ -18,7 +19,11 @@ const PaisesPage: React.FC = () => {
     isDialogOpen,
     setIsDialogOpen,
     fetchPaises,
-    handleDelete
+    handleDelete,
+    currentPage,
+    pageSize,
+    handlePageChange,
+    handlePageSizeChange
   } = usePaises();
 
   return (
@@ -55,6 +60,11 @@ const PaisesPage: React.FC = () => {
               setIsDialogOpen(true);
             }}
             onDelete={handleDelete}
+            totalItems={totalItems}
+            currentPage={currentPage}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
           />
         </div>
       </div>

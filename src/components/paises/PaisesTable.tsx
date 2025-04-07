@@ -27,19 +27,30 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import TablePagination from '@/components/ui/table-pagination';
 
 interface PaisesTableProps {
   paises: Pais[];
   loading: boolean;
   onEdit: (pais: Pais) => void;
   onDelete: (id: string) => void;
+  totalItems: number;
+  currentPage: number;
+  pageSize: number;
+  onPageChange: (page: number) => void;
+  onPageSizeChange: (size: number) => void;
 }
 
 const PaisesTable: React.FC<PaisesTableProps> = ({ 
   paises, 
   loading, 
   onEdit, 
-  onDelete 
+  onDelete,
+  totalItems,
+  currentPage,
+  pageSize,
+  onPageChange,
+  onPageSizeChange
 }) => {
   const [openAlert, setOpenAlert] = React.useState<string | null>(null);
 
@@ -137,6 +148,15 @@ const PaisesTable: React.FC<PaisesTableProps> = ({
           )}
         </TableBody>
       </Table>
+      
+      <TablePagination
+        currentPage={currentPage}
+        totalItems={totalItems}
+        pageSize={pageSize}
+        onPageChange={onPageChange}
+        onPageSizeChange={onPageSizeChange}
+        pageSizeOptions={[5, 10, 25, 50]}
+      />
     </div>
   );
 };

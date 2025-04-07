@@ -6,10 +6,13 @@ import { Pais } from '@/types/pais';
 
 export const usePaises = () => {
   const [paises, setPaises] = useState<Pais[]>([]);
+  const [allPaises, setAllPaises] = useState<Pais[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedPais, setSelectedPais] = useState<Pais | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const { toast } = useToast();
 
   const fetchPaises = async () => {
@@ -22,8 +25,8 @@ export const usePaises = () => {
 
       if (error) throw error;
       
-      // Cast the data to our Pais type
-      setPaises(data as unknown as Pais[]);
+      // Store all paises for filtering
+      setAllPaises(data as unknown as Pais[]);
     } catch (error: any) {
       console.error('Error fetching paises:', error);
       toast({
@@ -64,16 +67,42 @@ export const usePaises = () => {
     fetchPaises();
   }, []);
 
-  const filteredPaises = paises.filter(pais =>
-    pais.nombre_es.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    pais.nombre_en.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    pais.iso2.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    pais.iso3.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    pais.codigo.toString().includes(searchTerm)
+  // Filter paises based on search term
+  useEffect(() => {
+    const filteredResults = allPaises.filter(pais =>
+      pais.nombre_es.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      pais.nombre_en.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      pais.iso2.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      pais.iso3.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      pais.codigo.toString().includes(searchTerm)
+    );
+    
+    setPaises(filteredResults);
+    // Reset to first page when search term changes
+    setCurrentPage(1);
+  }, [searchTerm, allPaises]);
+
+  // Calculate paginated data
+  const paginatedPaises = paises.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
   );
 
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  // Handle page size change
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
+    setCurrentPage(1); // Reset to first page when changing page size
+  };
+
   return {
-    paises: filteredPaises,
+    paises: paginatedPaises,
+    allPaises: paises,
+    totalItems: paises.length,
     loading,
     searchTerm,
     setSearchTerm,
@@ -82,6 +111,10 @@ export const usePaises = () => {
     isDialogOpen,
     setIsDialogOpen,
     fetchPaises,
-    handleDelete
+    handleDelete,
+    currentPage,
+    pageSize,
+    handlePageChange,
+    handlePageSizeChange
   };
 };
