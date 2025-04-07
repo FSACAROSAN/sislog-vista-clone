@@ -78,9 +78,12 @@ const TerceroTarifasDialog: React.FC<TerceroTarifasDialogProps> = ({
     if (selectedTarifa) {
       await updateTarifa(selectedTarifa.id, data);
     } else if (tercero) {
+      // Make sure nombre is required in the object passed to createTarifa
       await createTarifa({
         tercero_id: tercero.id,
-        ...data,
+        nombre: data.nombre, // This ensures nombre is always provided
+        valor_tarifa: data.valor_tarifa,
+        tarifa_general_id: data.tarifa_general_id,
       });
     }
     setShowForm(false);
