@@ -7,31 +7,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Plus, Edit, Trash, Loader2 } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { Tercero } from '@/types/tercero';
 import { useTerceroTarifas } from '@/hooks/useTerceroTarifas';
 import { useTarifasGenerales } from '@/hooks/useTarifasGenerales';
 import TerceroTarifaForm from './TerceroTarifaForm';
 import { TarifaFormValues } from './schema';
 import { TerceroTarifa } from '@/types/terceroTarifa';
-import { Badge } from '@/components/ui/badge';
+import { TarifasCard, TarifasHeader } from './components';
 
 interface TerceroTarifasDialogProps {
   isOpen: boolean;
@@ -81,10 +63,9 @@ const TerceroTarifasDialog: React.FC<TerceroTarifasDialogProps> = ({
         tarifa_general_id: data.tarifa_general_id === "ninguna" ? null : data.tarifa_general_id
       });
     } else if (tercero) {
-      // Make sure nombre is required in the object passed to createTarifa
       await createTarifa({
         tercero_id: tercero.id,
-        nombre: data.nombre, // This ensures nombre is always provided
+        nombre: data.nombre,
         valor_tarifa: data.valor_tarifa,
         tarifa_general_id: data.tarifa_general_id === "ninguna" ? null : data.tarifa_general_id,
       });
@@ -123,89 +104,18 @@ const TerceroTarifasDialog: React.FC<TerceroTarifasDialogProps> = ({
           />
         ) : (
           <>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">{tercero?.nombre}</h3>
-              <Button onClick={handleAddNew} disabled={loading}>
-                <Plus className="mr-2 h-4 w-4" />
-                Agregar Tarifa
-              </Button>
-            </div>
+            <TarifasHeader 
+              terceroNombre={tercero?.nombre || ''} 
+              onAddNew={handleAddNew} 
+              loading={loading || loadingTarifasGenerales}
+            />
             
-            <Separator className="my-4" />
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Tarifas</CardTitle>
-                <CardDescription>
-                  Listado de tarifas asignadas a este tercero
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {loading || loadingTarifasGenerales ? (
-                  <div className="flex justify-center items-center py-8">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                    <span className="ml-2">Cargando tarifas...</span>
-                  </div>
-                ) : tarifas.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
-                    No hay tarifas asignadas a este tercero.
-                  </div>
-                ) : (
-                  <div className="rounded-md border">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Nombre</TableHead>
-                          <TableHead>Tipo</TableHead>
-                          <TableHead className="text-right">Valor</TableHead>
-                          <TableHead className="w-[100px]">Acciones</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {tarifas.map((tarifa) => (
-                          <TableRow key={tarifa.id}>
-                            <TableCell className="font-medium">{tarifa.nombre}</TableCell>
-                            <TableCell>
-                              {tarifa.tarifa_general ? (
-                                <Badge variant="outline">
-                                  {tarifa.tarifa_general.nombre}
-                                </Badge>
-                              ) : (
-                                <Badge variant="secondary">Personalizada</Badge>
-                              )}
-                            </TableCell>
-                            <TableCell className="text-right">
-                              ${Number(tarifa.valor_tarifa).toFixed(2)}
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex space-x-2">
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleEdit(tarifa)}
-                                >
-                                  <Edit className="h-4 w-4" />
-                                  <span className="sr-only">Editar</span>
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleDelete(tarifa.id)}
-                                  className="text-red-500 hover:text-red-600"
-                                >
-                                  <Trash className="h-4 w-4" />
-                                  <span className="sr-only">Eliminar</span>
-                                </Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <TarifasCard 
+              tarifas={tarifas}
+              loading={loading || loadingTarifasGenerales}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           </>
         )}
       </DialogContent>
