@@ -157,6 +157,113 @@ export type Database = {
         }
         Relationships: []
       }
+      ge_tercero: {
+        Row: {
+          cliente: boolean | null
+          created_at: string | null
+          direccion: string | null
+          documento: string
+          dv: string | null
+          email_contacto: string | null
+          email_tercero: string | null
+          estado: boolean | null
+          id: string
+          nombre: string
+          nombre_contacto: string | null
+          proveedor: boolean | null
+          telefono_1_tercero: string | null
+          telefono_2_tercero: string | null
+          telefono_contacto: string | null
+          tipo_documento_id: string | null
+          transporte: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          cliente?: boolean | null
+          created_at?: string | null
+          direccion?: string | null
+          documento: string
+          dv?: string | null
+          email_contacto?: string | null
+          email_tercero?: string | null
+          estado?: boolean | null
+          id?: string
+          nombre: string
+          nombre_contacto?: string | null
+          proveedor?: boolean | null
+          telefono_1_tercero?: string | null
+          telefono_2_tercero?: string | null
+          telefono_contacto?: string | null
+          tipo_documento_id?: string | null
+          transporte?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          cliente?: boolean | null
+          created_at?: string | null
+          direccion?: string | null
+          documento?: string
+          dv?: string | null
+          email_contacto?: string | null
+          email_tercero?: string | null
+          estado?: boolean | null
+          id?: string
+          nombre?: string
+          nombre_contacto?: string | null
+          proveedor?: boolean | null
+          telefono_1_tercero?: string | null
+          telefono_2_tercero?: string | null
+          telefono_contacto?: string | null
+          tipo_documento_id?: string | null
+          transporte?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ge_tercero_tipo_documento_id_fkey"
+            columns: ["tipo_documento_id"]
+            isOneToOne: false
+            referencedRelation: "ge_tercero_tipo_documento"
+            referencedColumns: ["tipo_documento_id"]
+          },
+        ]
+      }
+      ge_tercero_tipo_documento: {
+        Row: {
+          codigo: string
+          created_at: string | null
+          documento_local: number | null
+          estado: boolean | null
+          nombre: string
+          orden: number | null
+          sigla: string
+          tipo_documento_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          codigo: string
+          created_at?: string | null
+          documento_local?: number | null
+          estado?: boolean | null
+          nombre: string
+          orden?: number | null
+          sigla: string
+          tipo_documento_id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          codigo?: string
+          created_at?: string | null
+          documento_local?: number | null
+          estado?: boolean | null
+          nombre?: string
+          orden?: number | null
+          sigla?: string
+          tipo_documento_id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       paises: {
         Row: {
           codigo: number
