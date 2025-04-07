@@ -76,14 +76,17 @@ const TerceroTarifasDialog: React.FC<TerceroTarifasDialogProps> = ({
 
   const handleSubmit = async (data: TarifaFormValues) => {
     if (selectedTarifa) {
-      await updateTarifa(selectedTarifa.id, data);
+      await updateTarifa(selectedTarifa.id, {
+        ...data,
+        tarifa_general_id: data.tarifa_general_id === "ninguna" ? null : data.tarifa_general_id
+      });
     } else if (tercero) {
       // Make sure nombre is required in the object passed to createTarifa
       await createTarifa({
         tercero_id: tercero.id,
         nombre: data.nombre, // This ensures nombre is always provided
         valor_tarifa: data.valor_tarifa,
-        tarifa_general_id: data.tarifa_general_id,
+        tarifa_general_id: data.tarifa_general_id === "ninguna" ? null : data.tarifa_general_id,
       });
     }
     setShowForm(false);

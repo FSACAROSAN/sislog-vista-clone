@@ -81,7 +81,8 @@ const TerceroTarifaForm: React.FC<TerceroTarifaFormProps> = ({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="">Ninguna</SelectItem>
+                  {/* Fix: Changed from empty string to "ninguna" as the value */}
+                  <SelectItem value="ninguna">Ninguna</SelectItem>
                   {tarifasGenerales.map((tarifa) => (
                     <SelectItem key={tarifa.id} value={tarifa.id}>
                       {tarifa.nombre} (${tarifa.precio})
