@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -57,6 +57,29 @@ const TerceroTarifaForm: React.FC<TerceroTarifaFormProps> = ({
         },
   });
 
+  // Efecto para actualizar el nombre cuando se selecciona una tarifa general
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'tarifa_general_id' && value.tarifa_general_id && value.tarifa_general_id !== 'ninguna') {
+        const tarifaSeleccionada = tarifasGenerales.find(t => t.id === value.tarifa_general_id);
+        if (tarifaSeleccionada) {
+          form.setValue('nombre', tarifaSeleccionada.nombre);
+        }
+      }
+    });
+    
+    return () => subscription.unsubscribe();
+  }, [form, tarifasGenerales]);
+
+  // Función para formatear el valor como moneda
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0,
+    }).format(value);
+  };
+
   const handleSubmit = async (data: TarifaFormValues) => {
     await onSubmit(data);
   };
@@ -81,7 +104,6 @@ const TerceroTarifaForm: React.FC<TerceroTarifaFormProps> = ({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {/* Fix: Changed from empty string to "ninguna" as the value */}
                   <SelectItem value="ninguna">Ninguna</SelectItem>
                   {tarifasGenerales.map((tarifa) => (
                     <SelectItem key={tarifa.id} value={tarifa.id}>
@@ -121,6 +143,25 @@ const TerceroTarifaForm: React.FC<TerceroTarifaFormProps> = ({
                   step="0.001"
                   placeholder="Valor de la tarifa"
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(parseFloat(e.target.value) || 0);
+                  }}
+                  onBlur={(e) => {
+                    // Mantener el valor numérico pero mostrar formateado
+                    if (e.target.value) {
+                      const numericValue = parseFloat(e.target.value);
+                      e.target.value = numericValue.toString();
+                      
+                      // Mostrar el valor formateado brevemente y luego restaurar
+                      const formattedValue = formatCurrency(numericValue);
+                      e.target.placeholder = formattedValue;
+                      setTimeout(() => {
+                        if (document.activeElement !== e.target) {
+                          e.target.placeholder = "Valor de la tarifa";
+                        }
+                      }, 2000);
+                    }
+                  }}
                   disabled={loading}
                 />
               </FormControl>
