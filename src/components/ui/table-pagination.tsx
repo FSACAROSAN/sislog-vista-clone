@@ -81,7 +81,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
   
   return (
     <div className="pagination-container">
-      <div className="row-selector w-1/4 justify-center">
+      <div className="row-selector w-1/4 justify-end">
         <span>{t('rows-per-page') || 'Rows per page'}:</span>
         <Select
           value={pageSize.toString()}
