@@ -81,7 +81,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
   
   return (
     <div className="pagination-container">
-      <div className="row-selector">
+      <div className="row-selector w-1/4 justify-center">
         <span>{t('rows-per-page') || 'Rows per page'}:</span>
         <Select
           value={pageSize.toString()}
@@ -100,7 +100,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
         </Select>
       </div>
       
-      <div className="pagination-info">
+      <div className="pagination-info w-1/4 text-center">
         {totalItems > 0 ? (
           <span>
             {startItem}-{endItem} {t('of') || 'of'} {totalItems}

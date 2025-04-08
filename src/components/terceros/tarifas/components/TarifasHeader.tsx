@@ -16,13 +16,12 @@ const TarifasHeader: React.FC<TarifasHeaderProps> = ({
   loading
 }) => {
   return <>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mt-5 mb-1">
         <Button onClick={onAddNew} disabled={loading} className="text-justify">
           <Plus className="mr-2 h-4 w-4" />
           Agregar Tarifa
         </Button>
       </div>
-      <Separator className="my-4" />
     </>;
 };
 

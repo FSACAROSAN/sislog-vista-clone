@@ -17,14 +17,7 @@ const TarifasCard: React.FC<TarifasCardProps> = ({
   onEdit,
   onDelete
 }) => {
-  return <Card>
-      <CardHeader>
-        <CardTitle>Tarifas</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <TarifasList tarifas={tarifas} loading={loading} onEdit={onEdit} onDelete={onDelete} />
-      </CardContent>
-    </Card>;
+  return <TarifasList tarifas={tarifas} loading={loading} onEdit={onEdit} onDelete={onDelete} />;
 };
 
 export default TarifasCard;
