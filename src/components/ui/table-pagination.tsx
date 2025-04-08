@@ -100,7 +100,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
         </Select>
       </div>
       
-      <div className="pagination-info w-1/4 text-center">
+      <div className="pagination-info w-1/4 justify-start">
         {totalItems > 0 ? (
           <span>
             {startItem}-{endItem} {t('of') || 'of'} {totalItems}
