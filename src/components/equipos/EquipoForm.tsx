@@ -45,10 +45,17 @@ const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess }) => {
   const onSubmit = async (values: EquipoFormValues) => {
     try {
       if (isEditing && equipo) {
-        await updateEquipo.mutateAsync({
+        // Fix for type error - explicitly define the update object with required fields
+        const updateData: Equipo = {
           ...equipo,
-          ...values
-        });
+          codigo: values.codigo,
+          referencia: values.referencia,
+          estado: values.estado,
+          clase_id: values.clase_id,
+          tipo_id: values.tipo_id
+        };
+        
+        await updateEquipo.mutateAsync(updateData);
       } else {
         await createEquipo.mutateAsync(values);
       }
