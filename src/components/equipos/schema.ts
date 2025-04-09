@@ -9,4 +9,16 @@ export const equipoFormSchema = z.object({
   tipo_id: z.string().uuid().nullable().optional(),
 });
 
+export const equipoClaseSchema = z.object({
+  nombre: z.string().min(1, "El nombre es requerido"),
+  estado: z.boolean().default(true)
+});
+
+export const equipoTipoSchema = z.object({
+  nombre: z.string().min(1, "El nombre es requerido"),
+  estado: z.boolean().default(true)
+});
+
 export type EquipoFormValues = z.infer<typeof equipoFormSchema>;
+export type EquipoClaseFormValues = z.infer<typeof equipoClaseSchema>;
+export type EquipoTipoFormValues = z.infer<typeof equipoTipoSchema>;

@@ -27,11 +27,11 @@ const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess }) => {
     resolver: zodResolver(equipoFormSchema),
     defaultValues: isEditing
       ? {
-          codigo: equipo.codigo || '',
-          referencia: equipo.referencia || '',
-          estado: equipo.estado !== undefined ? equipo.estado : true,
-          clase_id: equipo.clase_id || null,
-          tipo_id: equipo.tipo_id || null,
+          codigo: equipo?.codigo || '',
+          referencia: equipo?.referencia || '',
+          estado: equipo?.estado !== undefined ? equipo.estado : true,
+          clase_id: equipo?.clase_id || null,
+          tipo_id: equipo?.tipo_id || null,
         }
       : {
           codigo: '',
@@ -44,11 +44,11 @@ const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess }) => {
 
   const onSubmit = async (values: EquipoFormValues) => {
     try {
-      if (isEditing) {
+      if (isEditing && equipo) {
         await updateEquipo.mutateAsync({
-          ...values,
-          id: equipo.id,
-        } as Equipo);
+          ...equipo,
+          ...values
+        });
       } else {
         await createEquipo.mutateAsync(values);
       }

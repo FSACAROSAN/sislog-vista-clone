@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Table,
@@ -11,7 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Edit, Trash2 } from 'lucide-react';
 import { Equipo } from '@/types/equipo';
-import { TablePagination } from '@/components/ui/table-pagination';
+import TablePagination from '@/components/ui/table-pagination';
 import { 
   AlertDialog,
   AlertDialogAction,
@@ -86,7 +85,7 @@ const EquiposTable: React.FC<EquiposTableProps> = ({
                 <TableCell>{equipo.clase?.nombre || '-'}</TableCell>
                 <TableCell>{equipo.tipo?.nombre || '-'}</TableCell>
                 <TableCell>
-                  <Badge variant={equipo.estado ? "success" : "destructive"}>
+                  <Badge variant={equipo.estado ? "default" : "destructive"}>
                     {equipo.estado ? 'Activo' : 'Inactivo'}
                   </Badge>
                 </TableCell>

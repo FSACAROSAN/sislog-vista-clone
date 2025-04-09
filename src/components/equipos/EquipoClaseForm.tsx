@@ -2,8 +2,8 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EquipoClase, EquipoClaseFormValues } from '@/types/equipoClase';
-import { equipoClaseSchema } from './schema';
+import { EquipoClase } from '@/types/equipoClase';
+import { equipoClaseSchema, EquipoClaseFormValues } from './schema';
 import {
   Form,
   FormControl,
