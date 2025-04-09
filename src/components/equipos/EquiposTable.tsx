@@ -1,0 +1,151 @@
+
+import React from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Edit, Trash2 } from 'lucide-react';
+import { Equipo } from '@/types/equipo';
+import { TablePagination } from '@/components/ui/table-pagination';
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Badge } from '@/components/ui/badge';
+
+interface EquiposTableProps {
+  equipos: Equipo[];
+  loading: boolean;
+  onEdit: (equipo: Equipo) => void;
+  onDelete: (id: string) => void;
+  totalItems: number;
+  currentPage: number;
+  pageSize: number;
+  onPageChange: (page: number) => void;
+  onPageSizeChange: (size: number) => void;
+}
+
+const EquiposTable: React.FC<EquiposTableProps> = ({
+  equipos,
+  loading,
+  onEdit,
+  onDelete,
+  totalItems,
+  currentPage,
+  pageSize,
+  onPageChange,
+  onPageSizeChange
+}) => {
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <div className="animate-spin h-8 w-8 border-4 border-t-blue-500 border-b-blue-500 rounded-full"></div>
+      </div>
+    );
+  }
+
+  if (equipos?.length === 0) {
+    return (
+      <div className="text-center py-8 text-gray-500">
+        No se encontraron equipos. Intente con otros términos de búsqueda o cree uno nuevo.
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="border rounded-md overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Código</TableHead>
+              <TableHead>Referencia</TableHead>
+              <TableHead>Clase</TableHead>
+              <TableHead>Tipo</TableHead>
+              <TableHead>Estado</TableHead>
+              <TableHead className="w-[100px] text-right">Acciones</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {equipos?.map((equipo) => (
+              <TableRow key={equipo.id}>
+                <TableCell className="font-medium">{equipo.codigo}</TableCell>
+                <TableCell>{equipo.referencia}</TableCell>
+                <TableCell>{equipo.clase?.nombre || '-'}</TableCell>
+                <TableCell>{equipo.tipo?.nombre || '-'}</TableCell>
+                <TableCell>
+                  <Badge variant={equipo.estado ? "success" : "destructive"}>
+                    {equipo.estado ? 'Activo' : 'Inactivo'}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onEdit(equipo)}
+                    >
+                      <Edit size={16} />
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-red-500"
+                        >
+                          <Trash2 size={16} />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Esta acción no se puede deshacer. Esto eliminará permanentemente el equipo <strong>{equipo.referencia}</strong>.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                          <AlertDialogAction
+                            className="bg-red-500 hover:bg-red-600"
+                            onClick={() => onDelete(equipo.id)}
+                          >
+                            Eliminar
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="mt-4">
+        <TablePagination
+          totalItems={totalItems}
+          pageSize={pageSize}
+          currentPage={currentPage}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default EquiposTable;

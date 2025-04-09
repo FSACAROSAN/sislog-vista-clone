@@ -384,6 +384,54 @@ export type Database = {
         }
         Relationships: []
       }
+      log_equipos: {
+        Row: {
+          clase_id: string | null
+          codigo: string
+          created_at: string | null
+          estado: boolean
+          id: string
+          referencia: string
+          tipo_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          clase_id?: string | null
+          codigo: string
+          created_at?: string | null
+          estado?: boolean
+          id?: string
+          referencia: string
+          tipo_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          clase_id?: string | null
+          codigo?: string
+          created_at?: string | null
+          estado?: boolean
+          id?: string
+          referencia?: string
+          tipo_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "log_equipos_clase_id_fkey"
+            columns: ["clase_id"]
+            isOneToOne: false
+            referencedRelation: "log_equipos_clase"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "log_equipos_tipo_id_fkey"
+            columns: ["tipo_id"]
+            isOneToOne: false
+            referencedRelation: "log_equipos_tipo"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       log_equipos_clase: {
         Row: {
           created_at: string | null

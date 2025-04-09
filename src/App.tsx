@@ -21,6 +21,7 @@ import StandsPage from "./pages/Stands";
 import TarifasGenerales from "./pages/TarifasGenerales";
 import Terceros from "./pages/Terceros";
 import UnidadesMedida from "./pages/UnidadesMedida";
+import Equipos from "./pages/Equipos";
 
 const App = () => {
   // Create a client
@@ -52,6 +53,7 @@ const App = () => {
                     <Route path="tarifas-generales" element={<TarifasGenerales />} />
                     <Route path="terceros" element={<Terceros />} />
                     <Route path="unidades-medida" element={<UnidadesMedida />} />
+                    <Route path="equipos" element={<Equipos />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>
