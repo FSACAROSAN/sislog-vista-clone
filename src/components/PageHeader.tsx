@@ -29,7 +29,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   };
 
   return (
-    <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-4 px-4 md:px-6 border-b border-gray-200 bg-white">
+    <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-2 px-4 md:px-6 border-b border-gray-200 bg-white h-[61px]">
       <div className="flex items-center gap-3 mb-4 md:mb-0 mt-4 md:mt-0 ml-8 md:ml-0 px-0 md:px-[35px]">
         {icon && <div className="text-sislog-primary">{icon}</div>}
         <div>

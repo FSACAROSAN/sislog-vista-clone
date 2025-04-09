@@ -51,7 +51,7 @@ const Sidebar: React.FC = () => {
   const isFacturacionActive = ['/tarifas-generales'].includes(location.pathname);
 
   return <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
-      <div className="p-4 border-b border-gray-200 flex items-center">
+      <div className="h-[61px] px-4 border-b border-gray-200 flex items-center">
         <div className="h-8 w-8 bg-sislog-primary rounded-md flex items-center justify-center mr-2">
           <Package2 size={20} className="text-white" />
         </div>
