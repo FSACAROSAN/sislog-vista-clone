@@ -109,17 +109,13 @@ export const useUnidadesMedida = () => {
     setCurrentPage(1); // Reset to first page when changing page size
   };
 
-  // Calculate total items and paginated data
-  const totalItems = Array.isArray(unidadesMedida) ? unidadesMedida.length : 0;
+  // Calculate total items and paginated data - ensure arrays are used
   const paginatedData = Array.isArray(unidadesMedida) 
     ? unidadesMedida.slice((currentPage - 1) * pageSize, currentPage * pageSize) 
     : [];
 
   return {
-    unidadesMedida: Array.isArray(unidadesMedida) ? unidadesMedida.slice(
-      (currentPage - 1) * pageSize,
-      currentPage * pageSize
-    ) : [],
+    unidadesMedida: paginatedData,
     allUnidadesMedida: Array.isArray(allUnidadesMedida) ? allUnidadesMedida : [],
     totalItems: Array.isArray(unidadesMedida) ? unidadesMedida.length : 0,
     loading,

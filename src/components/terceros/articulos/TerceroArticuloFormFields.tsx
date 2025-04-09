@@ -62,6 +62,9 @@ export const TerceroArticuloUnidadMedidaField: React.FC = () => {
     fetchUnidadesMedida();
   }, [fetchUnidadesMedida]);
   
+  // Ensure allUnidadesMedida is always an array
+  const unidadesList = Array.isArray(allUnidadesMedida) ? allUnidadesMedida : [];
+  
   return (
     <FormField
       control={control}
@@ -82,8 +85,8 @@ export const TerceroArticuloUnidadMedidaField: React.FC = () => {
             <SelectContent>
               {loading ? (
                 <SelectItem value="loading" disabled>Cargando...</SelectItem>
-              ) : Array.isArray(allUnidadesMedida) && allUnidadesMedida.length > 0 ? (
-                allUnidadesMedida.map((unidad) => (
+              ) : unidadesList.length > 0 ? (
+                unidadesList.map((unidad) => (
                   <SelectItem 
                     key={unidad.unidad_medida_id} 
                     value={unidad.unidad_medida_id}
