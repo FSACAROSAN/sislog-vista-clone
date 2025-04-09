@@ -51,7 +51,7 @@ const EmpresaTable: React.FC<EmpresaTableProps> = ({
   const [openAlert, setOpenAlert] = React.useState<string | null>(null);
 
   return (
-    <div>
+    <div onClick={(e) => e.stopPropagation()}>
       <div className="flex justify-between items-center mb-4">
         <div className="relative w-full max-w-sm">
           <input
@@ -117,18 +117,32 @@ const EmpresaTable: React.FC<EmpresaTableProps> = ({
                   <TableCell>{formatDate(empresa.fecha_creacion)}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                      <DropdownMenuTrigger asChild onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}>
                         <Button variant="ghost" size="icon">
                           <MoreHorizontal size={16} />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-40">
-                        <DropdownMenuItem onClick={() => onEdit(empresa)} className="cursor-pointer">
+                      <DropdownMenuContent align="end" className="w-40 bg-white z-[999]">
+                        <DropdownMenuItem 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onEdit(empresa);
+                          }} 
+                          className="cursor-pointer"
+                        >
                           <Edit size={16} className="mr-2 text-gray-500" />
                           <span>Editar</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem 
-                          onClick={() => setOpenAlert(empresa.id)} 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setOpenAlert(empresa.id);
+                          }} 
                           className="cursor-pointer text-red-600 focus:text-red-600"
                         >
                           <Trash2 size={16} className="mr-2 text-red-500" />
@@ -137,8 +151,13 @@ const EmpresaTable: React.FC<EmpresaTableProps> = ({
                       </DropdownMenuContent>
                     </DropdownMenu>
 
-                    <AlertDialog open={openAlert === empresa.id} onOpenChange={() => setOpenAlert(null)}>
-                      <AlertDialogContent>
+                    <AlertDialog 
+                      open={openAlert === empresa.id} 
+                      onOpenChange={(open) => {
+                        if (!open) setOpenAlert(null);
+                      }}
+                    >
+                      <AlertDialogContent className="bg-white z-[9999]">
                         <AlertDialogHeader>
                           <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
                           <AlertDialogDescription>
@@ -146,10 +165,17 @@ const EmpresaTable: React.FC<EmpresaTableProps> = ({
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                          <AlertDialogCancel onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}>
+                            Cancelar
+                          </AlertDialogCancel>
                           <AlertDialogAction
                             className="bg-red-500 text-white hover:bg-red-600"
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
                               onDelete(empresa.id);
                               setOpenAlert(null);
                             }}
