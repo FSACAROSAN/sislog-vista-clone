@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useUnidadesMedida } from '@/hooks/useUnidadesMedida';
 import UnidadesMedidaHeader from '@/components/unidades-medida/UnidadesMedidaHeader';
 import UnidadesMedidaSearch from '@/components/unidades-medida/UnidadesMedidaSearch';
@@ -25,6 +25,10 @@ const UnidadesMedidaPage: React.FC = () => {
     handlePageChange,
     handlePageSizeChange
   } = useUnidadesMedida();
+
+  useEffect(() => {
+    fetchUnidadesMedida();
+  }, [fetchUnidadesMedida]);
 
   return (
     <div className="flex flex-col h-full">
