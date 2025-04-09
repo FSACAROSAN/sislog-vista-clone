@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Truck, Ship, ArrowDownToLine, ArrowUpFromLine, Settings, Wrench } from 'lucide-react';
+import { Truck, Ship, ArrowDownToLine, ArrowUpFromLine, Settings } from 'lucide-react';
 import { ChevronDown } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import SidebarSubItem from './SidebarSubItem';
@@ -13,8 +13,6 @@ interface LogisticaSectionProps {
 
 const LogisticaSection: React.FC<LogisticaSectionProps> = ({ isActive, activePath }) => {
   const { t } = useLanguage();
-
-  const isConfigActive = ['/equipos'].includes(activePath);
 
   return (
     <Collapsible className="w-full">
@@ -48,29 +46,6 @@ const LogisticaSection: React.FC<LogisticaSectionProps> = ({ isActive, activePat
               active={activePath === '/salida'} 
               path="/salida" 
             />
-            
-            {/* Configuración Submenu */}
-            <Collapsible className="w-full">
-              <CollapsibleTrigger className="w-full">
-                <div className={`flex items-center gap-2 px-2 py-2 text-sm text-gray-700 rounded-md hover:bg-gray-100 ${isConfigActive ? 'bg-gray-100 font-medium' : ''} justify-between`}>
-                  <div className="flex items-center gap-2">
-                    <Settings size={16} />
-                    <span>Configuración</span>
-                  </div>
-                  <ChevronDown size={14} className="transition-transform duration-200" />
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="pl-8">
-                  <SidebarSubItem 
-                    icon={<Wrench size={16} />} 
-                    label="Equipos" 
-                    active={activePath === '/equipos'} 
-                    path="/equipos" 
-                  />
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
           </div>
         </div>
       </CollapsibleContent>

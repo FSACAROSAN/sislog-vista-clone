@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { LayoutDashboard, Package2, LogOut, ClipboardList } from 'lucide-react';
@@ -20,7 +19,7 @@ const Sidebar: React.FC = () => {
   const isConfigActive = ['/empresa', '/paises', '/ciudades', '/centro-logistico', '/bodegas', '/stands', '/terceros'].includes(location.pathname);
   const isFacturacionActive = ['/tarifas-generales'].includes(location.pathname);
   const isInventarioActive = ['/productos', '/movimientos', '/valoracion', '/unidades-medida'].includes(location.pathname);
-  const isLogisticaActive = ['/anuncio-arribo', '/entradas', '/salida', '/equipos'].includes(location.pathname);
+  const isLogisticaActive = ['/anuncio-arribo', '/entradas', '/salida'].includes(location.pathname);
 
   return (
     <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
