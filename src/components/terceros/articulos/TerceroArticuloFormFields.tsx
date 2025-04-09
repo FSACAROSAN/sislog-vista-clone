@@ -69,7 +69,11 @@ export const TerceroArticuloUnidadMedidaField: React.FC = () => {
       render={({ field }) => (
         <FormItem>
           <FormLabel>Unidad de Medida</FormLabel>
-          <Select onValueChange={field.onChange} value={field.value || ""}>
+          <Select 
+            onValueChange={field.onChange} 
+            value={field.value || ""}
+            disabled={loading}
+          >
             <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder="Seleccione una unidad de medida" />
@@ -80,7 +84,10 @@ export const TerceroArticuloUnidadMedidaField: React.FC = () => {
                 <SelectItem value="loading" disabled>Cargando...</SelectItem>
               ) : Array.isArray(allUnidadesMedida) && allUnidadesMedida.length > 0 ? (
                 allUnidadesMedida.map((unidad) => (
-                  <SelectItem key={unidad.unidad_medida_id} value={unidad.unidad_medida_id}>
+                  <SelectItem 
+                    key={unidad.unidad_medida_id} 
+                    value={unidad.unidad_medida_id}
+                  >
                     {unidad.nombre}
                   </SelectItem>
                 ))

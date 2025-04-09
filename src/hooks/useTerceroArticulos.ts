@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { TerceroArticulo } from '@/types/terceroArticulo';
 
 export const useTerceroArticulos = (terceroId: string) => {
+  // Initialize with empty arrays to avoid undefined
   const [articulos, setArticulos] = useState<TerceroArticulo[]>([]);
   const [allArticulos, setAllArticulos] = useState<TerceroArticulo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +16,12 @@ export const useTerceroArticulos = (terceroId: string) => {
   const { toast } = useToast();
 
   const fetchArticulos = useCallback(async () => {
-    if (!terceroId) return;
+    if (!terceroId) {
+      setArticulos([]);
+      setAllArticulos([]);
+      setLoading(false);
+      return;
+    }
 
     try {
       setLoading(true);
@@ -31,11 +37,16 @@ export const useTerceroArticulos = (terceroId: string) => {
 
       if (error) throw error;
       
-      // Store all articulos for filtering
-      setAllArticulos(data as unknown as TerceroArticulo[]);
-      setArticulos(data as unknown as TerceroArticulo[]);
+      // Ensure we always set arrays, even if data is undefined
+      const articulosArray = Array.isArray(data) ? data : [];
+      setAllArticulos(articulosArray as unknown as TerceroArticulo[]);
+      setArticulos(articulosArray as unknown as TerceroArticulo[]);
     } catch (error: any) {
       console.error('Error fetching articulos:', error);
+      // Initialize with empty arrays in case of error
+      setAllArticulos([]);
+      setArticulos([]);
+      
       toast({
         title: 'Error',
         description: error.message || 'Error al cargar los productos',
@@ -75,11 +86,11 @@ export const useTerceroArticulos = (terceroId: string) => {
     fetchArticulos();
   }, [fetchArticulos]);
 
-  // Calculate paginated data
-  const paginatedArticulos = articulos.slice(
+  // Calculate paginated data - ensure articulos is an array
+  const paginatedArticulos = Array.isArray(articulos) ? articulos.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize
-  );
+  ) : [];
 
   // Handle page change
   const handlePageChange = (page: number) => {
@@ -94,8 +105,8 @@ export const useTerceroArticulos = (terceroId: string) => {
 
   return {
     articulos: paginatedArticulos,
-    allArticulos: articulos,
-    totalItems: articulos.length,
+    allArticulos: Array.isArray(articulos) ? articulos : [],
+    totalItems: Array.isArray(articulos) ? articulos.length : 0,
     loading,
     selectedArticulo,
     setSelectedArticulo,

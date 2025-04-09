@@ -5,6 +5,7 @@ import { UnidadMedida } from '@/types/unidadMedida';
 import { useToast } from '@/hooks/use-toast';
 
 export const useUnidadesMedida = () => {
+  // Initialize state with empty arrays to prevent undefined
   const [unidadesMedida, setUnidadesMedida] = useState<UnidadMedida[]>([]);
   const [allUnidadesMedida, setAllUnidadesMedida] = useState<UnidadMedida[]>([]);
   const [loading, setLoading] = useState(false);
@@ -25,10 +26,10 @@ export const useUnidadesMedida = () => {
 
       if (error) throw error;
       
-      // Ensure we always set arrays even if data is undefined
+      // Always ensure we set arrays, even if data is null or undefined
       const unidadesArray = Array.isArray(data) ? data : [];
-      setAllUnidadesMedida(unidadesArray as UnidadMedida[]);
-      setUnidadesMedida(unidadesArray as UnidadMedida[]);
+      setAllUnidadesMedida(unidadesArray);
+      setUnidadesMedida(unidadesArray);
     } catch (error: any) {
       console.error('Error fetching unidades de medida:', error);
       // Initialize with empty arrays in case of error
@@ -47,6 +48,7 @@ export const useUnidadesMedida = () => {
 
   // Search filter effect
   useEffect(() => {
+    // Ensure allUnidadesMedida is always an array before filtering
     if (!Array.isArray(allUnidadesMedida)) {
       setUnidadesMedida([]);
       return;
@@ -114,9 +116,12 @@ export const useUnidadesMedida = () => {
     : [];
 
   return {
-    unidadesMedida: paginatedData,
-    allUnidadesMedida,
-    totalItems,
+    unidadesMedida: Array.isArray(unidadesMedida) ? unidadesMedida.slice(
+      (currentPage - 1) * pageSize,
+      currentPage * pageSize
+    ) : [],
+    allUnidadesMedida: Array.isArray(allUnidadesMedida) ? allUnidadesMedida : [],
+    totalItems: Array.isArray(unidadesMedida) ? unidadesMedida.length : 0,
     loading,
     searchTerm,
     setSearchTerm,
@@ -132,4 +137,3 @@ export const useUnidadesMedida = () => {
     handlePageSizeChange
   };
 };
-
