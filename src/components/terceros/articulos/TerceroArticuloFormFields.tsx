@@ -68,10 +68,13 @@ export const TerceroArticuloUnidadMedidaField: React.FC = () => {
     fetchUnidadesMedida();
   }, [fetchUnidadesMedida]);
   
+  // Ensure we have an array to work with, even if allUnidadesMedida is undefined
+  const unidadesMedidaArray = Array.isArray(allUnidadesMedida) ? allUnidadesMedida : [];
+  
   // Filtrar unidades de medida según el texto de búsqueda
   const filteredUnidades = searchValue === '' 
-    ? allUnidadesMedida 
-    : allUnidadesMedida.filter((unidad) => 
+    ? unidadesMedidaArray 
+    : unidadesMedidaArray.filter((unidad) => 
         unidad.nombre.toLowerCase().includes(searchValue.toLowerCase())
       );
   
@@ -87,7 +90,7 @@ export const TerceroArticuloUnidadMedidaField: React.FC = () => {
               <FormControl>
                 <div className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
                   {field.value ? (
-                    allUnidadesMedida.find(unidad => unidad.unidad_medida_id === field.value)?.nombre || "Seleccione una unidad"
+                    unidadesMedidaArray.find(unidad => unidad.unidad_medida_id === field.value)?.nombre || "Seleccione una unidad"
                   ) : (
                     "Seleccione una unidad de medida"
                   )}
