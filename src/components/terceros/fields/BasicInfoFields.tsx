@@ -47,7 +47,13 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
             <FormItem className="space-y-1">
               <FormLabel>Dirección</FormLabel>
               <FormControl>
-                <Textarea disabled={loading} placeholder="Dirección" {...field} rows={2} />
+                <Textarea 
+                  disabled={loading} 
+                  placeholder="Dirección" 
+                  {...field} 
+                  className="min-h-[56px]" 
+                  rows={1} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -96,7 +102,13 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
           <FormItem>
             <FormLabel>Dirección</FormLabel>
             <FormControl>
-              <Textarea disabled={loading} placeholder="Dirección" {...field} />
+              <Textarea 
+                disabled={loading} 
+                placeholder="Dirección" 
+                {...field} 
+                className="min-h-[56px]" 
+                rows={1}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
