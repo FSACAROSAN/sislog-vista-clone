@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Settings, Building2, Map, MapPin, Warehouse, UserCircle, PackageOpen } from 'lucide-react';
+import { Settings, Building2, Map, MapPin, Warehouse, UserCircle, PackageOpen, Package } from 'lucide-react';
 import { ChevronDown } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import SidebarSubItem from './SidebarSubItem';
@@ -53,7 +53,7 @@ const ConfigSection: React.FC<ConfigSectionProps> = ({ isActive, activePath }) =
               path="/centro-logistico" 
             />
             <SidebarSubItem 
-              icon={<Warehouse size={16} />} 
+              icon={<Package size={16} />} 
               label={t('warehouses')} 
               active={activePath === '/bodegas'} 
               path="/bodegas" 
