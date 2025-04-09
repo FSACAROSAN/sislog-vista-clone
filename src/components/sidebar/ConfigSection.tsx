@@ -53,7 +53,7 @@ const ConfigSection: React.FC<ConfigSectionProps> = ({ isActive, activePath }) =
               path="/centro-logistico" 
             />
             <SidebarSubItem 
-              icon={<img src="/lovable-uploads/93a7ddd3-b268-4cb6-93ca-eb23d2e21690.png" className="w-4 h-4" alt="Bodega" />} 
+              icon={<Warehouse size={16} />} 
               label={t('warehouses')} 
               active={activePath === '/bodegas'} 
               path="/bodegas" 
