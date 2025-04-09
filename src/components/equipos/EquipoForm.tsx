@@ -46,16 +46,18 @@ const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess }) => {
     try {
       if (isEditing && equipo) {
         // Fix for type error - explicitly define the update object with required fields
-        const updateData: Equipo = {
-          ...equipo,
-          codigo: values.codigo,
-          referencia: values.referencia,
-          estado: values.estado,
+        // Ensure all required fields from EquipoFormValues are assigned non-optional values
+        await updateEquipo.mutateAsync({
+          id: equipo.id,
+          codigo: values.codigo, // This is required by EquipoFormValues
+          referencia: values.referencia, // This is required by EquipoFormValues
+          estado: values.estado, 
           clase_id: values.clase_id,
-          tipo_id: values.tipo_id
-        };
-        
-        await updateEquipo.mutateAsync(updateData);
+          tipo_id: values.tipo_id,
+          // Preserve other fields from the original equipo if needed
+          created_at: equipo.created_at,
+          updated_at: equipo.updated_at
+        });
       } else {
         await createEquipo.mutateAsync(values);
       }
