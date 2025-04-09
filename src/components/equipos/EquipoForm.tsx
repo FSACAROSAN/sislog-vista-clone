@@ -10,18 +10,21 @@ import { Equipo } from '@/types/equipo';
 import { useEquipos } from '@/hooks/useEquipos';
 import { useEquiposClase } from '@/hooks/useEquiposClase';
 import { useEquiposTipo } from '@/hooks/useEquiposTipo';
+import FormActions from '@/components/terceros/tarifas/form/FormActions';
 
 interface EquipoFormProps {
   equipo?: Equipo | null;
   onSuccess: () => void;
+  onCancel: () => void;
 }
 
-const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess }) => {
+const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess, onCancel }) => {
   const { toast } = useToast();
   const { createEquipo, updateEquipo } = useEquipos();
   const { equiposClase } = useEquiposClase();
   const { equiposTipo } = useEquiposTipo();
   const isEditing = Boolean(equipo?.id);
+  const loading = createEquipo.isPending || updateEquipo.isPending;
 
   const form = useForm<EquipoFormValues>({
     resolver: zodResolver(equipoFormSchema),
@@ -86,15 +89,11 @@ const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess }) => {
           equiposTipo={equiposTipo || []} 
         />
         
-        <div className="flex justify-end gap-2">
-          <Button
-            type="submit"
-            disabled={createEquipo.isPending || updateEquipo.isPending}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {isEditing ? 'Guardar cambios' : 'Crear equipo'}
-          </Button>
-        </div>
+        <FormActions
+          onCancel={onCancel}
+          loading={loading}
+          submitText={isEditing ? 'Guardar cambios' : 'Crear equipo'}
+        />
       </form>
     </FormProvider>
   );
