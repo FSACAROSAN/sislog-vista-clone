@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Truck, Ship, ArrowDownToLine, ArrowUpFromLine, Settings, Wrench } from 'lucide-react';
+import { Truck, Ship, ArrowDownToLine, ArrowUpFromLine, Settings, Wrench, Ruler } from 'lucide-react';
 import { ChevronDown } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import SidebarSubItem from './SidebarSubItem';
@@ -14,7 +14,7 @@ interface LogisticaSectionProps {
 const LogisticaSection: React.FC<LogisticaSectionProps> = ({ isActive, activePath }) => {
   const { t } = useLanguage();
 
-  const isConfigActive = ['/equipos'].includes(activePath);
+  const isConfigActive = ['/equipos', '/unidades-medida'].includes(activePath);
 
   return (
     <Collapsible className="w-full">
@@ -67,6 +67,12 @@ const LogisticaSection: React.FC<LogisticaSectionProps> = ({ isActive, activePat
                     label="Equipos" 
                     active={activePath === '/equipos'} 
                     path="/equipos" 
+                  />
+                  <SidebarSubItem 
+                    icon={<Ruler size={16} />} 
+                    label="Unidades de medida" 
+                    active={activePath === '/unidades-medida'} 
+                    path="/unidades-medida" 
                   />
                 </div>
               </CollapsibleContent>
