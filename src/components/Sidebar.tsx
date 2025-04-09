@@ -8,7 +8,6 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import SidebarItem from './sidebar/SidebarItem';
 import ConfigSection from './sidebar/ConfigSection';
 import FacturacionSection from './sidebar/FacturacionSection';
-import InventarioSection from './sidebar/InventarioSection';
 import LogisticaSection from './sidebar/LogisticaSection';
 
 const Sidebar: React.FC = () => {
@@ -19,7 +18,6 @@ const Sidebar: React.FC = () => {
   
   const isConfigActive = ['/empresa', '/paises', '/ciudades', '/centro-logistico', '/bodegas', '/stands', '/terceros'].includes(location.pathname);
   const isFacturacionActive = ['/tarifas-generales'].includes(location.pathname);
-  const isInventarioActive = ['/productos', '/movimientos', '/valoracion', '/unidades-medida'].includes(location.pathname);
   const isLogisticaActive = ['/anuncio-arribo', '/entradas', '/salida', '/equipos', '/unidades-medida'].includes(location.pathname);
 
   return (
@@ -46,11 +44,6 @@ const Sidebar: React.FC = () => {
 
         <FacturacionSection 
           isActive={isFacturacionActive} 
-          activePath={location.pathname} 
-        />
-
-        <InventarioSection 
-          isActive={isInventarioActive} 
           activePath={location.pathname} 
         />
 
