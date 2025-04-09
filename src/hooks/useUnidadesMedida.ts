@@ -1,32 +1,25 @@
 
-import { useState, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { UnidadMedida } from '@/types/unidadMedida';
+import { useToast } from '@/hooks/use-toast';
 
 export const useUnidadesMedida = () => {
   const [unidadesMedida, setUnidadesMedida] = useState<UnidadMedida[]>([]);
-  const [allUnidadesMedida, setAllUnidadesMedida] = useState<UnidadMedida[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedUnidadMedida, setSelectedUnidadMedida] = useState<UnidadMedida | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const fetchUnidadesMedida = async () => {
+  const fetchUnidadesMedida = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
         .from('inv_unidades_medida')
         .select('*')
+        .eq('estado', true)
         .order('nombre', { ascending: true });
 
       if (error) throw error;
-      
-      // Store all unidades de medida for filtering
-      setAllUnidadesMedida(data as unknown as UnidadMedida[]);
+      setUnidadesMedida(data as UnidadMedida[]);
     } catch (error: any) {
       console.error('Error fetching unidades de medida:', error);
       toast({
@@ -37,80 +30,11 @@ export const useUnidadesMedida = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleDelete = async (id: string) => {
-    try {
-      const { error } = await supabase
-        .from('inv_unidades_medida')
-        .delete()
-        .eq('unidad_medida_id', id);
-
-      if (error) throw error;
-
-      toast({
-        title: 'Éxito',
-        description: 'Unidad de medida eliminada correctamente',
-      });
-      fetchUnidadesMedida();
-    } catch (error: any) {
-      console.error('Error deleting unidad de medida:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Error al eliminar la unidad de medida',
-        variant: 'destructive',
-      });
-    }
-  };
-
-  useEffect(() => {
-    fetchUnidadesMedida();
-  }, []);
-
-  // Filter unidades de medida based on search term
-  useEffect(() => {
-    const filteredResults = allUnidadesMedida.filter(unidad =>
-      unidad.nombre.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    
-    setUnidadesMedida(filteredResults);
-    // Reset to first page when search term changes
-    setCurrentPage(1);
-  }, [searchTerm, allUnidadesMedida]);
-
-  // Calculate paginated data
-  const paginatedUnidadesMedida = unidadesMedida.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
-
-  // Handle page change
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  // Handle page size change
-  const handlePageSizeChange = (size: number) => {
-    setPageSize(size);
-    setCurrentPage(1); // Reset to first page when changing page size
-  };
+  }, [toast]);
 
   return {
-    unidadesMedida: paginatedUnidadesMedida,
-    allUnidadesMedida: unidadesMedida,
-    totalItems: unidadesMedida.length,
+    unidadesMedida,
     loading,
-    searchTerm,
-    setSearchTerm,
-    selectedUnidadMedida,
-    setSelectedUnidadMedida,
-    isDialogOpen,
-    setIsDialogOpen,
-    fetchUnidadesMedida,
-    handleDelete,
-    currentPage,
-    pageSize,
-    handlePageChange,
-    handlePageSizeChange
+    fetchUnidadesMedida
   };
 };

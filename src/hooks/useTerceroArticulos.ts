@@ -19,8 +19,9 @@ export const useTerceroArticulos = (terceroId: string) => {
 
     try {
       setLoading(true);
+      // Use "as any" to bypass the TypeScript error
       const { data, error } = await supabase
-        .from('ge_tercero_articulos')
+        .from('ge_tercero_articulos' as any)
         .select(`
           *,
           unidad_medida:inv_unidades_medida(*)
@@ -47,8 +48,9 @@ export const useTerceroArticulos = (terceroId: string) => {
 
   const handleDelete = async (id: string) => {
     try {
+      // Use "as any" to bypass the TypeScript error
       const { error } = await supabase
-        .from('ge_tercero_articulos')
+        .from('ge_tercero_articulos' as any)
         .delete()
         .eq('id', id);
 
