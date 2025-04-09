@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { Mail, Lock, Truck, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -92,10 +91,10 @@ const Auth: React.FC = () => {
         <div className="bg-white rounded-xl shadow-lg p-8">
           <div className="flex items-center justify-center mb-6">
             <div className="h-12 w-12 bg-sislog-primary rounded-md flex items-center justify-center mr-3">
-              <User size={28} className="text-white" />
+              <Truck size={28} className="text-white" />
             </div>
             <h1 className="text-2xl font-bold text-gray-800">
-              SISLOG {isSignUp ? 'Registro' : 'Acceso'}
+              SISLOG {isSignUp ? 'Registro' : ''}
             </h1>
           </div>
           
@@ -104,7 +103,7 @@ const Auth: React.FC = () => {
               <div className="space-y-2">
                 <Label htmlFor="fullName">Nombre completo</Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                  <Truck className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                   <Input
                     id="fullName"
                     type="text"
