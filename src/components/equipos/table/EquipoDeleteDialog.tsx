@@ -38,12 +38,18 @@ const EquipoDeleteDialog: React.FC<EquipoDeleteDialogProps> = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={(e) => e.stopPropagation()}>
+          <AlertDialogCancel 
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
             Cancelar
           </AlertDialogCancel>
           <AlertDialogAction
             className="bg-red-500 hover:bg-red-600 text-white"
             onClick={(e) => {
+              e.preventDefault();
               e.stopPropagation();
               onConfirm();
             }}

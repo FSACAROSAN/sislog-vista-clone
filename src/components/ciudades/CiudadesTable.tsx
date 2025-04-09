@@ -51,7 +51,7 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
   };
 
   return (
-    <div className="rounded-md border">
+    <div onClick={(e) => e.stopPropagation()} className="rounded-md border">
       <Table>
         <TableHeader>
           <TableRow>

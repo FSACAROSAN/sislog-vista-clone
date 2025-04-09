@@ -51,7 +51,10 @@ const EquipoTableRow: React.FC<EquipoTableRowProps> = ({ equipo, onEdit, onDelet
       <TableCell className="text-right">
         <div className="flex justify-end">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+            <DropdownMenuTrigger asChild onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}>
               <Button 
                 variant="ghost" 
                 size="icon" 

@@ -62,7 +62,7 @@ const EquiposTable: React.FC<EquiposTableProps> = ({
   };
 
   return (
-    <div>
+    <div onClick={(e) => e.stopPropagation()}>
       <div className="border rounded-md overflow-hidden">
         <Table>
           <TableHeader>
