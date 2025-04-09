@@ -384,6 +384,54 @@ export type Database = {
         }
         Relationships: []
       }
+      log_equipos_clase: {
+        Row: {
+          created_at: string | null
+          estado: boolean | null
+          id: string
+          nombre: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          estado?: boolean | null
+          id?: string
+          nombre: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          estado?: boolean | null
+          id?: string
+          nombre?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      log_equipos_tipo: {
+        Row: {
+          created_at: string | null
+          estado: boolean | null
+          id: string
+          nombre: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          estado?: boolean | null
+          id?: string
+          nombre: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          estado?: boolean | null
+          id?: string
+          nombre?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       paises: {
         Row: {
           codigo: number
