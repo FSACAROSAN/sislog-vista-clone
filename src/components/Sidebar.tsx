@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { LayoutDashboard, Package2, LogOut, ClipboardList } from 'lucide-react';
+import { LayoutDashboard, Truck, LogOut, ClipboardList } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -24,7 +24,7 @@ const Sidebar: React.FC = () => {
     <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
       <div className="h-[61px] px-4 border-b border-gray-200 flex items-center">
         <div className="h-8 w-8 bg-sislog-primary rounded-md flex items-center justify-center mr-2">
-          <Package2 size={20} className="text-white" />
+          <Truck size={20} className="text-white" />
         </div>
         <span className="font-bold text-xl">SISLOG</span>
       </div>
@@ -53,7 +53,7 @@ const Sidebar: React.FC = () => {
         />
         
         <SidebarItem 
-          icon={<Package2 size={18} />} 
+          icon={<Truck size={18} />} 
           label={t('containers')} 
         />
         
