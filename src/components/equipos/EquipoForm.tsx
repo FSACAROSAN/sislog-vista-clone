@@ -67,13 +67,6 @@ const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess }) => {
         });
       }
       
-      toast({
-        title: isEditing ? "Equipo actualizado" : "Equipo creado",
-        description: isEditing 
-          ? "El equipo se ha actualizado correctamente" 
-          : "El nuevo equipo se ha creado correctamente",
-      });
-      
       onSuccess();
     } catch (error) {
       console.error('Error saving equipo:', error);
@@ -85,15 +78,9 @@ const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess }) => {
     }
   };
 
-  // Prevenir propagación de eventos
-  const preventPropagation = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" onClick={preventPropagation}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" onClick={(e) => e.stopPropagation()}>
         <EquipoFormFields 
           equiposClase={equiposClase || []} 
           equiposTipo={equiposTipo || []} 
@@ -103,7 +90,7 @@ const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess }) => {
           <Button
             type="submit"
             disabled={createEquipo.isPending || updateEquipo.isPending}
-            onClick={preventPropagation}
+            onClick={(e) => e.stopPropagation()}
           >
             {isEditing ? 'Guardar cambios' : 'Crear equipo'}
           </Button>

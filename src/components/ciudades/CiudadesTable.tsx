@@ -42,12 +42,78 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
   onEdit, 
   onDelete 
 }) => {
-  const [openAlert, setOpenAlert] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [ciudadToDelete, setCiudadToDelete] = useState<Ciudad | null>(null);
 
-  // Función para evitar la propagación de eventos
-  const preventPropagation = (e: React.MouseEvent) => {
+  if (loading) {
+    return (
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nombre</TableHead>
+              <TableHead>País</TableHead>
+              <TableHead>Estado</TableHead>
+              <TableHead className="text-right">Acciones</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-4">
+                <div className="flex justify-center">
+                  <div className="animate-spin h-6 w-6 border-4 border-t-blue-500 border-b-blue-500 rounded-full"></div>
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    );
+  } 
+
+  if (ciudades.length === 0) {
+    return (
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nombre</TableHead>
+              <TableHead>País</TableHead>
+              <TableHead>Estado</TableHead>
+              <TableHead className="text-right">Acciones</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-4">
+                No se encontraron ciudades
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    );
+  }
+
+  const handleDeleteClick = (e: React.MouseEvent, ciudad: Ciudad) => {
     e.preventDefault();
     e.stopPropagation();
+    setCiudadToDelete(ciudad);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (ciudadToDelete) {
+      onDelete(ciudadToDelete.id);
+    }
+    setDeleteDialogOpen(false);
+    setCiudadToDelete(null);
+  };
+
+  const handleEditClick = (e: React.MouseEvent, ciudad: Ciudad) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onEdit(ciudad);
   };
 
   return (
@@ -62,114 +128,84 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {loading ? (
-            <TableRow>
-              <TableCell colSpan={4} className="text-center py-4">
-                <div className="flex justify-center">
-                  <div className="animate-spin h-6 w-6 border-4 border-t-blue-500 border-b-blue-500 rounded-full"></div>
+          {ciudades.map((ciudad) => (
+            <TableRow key={ciudad.id}>
+              <TableCell className="font-medium">{ciudad.nombre}</TableCell>
+              <TableCell>{ciudad.pais_nombre}</TableCell>
+              <TableCell>
+                <Badge className={`${
+                  ciudad.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                } border-0`}>
+                  {ciudad.estado || 'Activo'}
+                </Badge>
+              </TableCell>
+              <TableCell className="text-right">
+                <div className="flex justify-end">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="h-8 w-8 p-0"
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Abrir menú</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent 
+                      align="end" 
+                      className="w-36 bg-white shadow-lg z-[999]"
+                    >
+                      <DropdownMenuItem 
+                        onClick={(e) => handleEditClick(e, ciudad)}
+                        className="cursor-pointer"
+                      >
+                        <Edit className="mr-2 h-4 w-4 text-gray-500" />
+                        <span>Editar</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={(e) => handleDeleteClick(e, ciudad)}
+                        className="cursor-pointer text-red-600 focus:text-red-600"
+                      >
+                        <Trash2 className="mr-2 h-4 w-4 text-red-500" />
+                        <span>Eliminar</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </TableCell>
             </TableRow>
-          ) : ciudades.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={4} className="text-center py-4">
-                No se encontraron ciudades
-              </TableCell>
-            </TableRow>
-          ) : (
-            ciudades.map((ciudad) => (
-              <TableRow key={ciudad.id}>
-                <TableCell className="font-medium">{ciudad.nombre}</TableCell>
-                <TableCell>{ciudad.pais_nombre}</TableCell>
-                <TableCell>
-                  <Badge className={`${
-                    ciudad.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                  } border-0`}>
-                    {ciudad.estado || 'Activo'}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end" onClick={preventPropagation}>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="h-8 w-8 p-0 focus:ring-0 focus:ring-offset-0"
-                          onClick={preventPropagation}
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Acciones</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent 
-                        align="end" 
-                        className="w-36 bg-white shadow-lg z-[200]"
-                        onClick={preventPropagation}
-                      >
-                        <DropdownMenuItem 
-                          onClick={(e) => {
-                            preventPropagation(e);
-                            onEdit(ciudad);
-                          }}
-                          className="cursor-pointer"
-                        >
-                          <Edit className="mr-2 h-4 w-4 text-gray-500" />
-                          <span>Editar</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem 
-                          onClick={(e) => {
-                            preventPropagation(e);
-                            setOpenAlert(ciudad.id);
-                          }}
-                          className="cursor-pointer text-red-600 focus:text-red-600"
-                        >
-                          <Trash2 className="mr-2 h-4 w-4 text-red-500" />
-                          <span>Eliminar</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-
-                  <AlertDialog 
-                    open={openAlert === ciudad.id} 
-                    onOpenChange={(open) => {
-                      if (!open) setOpenAlert(null);
-                    }}
-                  >
-                    <AlertDialogContent 
-                      className="bg-white z-[300]" 
-                      onClick={preventPropagation}
-                    >
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Esta acción no se puede deshacer. Esto eliminará permanentemente la ciudad {ciudad.nombre}.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel onClick={preventPropagation}>
-                          Cancelar
-                        </AlertDialogCancel>
-                        <AlertDialogAction
-                          className="bg-red-500 text-white hover:bg-red-600"
-                          onClick={(e) => {
-                            preventPropagation(e);
-                            onDelete(ciudad.id);
-                            setOpenAlert(null);
-                          }}
-                        >
-                          Eliminar
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </TableCell>
-              </TableRow>
-            ))
-          )}
+          ))}
         </TableBody>
       </Table>
+
+      <AlertDialog 
+        open={deleteDialogOpen} 
+        onOpenChange={setDeleteDialogOpen}
+      >
+        <AlertDialogContent className="bg-white z-[9999]">
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. Esto eliminará permanentemente la ciudad {ciudadToDelete?.nombre}.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={(e) => e.stopPropagation()}>
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-500 text-white hover:bg-red-600"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleConfirmDelete();
+              }}
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

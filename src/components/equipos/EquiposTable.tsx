@@ -53,7 +53,8 @@ const EquiposTable: React.FC<EquiposTableProps> = ({
   onPageChange,
   onPageSizeChange
 }) => {
-  const [openAlert, setOpenAlert] = useState<string | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [equipoToDelete, setEquipoToDelete] = useState<Equipo | null>(null);
 
   if (loading) {
     return (
@@ -71,10 +72,25 @@ const EquiposTable: React.FC<EquiposTableProps> = ({
     );
   }
 
-  // Función para evitar la propagación de eventos
-  const preventPropagation = (e: React.MouseEvent) => {
+  const handleDeleteClick = (e: React.MouseEvent, equipo: Equipo) => {
     e.preventDefault();
     e.stopPropagation();
+    setEquipoToDelete(equipo);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (equipoToDelete) {
+      onDelete(equipoToDelete.id);
+    }
+    setDeleteDialogOpen(false);
+    setEquipoToDelete(null);
+  };
+
+  const handleEditClick = (e: React.MouseEvent, equipo: Equipo) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onEdit(equipo);
   };
 
   return (
@@ -110,39 +126,31 @@ const EquiposTable: React.FC<EquiposTableProps> = ({
                   )}
                 </TableCell>
                 <TableCell className="text-right">
-                  <div className="flex justify-end" onClick={preventPropagation}>
+                  <div className="flex justify-end">
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                      <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
                         <Button 
                           variant="ghost" 
                           size="icon" 
-                          className="h-8 w-8 p-0 focus:ring-0 focus:ring-offset-0"
-                          onClick={preventPropagation}
+                          className="h-8 w-8 p-0"
                         >
                           <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Acciones</span>
+                          <span className="sr-only">Abrir menú</span>
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent 
                         align="end" 
-                        className="w-36 bg-white shadow-lg z-[200]"
-                        onClick={preventPropagation}
+                        className="w-36 bg-white shadow-lg z-[999]"
                       >
                         <DropdownMenuItem 
-                          onClick={(e) => {
-                            preventPropagation(e);
-                            onEdit(equipo);
-                          }}
+                          onClick={(e) => handleEditClick(e, equipo)}
                           className="cursor-pointer"
                         >
                           <Edit className="mr-2 h-4 w-4 text-gray-500" />
                           <span>Editar</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem 
-                          onClick={(e) => {
-                            preventPropagation(e);
-                            setOpenAlert(equipo.id);
-                          }}
+                          onClick={(e) => handleDeleteClick(e, equipo)}
                           className="cursor-pointer text-red-600 focus:text-red-600"
                         >
                           <Trash2 className="mr-2 h-4 w-4 text-red-500" />
@@ -151,40 +159,6 @@ const EquiposTable: React.FC<EquiposTableProps> = ({
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-
-                  <AlertDialog 
-                    open={openAlert === equipo.id} 
-                    onOpenChange={(open) => {
-                      if (!open) setOpenAlert(null);
-                    }}
-                  >
-                    <AlertDialogContent 
-                      className="bg-white z-[300]" 
-                      onClick={preventPropagation}
-                    >
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Esta acción no se puede deshacer. Esto eliminará permanentemente el equipo <strong>{equipo.referencia}</strong>.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel onClick={preventPropagation}>
-                          Cancelar
-                        </AlertDialogCancel>
-                        <AlertDialogAction
-                          className="bg-red-500 hover:bg-red-600 text-white"
-                          onClick={(e) => {
-                            preventPropagation(e);
-                            onDelete(equipo.id);
-                            setOpenAlert(null);
-                          }}
-                        >
-                          Eliminar
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
                 </TableCell>
               </TableRow>
             ))}
@@ -201,6 +175,34 @@ const EquiposTable: React.FC<EquiposTableProps> = ({
           onPageSizeChange={onPageSizeChange}
         />
       </div>
+
+      <AlertDialog 
+        open={deleteDialogOpen} 
+        onOpenChange={setDeleteDialogOpen}
+      >
+        <AlertDialogContent className="bg-white z-[9999]">
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. Esto eliminará permanentemente el equipo <strong>{equipoToDelete?.referencia}</strong>.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={(e) => e.stopPropagation()}>
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-500 hover:bg-red-600 text-white"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleConfirmDelete();
+              }}
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
