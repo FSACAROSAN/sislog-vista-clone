@@ -1,16 +1,7 @@
 
 import React from 'react';
 import { Equipo } from '@/types/equipo';
-import { 
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import DeleteDialog from '@/components/common/DeleteDialog';
 
 interface EquipoDeleteDialogProps {
   open: boolean;
@@ -26,39 +17,17 @@ const EquipoDeleteDialog: React.FC<EquipoDeleteDialogProps> = ({
   onConfirm
 }) => {
   return (
-    <AlertDialog 
-      open={open} 
+    <DeleteDialog
+      open={open}
       onOpenChange={onOpenChange}
-    >
-      <AlertDialogContent className="bg-white z-[9999]">
-        <AlertDialogHeader>
-          <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
-          <AlertDialogDescription>
-            Esta acción no se puede deshacer. Esto eliminará permanentemente el equipo <strong>{equipo?.referencia}</strong>.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel 
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-          >
-            Cancelar
-          </AlertDialogCancel>
-          <AlertDialogAction
-            className="bg-red-500 hover:bg-red-600 text-white"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              onConfirm();
-            }}
-          >
-            Eliminar
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+      title="¿Está seguro?"
+      description={
+        <>
+          Esta acción no se puede deshacer. Esto eliminará permanentemente el equipo <strong>{equipo?.referencia}</strong>.
+        </>
+      }
+      onConfirm={onConfirm}
+    />
   );
 };
 

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Edit, Trash2, ArrowUpDown, Plus, MoreHorizontal } from 'lucide-react';
 import { Empresa } from '@/types/empresa';
@@ -18,16 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import DeleteDialog from '@/components/common/DeleteDialog';
 
 interface EmpresaTableProps {
   empresas: Empresa[];
@@ -49,6 +39,9 @@ const EmpresaTable: React.FC<EmpresaTableProps> = ({
   openNewDialog
 }) => {
   const [openAlert, setOpenAlert] = React.useState<string | null>(null);
+  const selectedEmpresa = React.useMemo(() => {
+    return empresas.find(empresa => empresa.id === openAlert) || null;
+  }, [openAlert, empresas]);
 
   return (
     <div onClick={(e) => e.stopPropagation()}>
@@ -151,40 +144,22 @@ const EmpresaTable: React.FC<EmpresaTableProps> = ({
                       </DropdownMenuContent>
                     </DropdownMenu>
 
-                    <AlertDialog 
-                      open={openAlert === empresa.id} 
+                    <DeleteDialog
+                      open={openAlert === empresa.id}
                       onOpenChange={(open) => {
                         if (!open) setOpenAlert(null);
                       }}
-                    >
-                      <AlertDialogContent className="bg-white z-[9999]">
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Esta acción no se puede deshacer. Esto eliminará permanentemente la empresa {empresa.nombre}.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                          }}>
-                            Cancelar
-                          </AlertDialogCancel>
-                          <AlertDialogAction
-                            className="bg-red-500 text-white hover:bg-red-600"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              onDelete(empresa.id);
-                              setOpenAlert(null);
-                            }}
-                          >
-                            Eliminar
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                      title="¿Está seguro?"
+                      description={
+                        <>
+                          Esta acción no se puede deshacer. Esto eliminará permanentemente la empresa <strong>{empresa.nombre}</strong>.
+                        </>
+                      }
+                      onConfirm={() => {
+                        onDelete(empresa.id);
+                        setOpenAlert(null);
+                      }}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
