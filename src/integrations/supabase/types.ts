@@ -228,6 +228,54 @@ export type Database = {
           },
         ]
       }
+      ge_tercero_articulos: {
+        Row: {
+          activo: boolean | null
+          created_at: string | null
+          id: string
+          nombre: string
+          referencia: string | null
+          tercero_id: string
+          unidad_medida_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          activo?: boolean | null
+          created_at?: string | null
+          id?: string
+          nombre: string
+          referencia?: string | null
+          tercero_id: string
+          unidad_medida_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          activo?: boolean | null
+          created_at?: string | null
+          id?: string
+          nombre?: string
+          referencia?: string | null
+          tercero_id?: string
+          unidad_medida_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ge_tercero_articulos_tercero_id_fkey"
+            columns: ["tercero_id"]
+            isOneToOne: false
+            referencedRelation: "ge_tercero"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ge_tercero_articulos_unidad_medida_id_fkey"
+            columns: ["unidad_medida_id"]
+            isOneToOne: false
+            referencedRelation: "inv_unidades_medida"
+            referencedColumns: ["unidad_medida_id"]
+          },
+        ]
+      }
       ge_tercero_tarifas: {
         Row: {
           created_at: string | null

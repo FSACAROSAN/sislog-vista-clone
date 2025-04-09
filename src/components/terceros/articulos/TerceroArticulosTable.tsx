@@ -15,18 +15,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, Edit, Trash, Loader2, Tag, Package } from 'lucide-react';
+import { MoreHorizontal, Edit, Trash, Loader2 } from 'lucide-react';
 import TablePagination from '@/components/ui/table-pagination';
 import { Badge } from '@/components/ui/badge';
-import { Tercero } from '@/types/tercero';
+import { TerceroArticulo } from '@/types/terceroArticulo';
 
-interface TercerosTableProps {
-  terceros: Tercero[];
+interface TerceroArticulosTableProps {
+  articulos: TerceroArticulo[];
   loading: boolean;
-  onEdit: (tercero: Tercero) => void;
+  onEdit: (articulo: TerceroArticulo) => void;
   onDelete: (id: string) => void;
-  onManageTarifas: (tercero: Tercero) => void;
-  onManageArticulos: (tercero: Tercero) => void;
   totalItems: number;
   currentPage: number;
   pageSize: number;
@@ -34,13 +32,11 @@ interface TercerosTableProps {
   onPageSizeChange: (size: number) => void;
 }
 
-const TercerosTable: React.FC<TercerosTableProps> = ({
-  terceros,
+const TerceroArticulosTable: React.FC<TerceroArticulosTableProps> = ({
+  articulos,
   loading,
   onEdit,
   onDelete,
-  onManageTarifas,
-  onManageArticulos,
   totalItems,
   currentPage,
   pageSize,
@@ -54,9 +50,8 @@ const TercerosTable: React.FC<TercerosTableProps> = ({
           <TableHeader>
             <TableRow>
               <TableHead>Nombre</TableHead>
-              <TableHead>Documento</TableHead>
-              <TableHead>Tipo</TableHead>
-              <TableHead>Contacto</TableHead>
+              <TableHead>Referencia</TableHead>
+              <TableHead>Unidad de Medida</TableHead>
               <TableHead>Estado</TableHead>
               <TableHead className="w-[80px]">Acciones</TableHead>
             </TableRow>
@@ -64,47 +59,28 @@ const TercerosTable: React.FC<TercerosTableProps> = ({
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
+                <TableCell colSpan={5} className="h-24 text-center">
                   <div className="flex justify-center items-center">
                     <Loader2 className="h-6 w-6 animate-spin mr-2" />
                     Cargando...
                   </div>
                 </TableCell>
               </TableRow>
-            ) : terceros.length === 0 ? (
+            ) : articulos.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
-                  No hay terceros para mostrar.
+                <TableCell colSpan={5} className="h-24 text-center">
+                  No hay productos para mostrar.
                 </TableCell>
               </TableRow>
             ) : (
-              terceros.map((tercero) => (
-                <TableRow key={tercero.id}>
-                  <TableCell className="font-medium">{tercero.nombre}</TableCell>
+              articulos.map((articulo) => (
+                <TableRow key={articulo.id}>
+                  <TableCell className="font-medium">{articulo.nombre}</TableCell>
+                  <TableCell>{articulo.referencia || '-'}</TableCell>
+                  <TableCell>{articulo.unidad_medida?.nombre || '-'}</TableCell>
                   <TableCell>
-                    {tercero.documento}
-                    {tercero.dv && `-${tercero.dv}`}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                      {tercero.cliente && <Badge variant="outline">Cliente</Badge>}
-                      {tercero.proveedor && <Badge variant="outline">Proveedor</Badge>}
-                      {tercero.transporte && <Badge variant="outline">Transporte</Badge>}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {tercero.telefono_1_tercero && (
-                      <div className="text-sm">{tercero.telefono_1_tercero}</div>
-                    )}
-                    {tercero.email_tercero && (
-                      <div className="text-sm text-muted-foreground truncate max-w-[200px]">
-                        {tercero.email_tercero}
-                      </div>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={tercero.estado ? "default" : "secondary"}>
-                      {tercero.estado ? "Activo" : "Inactivo"}
+                    <Badge variant={articulo.activo ? "default" : "secondary"}>
+                      {articulo.activo ? "Activo" : "Inactivo"}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -116,22 +92,14 @@ const TercerosTable: React.FC<TercerosTableProps> = ({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onEdit(tercero)}>
+                        <DropdownMenuItem onClick={() => onEdit(articulo)}>
                           <Edit className="h-4 w-4 mr-2" />
                           Editar
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onManageArticulos(tercero)}>
-                          <Package className="h-4 w-4 mr-2" />
-                          Productos
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onManageTarifas(tercero)}>
-                          <Tag className="h-4 w-4 mr-2" />
-                          Tarifas
-                        </DropdownMenuItem>
                         <DropdownMenuItem 
                           onClick={() => {
-                            if (window.confirm('¿Está seguro de eliminar este tercero?')) {
-                              onDelete(tercero.id);
+                            if (window.confirm('¿Está seguro de eliminar este producto?')) {
+                              onDelete(articulo.id);
                             }
                           }}
                           className="text-red-600"
@@ -160,4 +128,4 @@ const TercerosTable: React.FC<TercerosTableProps> = ({
   );
 };
 
-export default TercerosTable;
+export default TerceroArticulosTable;

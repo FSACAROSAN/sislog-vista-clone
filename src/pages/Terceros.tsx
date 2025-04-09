@@ -8,6 +8,7 @@ import PageHeader from '@/components/PageHeader';
 import { UserCircle } from 'lucide-react';
 import TerceroTarifasDialog from '@/components/terceros/tarifas/TerceroTarifasDialog';
 import { Tercero } from '@/types/tercero';
+import TerceroArticulosDialog from '@/components/terceros/articulos/TerceroArticulosDialog';
 
 const TercerosPage: React.FC = () => {
   const {
@@ -29,16 +30,28 @@ const TercerosPage: React.FC = () => {
   } = useTerceros();
 
   const [isTarifasDialogOpen, setIsTarifasDialogOpen] = useState(false);
+  const [isArticulosDialogOpen, setIsArticulosDialogOpen] = useState(false);
   const [selectedTerceroForTarifas, setSelectedTerceroForTarifas] = useState<Tercero | null>(null);
+  const [selectedTerceroForArticulos, setSelectedTerceroForArticulos] = useState<Tercero | null>(null);
 
   const handleManageTarifas = (tercero: Tercero) => {
     setSelectedTerceroForTarifas(tercero);
     setIsTarifasDialogOpen(true);
   };
 
+  const handleManageArticulos = (tercero: Tercero) => {
+    setSelectedTerceroForArticulos(tercero);
+    setIsArticulosDialogOpen(true);
+  };
+
   const closeTarifasDialog = () => {
     setIsTarifasDialogOpen(false);
     setSelectedTerceroForTarifas(null);
+  };
+
+  const closeArticulosDialog = () => {
+    setIsArticulosDialogOpen(false);
+    setSelectedTerceroForArticulos(null);
   };
 
   return (
@@ -76,6 +89,7 @@ const TercerosPage: React.FC = () => {
             }}
             onDelete={handleDelete}
             onManageTarifas={handleManageTarifas}
+            onManageArticulos={handleManageArticulos}
             totalItems={totalItems}
             currentPage={currentPage}
             pageSize={pageSize}
@@ -90,6 +104,13 @@ const TercerosPage: React.FC = () => {
         isOpen={isTarifasDialogOpen}
         onClose={closeTarifasDialog}
         tercero={selectedTerceroForTarifas}
+      />
+
+      {/* Articulos Dialog */}
+      <TerceroArticulosDialog
+        isOpen={isArticulosDialogOpen}
+        onClose={closeArticulosDialog}
+        tercero={selectedTerceroForArticulos}
       />
     </div>
   );
