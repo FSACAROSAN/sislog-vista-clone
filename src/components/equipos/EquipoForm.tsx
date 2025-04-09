@@ -45,7 +45,6 @@ const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess }) => {
   const onSubmit = async (values: EquipoFormValues) => {
     try {
       if (isEditing && equipo) {
-        // Crear un objeto que satisfaga el tipo Equipo para actualizarlo
         const equipoUpdate: Equipo = {
           id: equipo.id,
           codigo: values.codigo,
@@ -59,7 +58,6 @@ const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess }) => {
         
         await updateEquipo.mutateAsync(equipoUpdate);
       } else {
-        // Para crear un nuevo equipo, aseguramos que todos los campos requeridos estén explícitamente definidos
         await createEquipo.mutateAsync({
           codigo: values.codigo,
           referencia: values.referencia,

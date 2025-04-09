@@ -44,18 +44,6 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
 }) => {
   const [openAlert, setOpenAlert] = useState<string | null>(null);
 
-  const handleEditClick = (ciudad: Ciudad) => (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onEdit(ciudad);
-  };
-
-  const handleDeleteClick = (id: string) => (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setOpenAlert(id);
-  };
-
   return (
     <div className="rounded-md border">
       <Table>
@@ -102,21 +90,30 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
                           variant="ghost" 
                           size="icon" 
                           className="h-8 w-8 p-0 focus:ring-0 focus:ring-offset-0"
+                          onClick={(e) => e.stopPropagation()}
                         >
                           <MoreHorizontal className="h-4 w-4" />
                           <span className="sr-only">Acciones</span>
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-36 bg-white shadow-lg z-50">
+                      <DropdownMenuContent align="end" className="w-36 bg-white shadow-lg z-[100]">
                         <DropdownMenuItem 
-                          onClick={handleEditClick(ciudad)} 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onEdit(ciudad);
+                          }}
                           className="cursor-pointer"
                         >
                           <Edit className="mr-2 h-4 w-4 text-gray-500" />
                           <span>Editar</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem 
-                          onClick={handleDeleteClick(ciudad.id)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setOpenAlert(ciudad.id);
+                          }}
                           className="cursor-pointer text-red-600 focus:text-red-600"
                         >
                           <Trash2 className="mr-2 h-4 w-4 text-red-500" />
@@ -132,7 +129,7 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
                       if (!open) setOpenAlert(null);
                     }}
                   >
-                    <AlertDialogContent className="bg-white">
+                    <AlertDialogContent className="bg-white" onClick={e => e.stopPropagation()}>
                       <AlertDialogHeader>
                         <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
                         <AlertDialogDescription>
@@ -140,10 +137,16 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel onClick={(e) => e.stopPropagation()}>Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}>
+                          Cancelar
+                        </AlertDialogCancel>
                         <AlertDialogAction
                           className="bg-red-500 text-white hover:bg-red-600"
                           onClick={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
                             onDelete(ciudad.id);
                             setOpenAlert(null);
