@@ -60,15 +60,14 @@ const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess }) => {
         await updateEquipo.mutateAsync(equipoUpdate);
       } else {
         // Para crear un nuevo equipo, aseguramos que todos los campos requeridos estén presentes
-        const nuevoEquipo: EquipoFormValues = {
+        // Creamos un objeto explícito que cumpla con EquipoFormValues
+        await createEquipo.mutateAsync({
           codigo: values.codigo,
           referencia: values.referencia,
           estado: values.estado,
           clase_id: values.clase_id,
           tipo_id: values.tipo_id
-        };
-        
-        await createEquipo.mutateAsync(nuevoEquipo);
+        });
       }
       
       toast({

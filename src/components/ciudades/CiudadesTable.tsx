@@ -1,7 +1,7 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Ciudad } from '@/types/ciudad';
-import { Pencil, Trash2, MoreHorizontal } from 'lucide-react';
+import { Edit, Trash2, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -27,6 +27,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Badge } from '@/components/ui/badge';
 
 interface CiudadesTableProps {
   ciudades: Ciudad[];
@@ -41,7 +42,7 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
   onEdit, 
   onDelete 
 }) => {
-  const [openAlert, setOpenAlert] = React.useState<string | null>(null);
+  const [openAlert, setOpenAlert] = useState<string | null>(null);
 
   return (
     <div className="rounded-md border">
@@ -75,29 +76,30 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
                 <TableCell className="font-medium">{ciudad.nombre}</TableCell>
                 <TableCell>{ciudad.pais_nombre}</TableCell>
                 <TableCell>
-                  <span className={`px-2 py-1 rounded-full text-xs ${
+                  <Badge className={`${
                     ciudad.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                  }`}>
+                  } border-0`}>
                     {ciudad.estado || 'Activo'}
-                  </span>
+                  </Badge>
                 </TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <MoreHorizontal size={16} />
+                      <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
+                        <MoreHorizontal className="h-4 w-4" />
+                        <span className="sr-only">Abrir menú</span>
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-40">
-                      <DropdownMenuItem onClick={() => onEdit(ciudad)} className="cursor-pointer">
-                        <Pencil size={16} className="mr-2 text-gray-500" />
+                      <DropdownMenuItem onClick={() => onEdit(ciudad)}>
+                        <Edit className="mr-2 h-4 w-4 text-gray-500" />
                         <span>Editar</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem 
                         onClick={() => setOpenAlert(ciudad.id)} 
-                        className="cursor-pointer text-red-600 focus:text-red-600"
+                        className="text-red-600 focus:text-red-600"
                       >
-                        <Trash2 size={16} className="mr-2 text-red-500" />
+                        <Trash2 className="mr-2 h-4 w-4 text-red-500" />
                         <span>Eliminar</span>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
