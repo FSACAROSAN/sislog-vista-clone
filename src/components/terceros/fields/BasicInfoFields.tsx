@@ -30,7 +30,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
           control={control}
           name="nombre"
           render={({ field }) => (
-            <FormItem className="space-y-1">
+            <FormItem className="space-y-0.5">
               <FormLabel>Nombre *</FormLabel>
               <FormControl>
                 <Input disabled={loading} placeholder="Nombre" {...field} />
@@ -44,14 +44,14 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
           control={control}
           name="direccion"
           render={({ field }) => (
-            <FormItem className="space-y-1">
+            <FormItem className="space-y-0.5">
               <FormLabel>Dirección</FormLabel>
               <FormControl>
                 <Textarea 
                   disabled={loading} 
                   placeholder="Dirección" 
                   {...field} 
-                  className="min-h-[56px]" 
+                  className="min-h-[52px]" 
                   rows={1} 
                 />
               </FormControl>
@@ -70,7 +70,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
           control={control}
           name="dv"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-0.5">
               <FormLabel>Dígito de Verificación</FormLabel>
               <FormControl>
                 <Input disabled={loading} maxLength={1} placeholder="DV" {...field} />
@@ -84,7 +84,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
           control={control}
           name="nombre"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-0.5">
               <FormLabel>Nombre *</FormLabel>
               <FormControl>
                 <Input disabled={loading} placeholder="Nombre" {...field} />
@@ -99,14 +99,14 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
         control={control}
         name="direccion"
         render={({ field }) => (
-          <FormItem>
+          <FormItem className="space-y-0.5">
             <FormLabel>Dirección</FormLabel>
             <FormControl>
               <Textarea 
                 disabled={loading} 
                 placeholder="Dirección" 
                 {...field} 
-                className="min-h-[56px]" 
+                className="min-h-[52px]" 
                 rows={1}
               />
             </FormControl>

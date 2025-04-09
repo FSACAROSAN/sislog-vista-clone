@@ -29,7 +29,7 @@ const ContactInfoFields: React.FC<ContactInfoFieldsProps> = ({
           control={control}
           name="email_tercero"
           render={({ field }) => (
-            <FormItem className="space-y-1">
+            <FormItem className="space-y-0.5">
               <FormLabel>Correo Electrónico</FormLabel>
               <FormControl>
                 <Input
@@ -49,7 +49,7 @@ const ContactInfoFields: React.FC<ContactInfoFieldsProps> = ({
             control={control}
             name="telefono_1_tercero"
             render={({ field }) => (
-              <FormItem className="space-y-1">
+              <FormItem className="space-y-0.5">
                 <FormLabel>Teléfono 1</FormLabel>
                 <FormControl>
                   <Input
@@ -67,7 +67,7 @@ const ContactInfoFields: React.FC<ContactInfoFieldsProps> = ({
             control={control}
             name="telefono_2_tercero"
             render={({ field }) => (
-              <FormItem className="space-y-1">
+              <FormItem className="space-y-0.5">
                 <FormLabel>Teléfono 2</FormLabel>
                 <FormControl>
                   <Input 
@@ -92,7 +92,7 @@ const ContactInfoFields: React.FC<ContactInfoFieldsProps> = ({
           control={control}
           name="email_tercero"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-0.5">
               <FormLabel>Correo Electrónico</FormLabel>
               <FormControl>
                 <Input
@@ -111,7 +111,7 @@ const ContactInfoFields: React.FC<ContactInfoFieldsProps> = ({
           control={control}
           name="telefono_1_tercero"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-0.5">
               <FormLabel>Teléfono 1</FormLabel>
               <FormControl>
                 <Input
@@ -130,7 +130,7 @@ const ContactInfoFields: React.FC<ContactInfoFieldsProps> = ({
         control={control}
         name="telefono_2_tercero"
         render={({ field }) => (
-          <FormItem>
+          <FormItem className="space-y-0.5">
             <FormLabel>Teléfono 2</FormLabel>
             <FormControl>
               <Input disabled={loading} placeholder="Teléfono 2" {...field} />

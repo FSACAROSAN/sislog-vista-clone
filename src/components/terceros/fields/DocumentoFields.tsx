@@ -33,12 +33,12 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = ({
   tipoDocumentoRef,
 }) => {
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <FormField
         control={control}
         name="tipo_documento_id"
         render={({ field }) => (
-          <FormItem className="space-y-1">
+          <FormItem className="space-y-0.5">
             <FormLabel>Tipo de Documento *</FormLabel>
             <Select
               disabled={loading}
@@ -47,7 +47,7 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = ({
               value={field.value}
             >
               <FormControl>
-                <SelectTrigger ref={tipoDocumentoRef}>
+                <SelectTrigger ref={tipoDocumentoRef} className="h-9">
                   <SelectValue placeholder="Seleccione un tipo de documento" />
                 </SelectTrigger>
               </FormControl>
@@ -73,7 +73,7 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = ({
             control={control}
             name="documento"
             render={({ field }) => (
-              <FormItem className="space-y-1">
+              <FormItem className="space-y-0.5">
                 <FormLabel>Documento *</FormLabel>
                 <FormControl>
                   <Input disabled={loading} placeholder="Documento" {...field} />
@@ -89,7 +89,7 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = ({
             control={control}
             name="dv"
             render={({ field }) => (
-              <FormItem className="space-y-1">
+              <FormItem className="space-y-0.5">
                 <FormLabel>DV</FormLabel>
                 <FormControl>
                   <Input disabled={loading} maxLength={1} placeholder="DV" {...field} />
