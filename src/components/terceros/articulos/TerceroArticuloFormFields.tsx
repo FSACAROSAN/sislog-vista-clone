@@ -60,7 +60,7 @@ export const TerceroArticuloReferenciaField: React.FC = () => {
 
 export const TerceroArticuloUnidadMedidaField: React.FC = () => {
   const { control } = useFormContext<TerceroArticuloFormValues>();
-  const { allUnidadesMedida, fetchUnidadesMedida } = useUnidadesMedida();
+  const { allUnidadesMedida, fetchUnidadesMedida, loading } = useUnidadesMedida();
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   
@@ -68,7 +68,7 @@ export const TerceroArticuloUnidadMedidaField: React.FC = () => {
     fetchUnidadesMedida();
   }, [fetchUnidadesMedida]);
   
-  // Ensure we have an array to work with, even if allUnidadesMedida is undefined
+  // Ensure we have an array to work with
   const unidadesMedidaArray = Array.isArray(allUnidadesMedida) ? allUnidadesMedida : [];
   
   // Filtrar unidades de medida según el texto de búsqueda
@@ -98,36 +98,38 @@ export const TerceroArticuloUnidadMedidaField: React.FC = () => {
                 </div>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="w-full p-0">
-              <Command>
-                <CommandInput 
-                  placeholder="Buscar unidad de medida..." 
-                  onValueChange={setSearchValue}
-                  className="h-9"
-                />
-                <CommandEmpty>No se encontraron resultados.</CommandEmpty>
-                <CommandGroup className="max-h-[200px] overflow-y-auto">
-                  {filteredUnidades.map((unidad) => (
-                    <CommandItem
-                      key={unidad.unidad_medida_id}
-                      value={unidad.nombre}
-                      onSelect={() => {
-                        field.onChange(unidad.unidad_medida_id);
-                        setOpen(false);
-                      }}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          field.value === unidad.unidad_medida_id ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                      {unidad.nombre}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
+            {!loading && (
+              <PopoverContent className="w-full p-0">
+                <Command>
+                  <CommandInput 
+                    placeholder="Buscar unidad de medida..." 
+                    onValueChange={setSearchValue}
+                    className="h-9"
+                  />
+                  <CommandEmpty>No se encontraron resultados.</CommandEmpty>
+                  <CommandGroup className="max-h-[200px] overflow-y-auto">
+                    {filteredUnidades.map((unidad) => (
+                      <CommandItem
+                        key={unidad.unidad_medida_id}
+                        value={unidad.nombre}
+                        onSelect={() => {
+                          field.onChange(unidad.unidad_medida_id);
+                          setOpen(false);
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            field.value === unidad.unidad_medida_id ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                        {unidad.nombre}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            )}
           </Popover>
           <FormMessage />
         </FormItem>
