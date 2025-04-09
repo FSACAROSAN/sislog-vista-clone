@@ -44,6 +44,12 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
 }) => {
   const [openAlert, setOpenAlert] = useState<string | null>(null);
 
+  // Función para evitar la propagación de eventos
+  const preventPropagation = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -60,7 +66,7 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
             <TableRow>
               <TableCell colSpan={4} className="text-center py-4">
                 <div className="flex justify-center">
-                  <div className="animate-spin h-6 w-6 border-4 border-sislog-primary border-t-transparent rounded-full"></div>
+                  <div className="animate-spin h-6 w-6 border-4 border-t-blue-500 border-b-blue-500 rounded-full"></div>
                 </div>
               </TableCell>
             </TableRow>
@@ -83,24 +89,27 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
-                  <div className="flex justify-end">
+                  <div className="flex justify-end" onClick={preventPropagation}>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button 
                           variant="ghost" 
                           size="icon" 
                           className="h-8 w-8 p-0 focus:ring-0 focus:ring-offset-0"
-                          onClick={(e) => e.stopPropagation()}
+                          onClick={preventPropagation}
                         >
                           <MoreHorizontal className="h-4 w-4" />
                           <span className="sr-only">Acciones</span>
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-36 bg-white shadow-lg z-[100]">
+                      <DropdownMenuContent 
+                        align="end" 
+                        className="w-36 bg-white shadow-lg z-[200]"
+                        onClick={preventPropagation}
+                      >
                         <DropdownMenuItem 
                           onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
+                            preventPropagation(e);
                             onEdit(ciudad);
                           }}
                           className="cursor-pointer"
@@ -110,8 +119,7 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
                         </DropdownMenuItem>
                         <DropdownMenuItem 
                           onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
+                            preventPropagation(e);
                             setOpenAlert(ciudad.id);
                           }}
                           className="cursor-pointer text-red-600 focus:text-red-600"
@@ -129,7 +137,10 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
                       if (!open) setOpenAlert(null);
                     }}
                   >
-                    <AlertDialogContent className="bg-white" onClick={e => e.stopPropagation()}>
+                    <AlertDialogContent 
+                      className="bg-white z-[300]" 
+                      onClick={preventPropagation}
+                    >
                       <AlertDialogHeader>
                         <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
                         <AlertDialogDescription>
@@ -137,17 +148,13 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                        }}>
+                        <AlertDialogCancel onClick={preventPropagation}>
                           Cancelar
                         </AlertDialogCancel>
                         <AlertDialogAction
                           className="bg-red-500 text-white hover:bg-red-600"
                           onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
+                            preventPropagation(e);
                             onDelete(ciudad.id);
                             setOpenAlert(null);
                           }}
