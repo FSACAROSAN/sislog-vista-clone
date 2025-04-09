@@ -19,6 +19,7 @@ export const terceroFormSchema = z.object({
   cliente: z.boolean().default(false),
   transporte: z.boolean().default(false),
   proveedor: z.boolean().default(false),
+  conductor: z.boolean().default(false),
   estado: z.boolean().default(true),
   tipo_documento_id: z.string().uuid({ message: "Tipo de documento inválido" }),
 });

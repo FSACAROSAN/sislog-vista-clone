@@ -90,6 +90,7 @@ const TercerosTable: React.FC<TercerosTableProps> = ({
                       {tercero.cliente && <Badge variant="outline">Cliente</Badge>}
                       {tercero.proveedor && <Badge variant="outline">Proveedor</Badge>}
                       {tercero.transporte && <Badge variant="outline">Transporte</Badge>}
+                      {tercero.conductor && <Badge variant="outline">Conductor</Badge>}
                     </div>
                   </TableCell>
                   <TableCell>

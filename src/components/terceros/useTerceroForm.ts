@@ -25,6 +25,7 @@ export const useTerceroForm = ({ onSuccess, initialData }: UseTerceroFormProps) 
           cliente: initialData.cliente || false,
           transporte: initialData.transporte || false,
           proveedor: initialData.proveedor || false,
+          conductor: initialData.conductor || false,
           estado: initialData.estado !== false,
         }
       : {
@@ -41,6 +42,7 @@ export const useTerceroForm = ({ onSuccess, initialData }: UseTerceroFormProps) 
           cliente: false,
           transporte: false,
           proveedor: false,
+          conductor: false,
           estado: true,
           tipo_documento_id: "",
         },
@@ -68,6 +70,7 @@ export const useTerceroForm = ({ onSuccess, initialData }: UseTerceroFormProps) 
             cliente: data.cliente,
             transporte: data.transporte,
             proveedor: data.proveedor,
+            conductor: data.conductor,
             estado: data.estado,
             tipo_documento_id: data.tipo_documento_id,
             updated_at: new Date().toISOString(),
@@ -98,6 +101,7 @@ export const useTerceroForm = ({ onSuccess, initialData }: UseTerceroFormProps) 
             cliente: data.cliente,
             transporte: data.transporte,
             proveedor: data.proveedor,
+            conductor: data.conductor,
             estado: data.estado,
             tipo_documento_id: data.tipo_documento_id,
           }) as any;

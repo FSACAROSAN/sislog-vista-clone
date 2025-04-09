@@ -160,6 +160,7 @@ export type Database = {
       ge_tercero: {
         Row: {
           cliente: boolean | null
+          conductor: boolean | null
           created_at: string | null
           direccion: string | null
           documento: string
@@ -180,6 +181,7 @@ export type Database = {
         }
         Insert: {
           cliente?: boolean | null
+          conductor?: boolean | null
           created_at?: string | null
           direccion?: string | null
           documento: string
@@ -200,6 +202,7 @@ export type Database = {
         }
         Update: {
           cliente?: boolean | null
+          conductor?: boolean | null
           created_at?: string | null
           direccion?: string | null
           documento?: string

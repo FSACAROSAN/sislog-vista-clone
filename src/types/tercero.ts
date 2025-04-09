@@ -28,6 +28,7 @@ export interface Tercero {
   cliente?: boolean;
   transporte?: boolean;
   proveedor?: boolean;
+  conductor?: boolean;
   estado?: boolean;
   tipo_documento_id?: UUID;
   tipo_documento?: TipoDocumento;
