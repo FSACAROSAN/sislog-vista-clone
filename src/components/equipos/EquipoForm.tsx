@@ -45,28 +45,40 @@ const EquipoForm: React.FC<EquipoFormProps> = ({ equipo, onSuccess }) => {
   const onSubmit = async (values: EquipoFormValues) => {
     try {
       if (isEditing && equipo) {
-        // Create a proper update object that satisfies the Equipo type
-        // but also ensures all required fields from EquipoFormValues are present
-        const updateData = {
+        // Crear un objeto que satisfaga el tipo Equipo para actualizarlo
+        const equipoUpdate: Equipo = {
           id: equipo.id,
-          // Explicitly include all required fields from EquipoFormValues
-          codigo: values.codigo, 
+          codigo: values.codigo,
           referencia: values.referencia,
           estado: values.estado,
           clase_id: values.clase_id,
           tipo_id: values.tipo_id,
-          // Include other existing fields if needed
           created_at: equipo.created_at,
           updated_at: equipo.updated_at
         };
         
-        await updateEquipo.mutateAsync(updateData);
+        await updateEquipo.mutateAsync(equipoUpdate);
       } else {
+        // Para crear un nuevo equipo, usamos directamente los valores del formulario
+        // que ya cumplen con el tipo EquipoFormValues
         await createEquipo.mutateAsync(values);
       }
+      
+      toast({
+        title: isEditing ? "Equipo actualizado" : "Equipo creado",
+        description: isEditing 
+          ? "El equipo se ha actualizado correctamente" 
+          : "El nuevo equipo se ha creado correctamente",
+      });
+      
       onSuccess();
     } catch (error) {
       console.error('Error saving equipo:', error);
+      toast({
+        title: "Error",
+        description: `Error al ${isEditing ? 'actualizar' : 'crear'} el equipo`,
+        variant: "destructive",
+      });
     }
   };
 

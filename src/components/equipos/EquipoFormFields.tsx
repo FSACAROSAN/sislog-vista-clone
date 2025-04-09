@@ -73,7 +73,7 @@ const EquipoFormFields: React.FC<EquipoFormFieldsProps> = ({
               <FormLabel>Clase</FormLabel>
               <Select
                 onValueChange={field.onChange}
-                value={field.value || ""}
+                value={field.value || undefined}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -81,7 +81,7 @@ const EquipoFormFields: React.FC<EquipoFormFieldsProps> = ({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="">Ninguna</SelectItem>
+                  <SelectItem value="null">Ninguna</SelectItem>
                   {equiposClase?.map((clase) => (
                     <SelectItem key={clase.id} value={clase.id}>
                       {clase.nombre}
@@ -102,7 +102,7 @@ const EquipoFormFields: React.FC<EquipoFormFieldsProps> = ({
               <FormLabel>Tipo</FormLabel>
               <Select
                 onValueChange={field.onChange}
-                value={field.value || ""}
+                value={field.value || undefined}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -110,7 +110,7 @@ const EquipoFormFields: React.FC<EquipoFormFieldsProps> = ({
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="">Ninguno</SelectItem>
+                  <SelectItem value="null">Ninguno</SelectItem>
                   {equiposTipo?.map((tipo) => (
                     <SelectItem key={tipo.id} value={tipo.id}>
                       {tipo.nombre}
