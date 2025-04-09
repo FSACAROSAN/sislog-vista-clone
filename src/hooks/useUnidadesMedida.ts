@@ -24,10 +24,17 @@ export const useUnidadesMedida = () => {
         .order('nombre', { ascending: true });
 
       if (error) throw error;
-      setAllUnidadesMedida(data as UnidadMedida[]);
-      setUnidadesMedida(data as UnidadMedida[]);
+      
+      // Ensure we always set arrays even if data is undefined
+      const unidadesArray = Array.isArray(data) ? data : [];
+      setAllUnidadesMedida(unidadesArray as UnidadMedida[]);
+      setUnidadesMedida(unidadesArray as UnidadMedida[]);
     } catch (error: any) {
       console.error('Error fetching unidades de medida:', error);
+      // Initialize with empty arrays in case of error
+      setAllUnidadesMedida([]);
+      setUnidadesMedida([]);
+      
       toast({
         title: 'Error',
         description: error.message || 'Error al cargar las unidades de medida',
@@ -40,6 +47,11 @@ export const useUnidadesMedida = () => {
 
   // Search filter effect
   useEffect(() => {
+    if (!Array.isArray(allUnidadesMedida)) {
+      setUnidadesMedida([]);
+      return;
+    }
+    
     if (searchTerm.trim() === '') {
       setUnidadesMedida(allUnidadesMedida);
     } else {
@@ -96,11 +108,10 @@ export const useUnidadesMedida = () => {
   };
 
   // Calculate total items and paginated data
-  const totalItems = unidadesMedida.length;
-  const paginatedData = unidadesMedida.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+  const totalItems = Array.isArray(unidadesMedida) ? unidadesMedida.length : 0;
+  const paginatedData = Array.isArray(unidadesMedida) 
+    ? unidadesMedida.slice((currentPage - 1) * pageSize, currentPage * pageSize) 
+    : [];
 
   return {
     unidadesMedida: paginatedData,
@@ -121,3 +132,4 @@ export const useUnidadesMedida = () => {
     handlePageSizeChange
   };
 };
+
