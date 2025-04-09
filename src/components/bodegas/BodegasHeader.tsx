@@ -20,6 +20,11 @@ const BodegasHeader: React.FC<BodegasHeaderProps> = ({
   setSelectedBodega,
   onSuccess
 }) => {
+  const handleCancel = () => {
+    setIsDialogOpen(false);
+    setSelectedBodega(null);
+  };
+
   return (
     <div className="flex justify-between items-center mb-6">
       <div>
@@ -32,11 +37,15 @@ const BodegasHeader: React.FC<BodegasHeaderProps> = ({
               {selectedBodega ? 'Editar Bodega' : 'Agregar Nueva Bodega'}
             </DialogTitle>
           </DialogHeader>
-          <BodegaForm bodega={selectedBodega} onSuccess={() => {
-            setIsDialogOpen(false);
-            setSelectedBodega(null);
-            onSuccess();
-          }} />
+          <BodegaForm 
+            bodega={selectedBodega} 
+            onSuccess={() => {
+              setIsDialogOpen(false);
+              setSelectedBodega(null);
+              onSuccess();
+            }} 
+            onCancel={handleCancel}
+          />
         </DialogContent>
       </Dialog>
     </div>

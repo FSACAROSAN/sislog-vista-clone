@@ -10,9 +10,10 @@ import { FormProvider } from 'react-hook-form';
 interface BodegaFormProps {
   bodega: Bodega | null;
   onSuccess: () => void;
+  onCancel?: () => void;
 }
 
-const BodegaForm: React.FC<BodegaFormProps> = ({ bodega, onSuccess }) => {
+const BodegaForm: React.FC<BodegaFormProps> = ({ bodega, onSuccess, onCancel }) => {
   const { toast } = useToast();
   const isEditing = Boolean(bodega?.id);
   
@@ -45,6 +46,16 @@ const BodegaForm: React.FC<BodegaFormProps> = ({ bodega, onSuccess }) => {
         <BodegaFormFields centrosLogisticos={centrosLogisticos} />
         
         <div className="flex justify-end gap-2">
+          {onCancel && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onCancel}
+              disabled={isSubmitting}
+            >
+              Cancelar
+            </Button>
+          )}
           <Button
             type="submit"
             disabled={isSubmitting}
