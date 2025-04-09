@@ -56,7 +56,7 @@ export const TerceroArticuloReferenciaField: React.FC = () => {
 
 export const TerceroArticuloUnidadMedidaField: React.FC = () => {
   const { control } = useFormContext<TerceroArticuloFormValues>();
-  const { unidadesMedida, fetchUnidadesMedida } = useUnidadesMedida();
+  const { allUnidadesMedida, fetchUnidadesMedida } = useUnidadesMedida();
   
   useEffect(() => {
     fetchUnidadesMedida();
@@ -76,7 +76,7 @@ export const TerceroArticuloUnidadMedidaField: React.FC = () => {
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {unidadesMedida.map((unidad) => (
+              {allUnidadesMedida.map((unidad) => (
                 <SelectItem key={unidad.unidad_medida_id} value={unidad.unidad_medida_id}>
                   {unidad.nombre}
                 </SelectItem>
