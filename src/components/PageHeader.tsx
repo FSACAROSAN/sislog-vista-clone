@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Search, Bell } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -6,20 +5,22 @@ import { useAuth } from '@/contexts/AuthContext';
 import LanguageSelector from './LanguageSelector';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/use-mobile';
-
 interface PageHeaderProps {
   title: string;
   subtitle?: string;
   icon?: React.ReactNode;
 }
-
 const PageHeader: React.FC<PageHeaderProps> = ({
   title,
   subtitle,
   icon
 }) => {
-  const { user } = useAuth();
-  const { t } = useLanguage();
+  const {
+    user
+  } = useAuth();
+  const {
+    t
+  } = useLanguage();
   const isMobile = useIsMobile();
 
   // Get user initials for avatar
@@ -27,9 +28,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
     if (!user?.email) return 'U';
     return user.email.substring(0, 2).toUpperCase();
   };
-
-  return (
-    <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-2 px-4 md:px-6 border-b border-gray-200 bg-white h-[61px]">
+  return <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-2 px-4 md:px-6 border-b border-gray-200 bg-white h-[61px]">
       <div className="flex items-center gap-3 mb-4 md:mb-0 mt-4 md:mt-0 ml-8 md:ml-0 px-0 md:px-[35px]">
         {icon && <div className="text-sislog-primary">{icon}</div>}
         <div>
@@ -42,12 +41,10 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       
       <div className="flex flex-col md:flex-row md:items-center gap-4 w-full md:w-auto">
         <div className="flex items-center gap-4 w-full md:w-auto ml-8 md:ml-0">
-          {!isMobile && (
-            <div className="relative w-full md:w-64">
-              <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <Input type="text" placeholder={t('search')} className="pl-10 pr-4 py-2 h-9 w-full" />
-            </div>
-          )}
+          {!isMobile && <div className="relative w-full md:w-64">
+              
+              
+            </div>}
           
           <div className="flex items-center gap-4">
             <LanguageSelector />
@@ -71,8 +68,6 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default PageHeader;
