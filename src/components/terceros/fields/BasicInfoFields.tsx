@@ -30,7 +30,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
           control={control}
           name="nombre"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-1">
               <FormLabel>Nombre *</FormLabel>
               <FormControl>
                 <Input disabled={loading} placeholder="Nombre" {...field} />
@@ -44,7 +44,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
           control={control}
           name="direccion"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-1">
               <FormLabel>Dirección</FormLabel>
               <FormControl>
                 <Textarea disabled={loading} placeholder="Dirección" {...field} rows={2} />

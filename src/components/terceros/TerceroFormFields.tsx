@@ -40,7 +40,7 @@ const TerceroFormFields: React.FC<TerceroFormFieldsProps> = ({
   
   return (
     <Tabs defaultValue="datos-generales" className="w-full">
-      <TabsList className="mb-4 w-full">
+      <TabsList className="mb-3 w-full">
         <TabsTrigger value="datos-generales" className="flex items-center">
           <FileText className="mr-2 h-4 w-4" />
           Datos Generales
@@ -51,7 +51,7 @@ const TerceroFormFields: React.FC<TerceroFormFieldsProps> = ({
         </TabsTrigger>
       </TabsList>
       
-      <TabsContent value="datos-generales" className="space-y-4">
+      <TabsContent value="datos-generales" className="space-y-3">
         {/* Documento fields in one line */}
         <DocumentoFields 
           control={control} 
@@ -61,7 +61,7 @@ const TerceroFormFields: React.FC<TerceroFormFieldsProps> = ({
         />
         
         {/* Modified layout for basic info */}
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-3">
           {/* Nombre in single line */}
           <div className="col-span-1">
             <BasicInfoFields 
@@ -81,14 +81,14 @@ const TerceroFormFields: React.FC<TerceroFormFieldsProps> = ({
           </div>
         </div>
         
-        {/* Tipo tercero and Estado */}
-        <div className="border-t pt-4 mt-2">
+        {/* Tipo tercero and Estado - removed one border-t */}
+        <div className="pt-2">
           <TerceroTypeFields control={control} loading={loading} />
           <EstadoField control={control} loading={loading} />
         </div>
       </TabsContent>
       
-      <TabsContent value="datos-contacto" className="space-y-4">
+      <TabsContent value="datos-contacto" className="space-y-3">
         <ContactPersonFields 
           control={control} 
           loading={loading}

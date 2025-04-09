@@ -20,8 +20,8 @@ const TerceroTypeFields: React.FC<TerceroTypeFieldsProps> = ({
   loading,
 }) => {
   return (
-    <div className="border-t pt-4 mt-4">
-      <h3 className="text-lg font-medium mb-4">Tipo de Tercero</h3>
+    <div className="mb-3">
+      <h3 className="text-lg font-medium mb-3">Tipo de Tercero</h3>
 
       <div className="flex flex-wrap gap-6">
         <FormField

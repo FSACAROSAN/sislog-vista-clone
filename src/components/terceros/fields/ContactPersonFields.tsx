@@ -24,15 +24,15 @@ const ContactPersonFields: React.FC<ContactPersonFieldsProps> = ({
 }) => {
   if (layout === "contact-tab") {
     return (
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium mb-4">Datos de Contacto</h3>
+      <div className="space-y-3">
+        <h3 className="text-lg font-medium mb-3">Datos de Contacto</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={control}
             name="nombre_contacto"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="space-y-1">
                 <FormLabel>Nombre del Contacto</FormLabel>
                 <FormControl>
                   <Input
@@ -50,7 +50,7 @@ const ContactPersonFields: React.FC<ContactPersonFieldsProps> = ({
             control={control}
             name="telefono_contacto"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="space-y-1">
                 <FormLabel>Teléfono del Contacto</FormLabel>
                 <FormControl>
                   <Input
@@ -69,7 +69,7 @@ const ContactPersonFields: React.FC<ContactPersonFieldsProps> = ({
           control={control}
           name="email_contacto"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="space-y-1">
               <FormLabel>Correo del Contacto</FormLabel>
               <FormControl>
                 <Input
