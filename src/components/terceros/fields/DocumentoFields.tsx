@@ -23,12 +23,14 @@ interface DocumentoFieldsProps {
   control: Control<TerceroFormValues>;
   tiposDocumento: TipoDocumento[];
   loading?: boolean;
+  tipoDocumentoRef?: React.RefObject<HTMLButtonElement>;
 }
 
 const DocumentoFields: React.FC<DocumentoFieldsProps> = ({
   control,
   tiposDocumento,
   loading,
+  tipoDocumentoRef,
 }) => {
   return (
     <div className="space-y-4">
@@ -45,7 +47,7 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = ({
               value={field.value}
             >
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger ref={tipoDocumentoRef}>
                   <SelectValue placeholder="Seleccione un tipo de documento" />
                 </SelectTrigger>
               </FormControl>

@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Control } from "react-hook-form";
 import { TerceroFormValues } from "./schema";
 import { TipoDocumento } from "@/types/tercero";
@@ -23,6 +23,21 @@ const TerceroFormFields: React.FC<TerceroFormFieldsProps> = ({
   tiposDocumento,
   loading,
 }) => {
+  // Reference to the select element
+  const tipoDocumentoRef = useRef<HTMLButtonElement>(null);
+
+  // Set focus on the tipo_documento select when component mounts
+  useEffect(() => {
+    // Short timeout to ensure the DOM is fully rendered
+    const timer = setTimeout(() => {
+      if (tipoDocumentoRef.current) {
+        tipoDocumentoRef.current.focus();
+      }
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
   return (
     <Tabs defaultValue="datos-generales" className="w-full">
       <TabsList className="mb-4 w-full">
@@ -42,6 +57,7 @@ const TerceroFormFields: React.FC<TerceroFormFieldsProps> = ({
           control={control} 
           tiposDocumento={tiposDocumento} 
           loading={loading} 
+          tipoDocumentoRef={tipoDocumentoRef}
         />
         
         {/* Modified layout for basic info */}
