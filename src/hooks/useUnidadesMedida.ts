@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 export const useUnidadesMedida = () => {
   const [unidadesMedida, setUnidadesMedida] = useState<UnidadMedida[]>([]);
   const [allUnidadesMedida, setAllUnidadesMedida] = useState<UnidadMedida[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedUnidadMedida, setSelectedUnidadMedida] = useState<UnidadMedida | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -24,10 +24,8 @@ export const useUnidadesMedida = () => {
         .order('nombre', { ascending: true });
 
       if (error) throw error;
-      
-      // Initialize with empty arrays first to avoid undefined
-      setAllUnidadesMedida(Array.isArray(data) ? data : []);
-      setUnidadesMedida(Array.isArray(data) ? data : []);
+      setAllUnidadesMedida(data as UnidadMedida[]);
+      setUnidadesMedida(data as UnidadMedida[]);
     } catch (error: any) {
       console.error('Error fetching unidades de medida:', error);
       toast({
@@ -35,9 +33,6 @@ export const useUnidadesMedida = () => {
         description: error.message || 'Error al cargar las unidades de medida',
         variant: 'destructive',
       });
-      // Set empty arrays on error to avoid undefined
-      setAllUnidadesMedida([]);
-      setUnidadesMedida([]);
     } finally {
       setLoading(false);
     }
