@@ -19,7 +19,7 @@ export const useEquiposTipo = () => {
       throw new Error(error.message);
     }
 
-    return data;
+    return data as unknown as EquipoTipo[];
   };
 
   const { data: equiposTipo, isLoading, error } = useQuery({
@@ -40,7 +40,7 @@ export const useEquiposTipo = () => {
         throw new Error(error.message);
       }
 
-      return data;
+      return data as unknown as EquipoTipo;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["equipos-tipo"] });
@@ -72,7 +72,7 @@ export const useEquiposTipo = () => {
         throw new Error(error.message);
       }
 
-      return data;
+      return data as unknown as EquipoTipo;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["equipos-tipo"] });
