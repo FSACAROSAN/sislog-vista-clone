@@ -71,6 +71,18 @@ const EquiposTable: React.FC<EquiposTableProps> = ({
     );
   }
 
+  const handleEditClick = (equipo: Equipo) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onEdit(equipo);
+  };
+
+  const handleDeleteClick = (id: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOpenAlert(id);
+  };
+
   return (
     <div>
       <div className="border rounded-md overflow-hidden">
@@ -116,16 +128,16 @@ const EquiposTable: React.FC<EquiposTableProps> = ({
                           <span className="sr-only">Acciones</span>
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-36 bg-white shadow-md">
+                      <DropdownMenuContent align="end" className="w-36 bg-white shadow-lg z-50">
                         <DropdownMenuItem 
-                          onClick={() => onEdit(equipo)} 
+                          onClick={handleEditClick(equipo)} 
                           className="cursor-pointer"
                         >
                           <Edit className="mr-2 h-4 w-4 text-gray-500" />
                           <span>Editar</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem 
-                          onClick={() => setOpenAlert(equipo.id)}
+                          onClick={handleDeleteClick(equipo.id)}
                           className="cursor-pointer text-red-600 focus:text-red-600"
                         >
                           <Trash2 className="mr-2 h-4 w-4 text-red-500" />
@@ -141,7 +153,7 @@ const EquiposTable: React.FC<EquiposTableProps> = ({
                       if (!open) setOpenAlert(null);
                     }}
                   >
-                    <AlertDialogContent>
+                    <AlertDialogContent className="bg-white">
                       <AlertDialogHeader>
                         <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
                         <AlertDialogDescription>
@@ -149,10 +161,11 @@ const EquiposTable: React.FC<EquiposTableProps> = ({
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel onClick={(e) => e.stopPropagation()}>Cancelar</AlertDialogCancel>
                         <AlertDialogAction
-                          className="bg-red-500 hover:bg-red-600"
-                          onClick={() => {
+                          className="bg-red-500 hover:bg-red-600 text-white"
+                          onClick={(e) => {
+                            e.stopPropagation();
                             onDelete(equipo.id);
                             setOpenAlert(null);
                           }}

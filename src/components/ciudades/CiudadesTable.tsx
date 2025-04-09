@@ -44,6 +44,18 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
 }) => {
   const [openAlert, setOpenAlert] = useState<string | null>(null);
 
+  const handleEditClick = (ciudad: Ciudad) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onEdit(ciudad);
+  };
+
+  const handleDeleteClick = (id: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOpenAlert(id);
+  };
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -95,16 +107,16 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
                           <span className="sr-only">Acciones</span>
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-36 bg-white shadow-md">
+                      <DropdownMenuContent align="end" className="w-36 bg-white shadow-lg z-50">
                         <DropdownMenuItem 
-                          onClick={() => onEdit(ciudad)} 
+                          onClick={handleEditClick(ciudad)} 
                           className="cursor-pointer"
                         >
                           <Edit className="mr-2 h-4 w-4 text-gray-500" />
                           <span>Editar</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem 
-                          onClick={() => setOpenAlert(ciudad.id)}
+                          onClick={handleDeleteClick(ciudad.id)}
                           className="cursor-pointer text-red-600 focus:text-red-600"
                         >
                           <Trash2 className="mr-2 h-4 w-4 text-red-500" />
@@ -120,7 +132,7 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
                       if (!open) setOpenAlert(null);
                     }}
                   >
-                    <AlertDialogContent>
+                    <AlertDialogContent className="bg-white">
                       <AlertDialogHeader>
                         <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
                         <AlertDialogDescription>
@@ -128,10 +140,11 @@ const CiudadesTable: React.FC<CiudadesTableProps> = ({
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel onClick={(e) => e.stopPropagation()}>Cancelar</AlertDialogCancel>
                         <AlertDialogAction
                           className="bg-red-500 text-white hover:bg-red-600"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             onDelete(ciudad.id);
                             setOpenAlert(null);
                           }}

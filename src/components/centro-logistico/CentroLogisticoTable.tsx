@@ -44,6 +44,18 @@ const CentroLogisticoTable: React.FC<CentroLogisticoTableProps> = ({
 }) => {
   const [openAlert, setOpenAlert] = useState<string | null>(null);
 
+  const handleEditClick = (centro: CentroLogistico) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onEdit(centro);
+  };
+
+  const handleDeleteClick = (id: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOpenAlert(id);
+  };
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -97,16 +109,16 @@ const CentroLogisticoTable: React.FC<CentroLogisticoTableProps> = ({
                           <span className="sr-only">Acciones</span>
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-36 bg-white shadow-md">
+                      <DropdownMenuContent align="end" className="w-36 bg-white shadow-lg z-50">
                         <DropdownMenuItem 
-                          onClick={() => onEdit(centro)} 
+                          onClick={handleEditClick(centro)} 
                           className="cursor-pointer"
                         >
                           <Edit className="mr-2 h-4 w-4 text-gray-500" />
                           <span>Editar</span>
                         </DropdownMenuItem>
                         <DropdownMenuItem 
-                          onClick={() => setOpenAlert(centro.id)}
+                          onClick={handleDeleteClick(centro.id)}
                           className="cursor-pointer text-red-600 focus:text-red-600"
                         >
                           <Trash2 className="mr-2 h-4 w-4 text-red-500" />
@@ -122,7 +134,7 @@ const CentroLogisticoTable: React.FC<CentroLogisticoTableProps> = ({
                       if (!open) setOpenAlert(null);
                     }}
                   >
-                    <AlertDialogContent>
+                    <AlertDialogContent className="bg-white">
                       <AlertDialogHeader>
                         <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
                         <AlertDialogDescription>
@@ -130,10 +142,11 @@ const CentroLogisticoTable: React.FC<CentroLogisticoTableProps> = ({
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel onClick={(e) => e.stopPropagation()}>Cancelar</AlertDialogCancel>
                         <AlertDialogAction
                           className="bg-red-500 text-white hover:bg-red-600"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             onDelete(centro.id);
                             setOpenAlert(null);
                           }}
