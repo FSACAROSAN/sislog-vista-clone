@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { MapPin } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import CiudadForm from './CiudadForm';
 import { Ciudad } from '@/types/ciudad';
 import { Button } from '@/components/ui/button';
+
 interface CiudadesHeaderProps {
   isDialogOpen: boolean;
   setIsDialogOpen: (open: boolean) => void;
@@ -11,6 +13,7 @@ interface CiudadesHeaderProps {
   setSelectedCiudad: (ciudad: Ciudad | null) => void;
   onSuccess: () => void;
 }
+
 const CiudadesHeader: React.FC<CiudadesHeaderProps> = ({
   isDialogOpen,
   setIsDialogOpen,
@@ -18,8 +21,13 @@ const CiudadesHeader: React.FC<CiudadesHeaderProps> = ({
   setSelectedCiudad,
   onSuccess
 }) => {
-  return <div className="flex justify-between items-center mb-6">
-      
+  const handleCancel = () => {
+    setIsDialogOpen(false);
+    setSelectedCiudad(null);
+  };
+
+  return (
+    <div className="flex justify-between items-center mb-6">
       
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[600px]">
@@ -28,13 +36,19 @@ const CiudadesHeader: React.FC<CiudadesHeaderProps> = ({
               {selectedCiudad ? 'Editar Ciudad' : 'Agregar Nueva Ciudad'}
             </DialogTitle>
           </DialogHeader>
-          <CiudadForm ciudad={selectedCiudad} onSuccess={() => {
-          setIsDialogOpen(false);
-          setSelectedCiudad(null);
-          onSuccess();
-        }} />
+          <CiudadForm 
+            ciudad={selectedCiudad} 
+            onSuccess={() => {
+              setIsDialogOpen(false);
+              setSelectedCiudad(null);
+              onSuccess();
+            }}
+            onCancel={handleCancel}
+          />
         </DialogContent>
       </Dialog>
-    </div>;
+    </div>
+  );
 };
+
 export default CiudadesHeader;

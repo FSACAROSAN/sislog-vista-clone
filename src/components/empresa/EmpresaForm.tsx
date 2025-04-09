@@ -10,9 +10,14 @@ import EmpresaFormFields from './EmpresaFormFields';
 interface EmpresaFormProps {
   empresa?: Empresa | null;
   onSuccess?: () => void;
+  onCancel?: () => void;
 }
 
-const EmpresaForm: React.FC<EmpresaFormProps> = ({ empresa, onSuccess }) => {
+const EmpresaForm: React.FC<EmpresaFormProps> = ({ 
+  empresa, 
+  onSuccess,
+  onCancel
+}) => {
   const { form, isSubmitting, onSubmit } = useEmpresaForm({ empresa, onSuccess });
 
   return (
@@ -21,6 +26,16 @@ const EmpresaForm: React.FC<EmpresaFormProps> = ({ empresa, onSuccess }) => {
         <EmpresaFormFields form={form} />
 
         <div className="flex justify-end gap-2">
+          {onCancel && (
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={onCancel}
+              disabled={isSubmitting}
+            >
+              Cancelar
+            </Button>
+          )}
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? (
               <>

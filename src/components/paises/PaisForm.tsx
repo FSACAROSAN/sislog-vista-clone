@@ -10,9 +10,10 @@ import { FormProvider } from 'react-hook-form';
 interface PaisFormProps {
   pais: Pais | null;
   onSuccess: () => void;
+  onCancel?: () => void;
 }
 
-const PaisForm: React.FC<PaisFormProps> = ({ pais, onSuccess }) => {
+const PaisForm: React.FC<PaisFormProps> = ({ pais, onSuccess, onCancel }) => {
   const { toast } = useToast();
   const isEditing = Boolean(pais?.id);
   
@@ -44,6 +45,16 @@ const PaisForm: React.FC<PaisFormProps> = ({ pais, onSuccess }) => {
         <PaisFormFields />
         
         <div className="flex justify-end gap-2">
+          {onCancel && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onCancel}
+              disabled={isSubmitting}
+            >
+              Cancelar
+            </Button>
+          )}
           <Button
             type="submit"
             disabled={isSubmitting}

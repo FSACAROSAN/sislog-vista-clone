@@ -10,9 +10,10 @@ import { FormProvider } from 'react-hook-form';
 interface CiudadFormProps {
   ciudad: Ciudad | null;
   onSuccess: () => void;
+  onCancel?: () => void;
 }
 
-const CiudadForm: React.FC<CiudadFormProps> = ({ ciudad, onSuccess }) => {
+const CiudadForm: React.FC<CiudadFormProps> = ({ ciudad, onSuccess, onCancel }) => {
   const { toast } = useToast();
   const isEditing = Boolean(ciudad?.id);
   
@@ -44,6 +45,16 @@ const CiudadForm: React.FC<CiudadFormProps> = ({ ciudad, onSuccess }) => {
         <CiudadFormFields />
         
         <div className="flex justify-end gap-2">
+          {onCancel && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onCancel}
+              disabled={isSubmitting}
+            >
+              Cancelar
+            </Button>
+          )}
           <Button
             type="submit"
             disabled={isSubmitting}

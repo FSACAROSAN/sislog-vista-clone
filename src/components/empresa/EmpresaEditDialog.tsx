@@ -24,6 +24,10 @@ export const EmpresaEditDialog: React.FC<EmpresaEditDialogProps> = ({
   empresa,
   onSuccess,
 }) => {
+  const handleCancel = () => {
+    onOpenChange(false);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
@@ -34,7 +38,11 @@ export const EmpresaEditDialog: React.FC<EmpresaEditDialogProps> = ({
           </DialogDescription>
         </DialogHeader>
         {empresa && (
-          <EmpresaForm empresa={empresa} onSuccess={onSuccess} />
+          <EmpresaForm 
+            empresa={empresa} 
+            onSuccess={onSuccess} 
+            onCancel={handleCancel}
+          />
         )}
         <DialogClose className="hidden" />
       </DialogContent>

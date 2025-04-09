@@ -51,6 +51,7 @@ const TercerosHeader: React.FC<TercerosHeaderProps> = ({
         <TerceroForm
           onSuccess={handleSuccess}
           initialData={selectedTercero}
+          onCancel={handleDialogClose}
         />
       </DialogContent>
     </Dialog>

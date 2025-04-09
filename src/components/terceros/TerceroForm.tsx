@@ -11,11 +11,13 @@ import { useTiposDocumento } from "@/hooks/useTiposDocumento";
 interface TerceroFormProps {
   onSuccess: () => void;
   initialData?: Tercero | null;
+  onCancel?: () => void;
 }
 
 const TerceroForm: React.FC<TerceroFormProps> = ({
   onSuccess,
   initialData,
+  onCancel,
 }) => {
   const { form, onSubmit, loading } = useTerceroForm({
     onSuccess,
@@ -35,6 +37,16 @@ const TerceroForm: React.FC<TerceroFormProps> = ({
           />
 
           <div className="flex justify-end space-x-2">
+            {onCancel && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onCancel}
+                disabled={loading}
+              >
+                Cancelar
+              </Button>
+            )}
             <Button
               type="submit"
               disabled={loading}

@@ -20,6 +20,11 @@ const EquiposHeader: React.FC<EquiposHeaderProps> = ({
   setSelectedEquipo,
   onSuccess
 }) => {
+  const handleCancel = () => {
+    setIsDialogOpen(false);
+    setSelectedEquipo(null);
+  };
+
   return (
     <div className="flex justify-between items-center mb-6">
       <div>
@@ -32,11 +37,15 @@ const EquiposHeader: React.FC<EquiposHeaderProps> = ({
               {selectedEquipo ? 'Editar Equipo' : 'Agregar Nuevo Equipo'}
             </DialogTitle>
           </DialogHeader>
-          <EquipoForm equipo={selectedEquipo} onSuccess={() => {
-            setIsDialogOpen(false);
-            setSelectedEquipo(null);
-            onSuccess();
-          }} />
+          <EquipoForm 
+            equipo={selectedEquipo} 
+            onSuccess={() => {
+              setIsDialogOpen(false);
+              setSelectedEquipo(null);
+              onSuccess();
+            }}
+            onCancel={handleCancel} 
+          />
         </DialogContent>
       </Dialog>
     </div>

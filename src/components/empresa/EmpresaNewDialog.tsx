@@ -21,6 +21,10 @@ export const EmpresaNewDialog: React.FC<EmpresaNewDialogProps> = ({
   onOpenChange,
   onSuccess,
 }) => {
+  const handleCancel = () => {
+    onOpenChange(false);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
@@ -30,7 +34,10 @@ export const EmpresaNewDialog: React.FC<EmpresaNewDialogProps> = ({
             Ingrese la información de la nueva empresa a continuación.
           </DialogDescription>
         </DialogHeader>
-        <EmpresaForm onSuccess={onSuccess} />
+        <EmpresaForm 
+          onSuccess={onSuccess} 
+          onCancel={handleCancel}
+        />
         <DialogClose className="hidden" />
       </DialogContent>
     </Dialog>

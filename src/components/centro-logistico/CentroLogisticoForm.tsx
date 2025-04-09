@@ -10,9 +10,14 @@ import { FormProvider } from 'react-hook-form';
 interface CentroLogisticoFormProps {
   centroLogistico: CentroLogistico | null;
   onSuccess: () => void;
+  onCancel?: () => void;
 }
 
-const CentroLogisticoForm: React.FC<CentroLogisticoFormProps> = ({ centroLogistico, onSuccess }) => {
+const CentroLogisticoForm: React.FC<CentroLogisticoFormProps> = ({ 
+  centroLogistico, 
+  onSuccess,
+  onCancel
+}) => {
   const { toast } = useToast();
   const isEditing = Boolean(centroLogistico?.id);
   
@@ -46,6 +51,16 @@ const CentroLogisticoForm: React.FC<CentroLogisticoFormProps> = ({ centroLogisti
         <CentroLogisticoFormFields paises={paises} ciudades={ciudades} />
         
         <div className="flex justify-end gap-2">
+          {onCancel && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onCancel}
+              disabled={isSubmitting}
+            >
+              Cancelar
+            </Button>
+          )}
           <Button
             type="submit"
             disabled={isSubmitting}

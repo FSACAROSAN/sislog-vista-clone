@@ -6,9 +6,16 @@ import { Loader2 } from 'lucide-react';
 interface FormActionsProps {
   onCancel: () => void;
   loading: boolean;
+  submitText?: string;
+  cancelText?: string;
 }
 
-const FormActions: React.FC<FormActionsProps> = ({ onCancel, loading }) => {
+const FormActions: React.FC<FormActionsProps> = ({ 
+  onCancel, 
+  loading, 
+  submitText = 'Guardar',
+  cancelText = 'Cancelar'
+}) => {
   return (
     <div className="flex justify-end space-x-2">
       <Button
@@ -17,7 +24,7 @@ const FormActions: React.FC<FormActionsProps> = ({ onCancel, loading }) => {
         onClick={onCancel}
         disabled={loading}
       >
-        Cancelar
+        {cancelText}
       </Button>
       <Button type="submit" disabled={loading}>
         {loading ? (
@@ -26,7 +33,7 @@ const FormActions: React.FC<FormActionsProps> = ({ onCancel, loading }) => {
             Guardando...
           </>
         ) : (
-          'Guardar'
+          submitText
         )}
       </Button>
     </div>

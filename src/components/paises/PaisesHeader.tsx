@@ -20,6 +20,11 @@ const PaisesHeader: React.FC<PaisesHeaderProps> = ({
   setSelectedPais,
   onSuccess
 }) => {
+  const handleCancel = () => {
+    setIsDialogOpen(false);
+    setSelectedPais(null);
+  };
+
   return (
     <div className="flex justify-between items-center mb-6">
       <div>
@@ -32,11 +37,15 @@ const PaisesHeader: React.FC<PaisesHeaderProps> = ({
               {selectedPais ? 'Editar País' : 'Agregar Nuevo País'}
             </DialogTitle>
           </DialogHeader>
-          <PaisForm pais={selectedPais} onSuccess={() => {
-            setIsDialogOpen(false);
-            setSelectedPais(null);
-            onSuccess();
-          }} />
+          <PaisForm 
+            pais={selectedPais} 
+            onSuccess={() => {
+              setIsDialogOpen(false);
+              setSelectedPais(null);
+              onSuccess();
+            }}
+            onCancel={handleCancel}
+          />
         </DialogContent>
       </Dialog>
     </div>
