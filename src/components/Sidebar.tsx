@@ -82,7 +82,7 @@ const Sidebar: React.FC = () => {
                 <SidebarSubItem icon={<Building2 size={16} />} label={t('company')} active={location.pathname === '/empresa'} path="/empresa" />
                 <SidebarSubItem icon={<Map size={16} />} label={t('countries')} active={location.pathname === '/paises'} path="/paises" />
                 <SidebarSubItem icon={<MapPin size={16} />} label={t('cities')} active={location.pathname === '/ciudades'} path="/ciudades" />
-                <SidebarSubItem icon={<Warehouse size={16} />} label={t('logistic.center')} active={location.pathname === '/centro-logistico'} path="/centro-logistico" />
+                <SidebarSubItem icon={<Warehouse size={16} />} label={'Centros Logísticos'} active={location.pathname === '/centro-logistico'} path="/centro-logistico" />
                 <SidebarSubItem icon={<img src="/lovable-uploads/93a7ddd3-b268-4cb6-93ca-eb23d2e21690.png" className="w-4 h-4" alt="Bodega" />} label={t('warehouses')} active={location.pathname === '/bodegas'} path="/bodegas" />
                 <SidebarSubItem icon={<PackageOpen size={16} />} label={t('stands')} active={location.pathname === '/stands'} path="/stands" />
                 <SidebarSubItem icon={<UserCircle size={16} />} label={'Terceros'} active={location.pathname === '/terceros'} path="/terceros" />
