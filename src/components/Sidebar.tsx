@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, MapPin, LogOut, Truck, ClipboardList, PackageOpen, ChevronDown, Receipt, Tag, UserCircle, Box, PackagePlus, Clipboard, CircleDollarSign, Ruler } from 'lucide-react';
+import { LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, MapPin, LogOut, Truck, ClipboardList, PackageOpen, ChevronDown, Receipt, Tag, UserCircle, Box, PackagePlus, Clipboard, CircleDollarSign, Ruler, Ship, ArrowDownToLine, ArrowUpFromLine } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -50,6 +50,7 @@ const Sidebar: React.FC = () => {
   const isConfigActive = ['/empresa', '/paises', '/ciudades', '/centro-logistico', '/bodegas', '/stands', '/terceros'].includes(location.pathname);
   const isFacturacionActive = ['/tarifas-generales'].includes(location.pathname);
   const isInventarioActive = ['/productos', '/movimientos', '/valoracion', '/unidades-medida'].includes(location.pathname);
+  const isLogisticaActive = ['/anuncio-arribo', '/entradas', '/salida'].includes(location.pathname);
 
   return <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
       <div className="h-[61px] px-4 border-b border-gray-200 flex items-center">
@@ -133,7 +134,26 @@ const Sidebar: React.FC = () => {
           </CollapsibleContent>
         </Collapsible>
 
-        <SidebarItem icon={<Truck size={18} />} label={t('logistics')} />
+        <Collapsible className="w-full">
+          <CollapsibleTrigger className="w-full">
+            <div className={`sidebar-item ${isLogisticaActive ? 'active' : ''} justify-between`}>
+              <div className="flex items-center">
+                <Truck size={18} />
+                <span className="px-[10px]">{t('logistics')}</span>
+              </div>
+              <ChevronDown size={16} className="transition-transform duration-200" />
+            </div>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <div className="pl-12 pr-4 mt-1">
+              <div className="flex flex-col space-y-1">
+                <SidebarSubItem icon={<Ship size={16} />} label="Anuncio de arribo" active={location.pathname === '/anuncio-arribo'} path="/anuncio-arribo" />
+                <SidebarSubItem icon={<ArrowDownToLine size={16} />} label="Entradas" active={location.pathname === '/entradas'} path="/entradas" />
+                <SidebarSubItem icon={<ArrowUpFromLine size={16} />} label="Salida" active={location.pathname === '/salida'} path="/salida" />
+              </div>
+            </div>
+          </CollapsibleContent>
+        </Collapsible>
         
         <SidebarItem icon={<Package2 size={18} />} label={t('containers')} />
         
