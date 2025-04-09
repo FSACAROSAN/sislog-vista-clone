@@ -104,29 +104,43 @@ const EquiposTable: React.FC<EquiposTableProps> = ({
                   )}
                 </TableCell>
                 <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
-                        <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Abrir menú</span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => onEdit(equipo)}>
-                        <Edit className="mr-2 h-4 w-4" />
-                        <span>Editar</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem 
-                        onClick={() => setOpenAlert(equipo.id)}
-                        className="text-red-600 focus:text-red-600"
-                      >
-                        <Trash2 className="mr-2 h-4 w-4 text-red-500" />
-                        <span>Eliminar</span>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <div className="flex justify-end">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-8 w-8 p-0 focus:ring-0 focus:ring-offset-0"
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Acciones</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-36 bg-white shadow-md">
+                        <DropdownMenuItem 
+                          onClick={() => onEdit(equipo)} 
+                          className="cursor-pointer"
+                        >
+                          <Edit className="mr-2 h-4 w-4 text-gray-500" />
+                          <span>Editar</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem 
+                          onClick={() => setOpenAlert(equipo.id)}
+                          className="cursor-pointer text-red-600 focus:text-red-600"
+                        >
+                          <Trash2 className="mr-2 h-4 w-4 text-red-500" />
+                          <span>Eliminar</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
 
-                  <AlertDialog open={openAlert === equipo.id} onOpenChange={() => setOpenAlert(null)}>
+                  <AlertDialog 
+                    open={openAlert === equipo.id} 
+                    onOpenChange={(open) => {
+                      if (!open) setOpenAlert(null);
+                    }}
+                  >
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
