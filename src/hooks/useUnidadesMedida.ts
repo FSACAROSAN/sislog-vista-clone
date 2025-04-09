@@ -70,8 +70,7 @@ export const useUnidadesMedida = () => {
   // Filter unidades de medida based on search term
   useEffect(() => {
     const filteredResults = allUnidadesMedida.filter(unidad =>
-      unidad.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      unidad.simbolo.toLowerCase().includes(searchTerm.toLowerCase())
+      unidad.nombre.toLowerCase().includes(searchTerm.toLowerCase())
     );
     
     setUnidadesMedida(filteredResults);

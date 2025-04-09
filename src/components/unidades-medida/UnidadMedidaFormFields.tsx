@@ -32,26 +32,6 @@ export const UnidadMedidaNombreField: React.FC = () => {
   );
 };
 
-export const UnidadMedidaSimboloField: React.FC = () => {
-  const { control } = useFormContext<UnidadMedidaFormValues>();
-  
-  return (
-    <FormField
-      control={control}
-      name="simbolo"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Símbolo*</FormLabel>
-          <FormControl>
-            <Input placeholder="Ej: kg" {...field} />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-  );
-};
-
 export const UnidadMedidaEstadoField: React.FC = () => {
   const { control } = useFormContext<UnidadMedidaFormValues>();
   
@@ -81,7 +61,6 @@ const UnidadMedidaFormFields: React.FC = () => {
   return (
     <div className="space-y-6">
       <UnidadMedidaNombreField />
-      <UnidadMedidaSimboloField />
       <UnidadMedidaEstadoField />
     </div>
   );

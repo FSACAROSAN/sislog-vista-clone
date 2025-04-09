@@ -19,11 +19,9 @@ export const useUnidadMedidaForm = ({ unidadMedida, onSuccess, onError }: UseUni
     resolver: zodResolver(unidadMedidaFormSchema),
     defaultValues: unidadMedida ? {
       nombre: unidadMedida.nombre,
-      simbolo: unidadMedida.simbolo,
       estado: unidadMedida.estado,
     } : {
       nombre: '',
-      simbolo: '',
       estado: true,
     }
   });
@@ -38,7 +36,6 @@ export const useUnidadMedidaForm = ({ unidadMedida, onSuccess, onError }: UseUni
           .from('inv_unidades_medida')
           .update({
             nombre: values.nombre,
-            simbolo: values.simbolo,
             estado: values.estado,
             updated_at: new Date().toISOString(),
           })
@@ -51,7 +48,6 @@ export const useUnidadMedidaForm = ({ unidadMedida, onSuccess, onError }: UseUni
           .from('inv_unidades_medida')
           .insert({
             nombre: values.nombre,
-            simbolo: values.simbolo,
             estado: values.estado,
           });
 

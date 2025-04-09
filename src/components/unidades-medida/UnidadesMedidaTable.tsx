@@ -60,7 +60,6 @@ const UnidadesMedidaTable: React.FC<UnidadesMedidaTableProps> = ({
         <TableHeader>
           <TableRow>
             <TableHead>Nombre</TableHead>
-            <TableHead>Símbolo</TableHead>
             <TableHead>Estado</TableHead>
             <TableHead className="text-right">Acciones</TableHead>
           </TableRow>
@@ -68,7 +67,7 @@ const UnidadesMedidaTable: React.FC<UnidadesMedidaTableProps> = ({
         <TableBody>
           {loading ? (
             <TableRow>
-              <TableCell colSpan={4} className="text-center py-4">
+              <TableCell colSpan={3} className="text-center py-4">
                 <div className="flex justify-center">
                   <div className="animate-spin h-6 w-6 border-4 border-sislog-primary border-t-transparent rounded-full"></div>
                 </div>
@@ -76,7 +75,7 @@ const UnidadesMedidaTable: React.FC<UnidadesMedidaTableProps> = ({
             </TableRow>
           ) : unidadesMedida.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={4} className="text-center py-4">
+              <TableCell colSpan={3} className="text-center py-4">
                 No se encontraron unidades de medida
               </TableCell>
             </TableRow>
@@ -84,7 +83,6 @@ const UnidadesMedidaTable: React.FC<UnidadesMedidaTableProps> = ({
             unidadesMedida.map((unidadMedida) => (
               <TableRow key={unidadMedida.unidad_medida_id}>
                 <TableCell className="font-medium">{unidadMedida.nombre}</TableCell>
-                <TableCell>{unidadMedida.simbolo}</TableCell>
                 <TableCell>
                   <span className={`px-2 py-1 rounded-full text-xs ${
                     unidadMedida.estado ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
