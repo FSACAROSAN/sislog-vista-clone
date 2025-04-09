@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, MapPin, LogOut, Truck, ClipboardList, PackageOpen, ChevronDown, Receipt, Tag, UserCircle, Box, PackagePlus, Clipboard, CircleDollarSign } from 'lucide-react';
+import { LayoutDashboard, Settings, Building2, Users, Package2, Warehouse, Map, MapPin, LogOut, Truck, ClipboardList, PackageOpen, ChevronDown, Receipt, Tag, UserCircle, Box, PackagePlus, Clipboard, CircleDollarSign, Ruler } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -49,7 +49,7 @@ const Sidebar: React.FC = () => {
   
   const isConfigActive = ['/empresa', '/paises', '/ciudades', '/centro-logistico', '/bodegas', '/stands', '/terceros'].includes(location.pathname);
   const isFacturacionActive = ['/tarifas-generales'].includes(location.pathname);
-  const isInventarioActive = ['/productos', '/movimientos', '/valoracion'].includes(location.pathname);
+  const isInventarioActive = ['/productos', '/movimientos', '/valoracion', '/unidades-medida'].includes(location.pathname);
 
   return <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
       <div className="h-[61px] px-4 border-b border-gray-200 flex items-center">
@@ -127,6 +127,7 @@ const Sidebar: React.FC = () => {
                 <SidebarSubItem icon={<PackagePlus size={16} />} label="Productos" active={location.pathname === '/productos'} path="/productos" />
                 <SidebarSubItem icon={<Clipboard size={16} />} label="Movimientos" active={location.pathname === '/movimientos'} path="/movimientos" />
                 <SidebarSubItem icon={<CircleDollarSign size={16} />} label="Valoración" active={location.pathname === '/valoracion'} path="/valoracion" />
+                <SidebarSubItem icon={<Ruler size={16} />} label="Unidades de medida" active={location.pathname === '/unidades-medida'} path="/unidades-medida" />
               </div>
             </div>
           </CollapsibleContent>

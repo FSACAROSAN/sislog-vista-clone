@@ -309,6 +309,33 @@ export type Database = {
         }
         Relationships: []
       }
+      inv_unidades_medida: {
+        Row: {
+          created_at: string | null
+          estado: boolean | null
+          nombre: string
+          simbolo: string
+          unidad_medida_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          estado?: boolean | null
+          nombre: string
+          simbolo: string
+          unidad_medida_id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          estado?: boolean | null
+          nombre?: string
+          simbolo?: string
+          unidad_medida_id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       paises: {
         Row: {
           codigo: number
