@@ -70,7 +70,7 @@ const LogisticaSection: React.FC<LogisticaSectionProps> = ({ isActive, activePat
                   />
                   <SidebarSubItem 
                     icon={<Ruler size={16} />} 
-                    label="Unidades de medida" 
+                    label="Unidades carga" 
                     active={activePath === '/unidades-medida'} 
                     path="/unidades-medida" 
                   />
