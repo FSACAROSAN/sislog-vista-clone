@@ -26,7 +26,7 @@ const TercerosSearch: React.FC<TercerosSearchProps> = ({
         <Input
           type="search"
           placeholder="Buscar por nombre, documento, email o teléfono..."
-          className="pl-8 w-full sm:max-w-xs"
+          className="pl-8 w-full sm:max-w-md"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
