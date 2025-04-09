@@ -31,7 +31,7 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = ({
   loading,
 }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="space-y-4">
       <FormField
         control={control}
         name="tipo_documento_id"
@@ -65,19 +65,39 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = ({
         )}
       />
 
-      <FormField
-        control={control}
-        name="documento"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Documento *</FormLabel>
-            <FormControl>
-              <Input disabled={loading} placeholder="Documento" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="col-span-2">
+          <FormField
+            control={control}
+            name="documento"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Documento *</FormLabel>
+                <FormControl>
+                  <Input disabled={loading} placeholder="Documento" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="col-span-1">
+          <FormField
+            control={control}
+            name="dv"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>DV</FormLabel>
+                <FormControl>
+                  <Input disabled={loading} maxLength={1} placeholder="DV" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
     </div>
   );
 };

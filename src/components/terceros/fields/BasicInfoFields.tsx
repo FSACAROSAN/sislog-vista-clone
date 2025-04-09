@@ -15,12 +15,48 @@ import { TerceroFormValues } from "../schema";
 interface BasicInfoFieldsProps {
   control: Control<TerceroFormValues>;
   loading?: boolean;
+  layout?: "default" | "single-line";
 }
 
 const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
   control,
   loading,
+  layout = "default",
 }) => {
+  if (layout === "single-line") {
+    return (
+      <>
+        <FormField
+          control={control}
+          name="nombre"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nombre *</FormLabel>
+              <FormControl>
+                <Input disabled={loading} placeholder="Nombre" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name="direccion"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Dirección</FormLabel>
+              <FormControl>
+                <Textarea disabled={loading} placeholder="Dirección" {...field} rows={2} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

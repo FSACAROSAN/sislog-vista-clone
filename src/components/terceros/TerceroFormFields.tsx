@@ -9,6 +9,8 @@ import ContactInfoFields from "./fields/ContactInfoFields";
 import ContactPersonFields from "./fields/ContactPersonFields";
 import TerceroTypeFields from "./fields/TerceroTypeFields";
 import EstadoField from "./fields/EstadoField";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FileText, Phone } from "lucide-react";
 
 interface TerceroFormFieldsProps {
   control: Control<TerceroFormValues>;
@@ -22,23 +24,62 @@ const TerceroFormFields: React.FC<TerceroFormFieldsProps> = ({
   loading,
 }) => {
   return (
-    <div className="space-y-4">
-      <DocumentoFields 
-        control={control} 
-        tiposDocumento={tiposDocumento} 
-        loading={loading} 
-      />
+    <Tabs defaultValue="datos-generales" className="w-full">
+      <TabsList className="mb-4 w-full">
+        <TabsTrigger value="datos-generales" className="flex items-center">
+          <FileText className="mr-2 h-4 w-4" />
+          Datos Generales
+        </TabsTrigger>
+        <TabsTrigger value="datos-contacto" className="flex items-center">
+          <Phone className="mr-2 h-4 w-4" />
+          Datos de Contacto
+        </TabsTrigger>
+      </TabsList>
       
-      <BasicInfoFields control={control} loading={loading} />
+      <TabsContent value="datos-generales" className="space-y-4">
+        {/* Documento fields in one line */}
+        <DocumentoFields 
+          control={control} 
+          tiposDocumento={tiposDocumento} 
+          loading={loading} 
+        />
+        
+        {/* Modified layout for basic info */}
+        <div className="grid grid-cols-1 gap-4">
+          {/* Nombre in single line */}
+          <div className="col-span-1">
+            <BasicInfoFields 
+              control={control} 
+              loading={loading} 
+              layout="single-line"
+            />
+          </div>
+          
+          {/* Contact info with telefono_1 and telefono_2 side by side */}
+          <div className="col-span-1">
+            <ContactInfoFields 
+              control={control} 
+              loading={loading} 
+              layout="side-by-side"
+            />
+          </div>
+        </div>
+        
+        {/* Tipo tercero and Estado */}
+        <div className="border-t pt-4 mt-2">
+          <TerceroTypeFields control={control} loading={loading} />
+          <EstadoField control={control} loading={loading} />
+        </div>
+      </TabsContent>
       
-      <ContactInfoFields control={control} loading={loading} />
-      
-      <ContactPersonFields control={control} loading={loading} />
-      
-      <TerceroTypeFields control={control} loading={loading} />
-      
-      <EstadoField control={control} loading={loading} />
-    </div>
+      <TabsContent value="datos-contacto" className="space-y-4">
+        <ContactPersonFields 
+          control={control} 
+          loading={loading}
+          layout="contact-tab"
+        />
+      </TabsContent>
+    </Tabs>
   );
 };
 
