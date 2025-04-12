@@ -1,12 +1,22 @@
 
-import React, { memo, useCallback, useMemo } from 'react';
+import React, { memo, useCallback, useMemo, Suspense, lazy } from 'react';
 import PageHeader from '@/components/PageHeader';
 import { Building2, AlertCircle } from 'lucide-react';
 import { useEmpresas } from '@/hooks/useEmpresas';
-import EmpresaTable from '@/components/empresa/EmpresaTable';
-import { EmpresaEditDialog, EmpresaNewDialog } from '@/components/empresa';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+
+// Lazy load components to reduce initial bundle size
+const EmpresaTable = lazy(() => import('@/components/empresa/EmpresaTable'));
+const EmpresaEditDialog = lazy(() => import('@/components/empresa/EmpresaEditDialog'));
+const EmpresaNewDialog = lazy(() => import('@/components/empresa/EmpresaNewDialog'));
+
+// Fallback loading component for suspense
+const TableLoadingFallback = () => (
+  <div className="flex justify-center p-8">
+    <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
+  </div>
+);
 
 // Optimize the component with memoization
 const EmpresaPage = memo(() => {
@@ -29,7 +39,7 @@ const EmpresaPage = memo(() => {
     setOpenNewDialog(true);
   }, [setOpenNewDialog]);
 
-  // Memoize the content to prevent unnecessary re-renders
+  // Memoize the error content to prevent unnecessary re-renders
   const errorContent = useMemo(() => {
     if (!error) return null;
     
@@ -42,17 +52,16 @@ const EmpresaPage = memo(() => {
     );
   }, [error]);
 
-  const tableContent = useMemo(() => (
-    <EmpresaTable 
-      empresas={empresas} 
-      isLoading={loading} 
-      onEdit={handleEdit} 
-      onDelete={handleDelete} 
-      formatDate={formatDate} 
-      onRefresh={handleFormSuccess} 
-      openNewDialog={handleOpenNewDialog} 
-    />
-  ), [empresas, loading, handleEdit, handleDelete, formatDate, handleFormSuccess, handleOpenNewDialog]);
+  // Memoize table props to prevent unnecessary re-renders
+  const tableProps = useMemo(() => ({
+    empresas,
+    isLoading: loading,
+    onEdit: handleEdit,
+    onDelete: handleDelete,
+    formatDate,
+    onRefresh: handleFormSuccess,
+    openNewDialog: handleOpenNewDialog
+  }), [empresas, loading, handleEdit, handleDelete, formatDate, handleFormSuccess, handleOpenNewDialog]);
 
   return (
     <div className="flex flex-col h-full">
@@ -66,27 +75,33 @@ const EmpresaPage = memo(() => {
             <div></div>
           </CardHeader>
           <CardContent>
-            {tableContent}
+            <Suspense fallback={<TableLoadingFallback />}>
+              <EmpresaTable {...tableProps} />
+            </Suspense>
           </CardContent>
         </Card>
       </div>
 
-      {/* Dialogs - Only render when needed */}
+      {/* Only mount dialogs when needed using Suspense */}
       {openEditDialog && selectedEmpresa && (
-        <EmpresaEditDialog 
-          open={openEditDialog} 
-          onOpenChange={setOpenEditDialog} 
-          empresa={selectedEmpresa} 
-          onSuccess={handleFormSuccess} 
-        />
+        <Suspense fallback={null}>
+          <EmpresaEditDialog 
+            open={openEditDialog} 
+            onOpenChange={setOpenEditDialog} 
+            empresa={selectedEmpresa} 
+            onSuccess={handleFormSuccess} 
+          />
+        </Suspense>
       )}
 
       {openNewDialog && (
-        <EmpresaNewDialog 
-          open={openNewDialog} 
-          onOpenChange={setOpenNewDialog} 
-          onSuccess={handleFormSuccess} 
-        />
+        <Suspense fallback={null}>
+          <EmpresaNewDialog 
+            open={openNewDialog} 
+            onOpenChange={setOpenNewDialog} 
+            onSuccess={handleFormSuccess} 
+          />
+        </Suspense>
       )}
     </div>
   );
