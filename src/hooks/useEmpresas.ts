@@ -1,8 +1,9 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Empresa } from '@/types/empresa';
 import { useToast } from '@/hooks/use-toast';
+import { debounce } from 'lodash';
 
 export const useEmpresas = () => {
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
@@ -11,6 +12,7 @@ export const useEmpresas = () => {
   const [error, setError] = useState<string | null>(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openNewDialog, setOpenNewDialog] = useState(false);
+  const isMounted = useRef(true);
   const { toast } = useToast();
 
   // Format date for display
@@ -25,33 +27,38 @@ export const useEmpresas = () => {
 
   // Fetch empresas from the database with debouncing
   const fetchEmpresas = useCallback(async () => {
+    if (!isMounted.current) return;
+    
     try {
       setLoading(true);
       setError(null);
       
-      console.log('Fetching empresas...');
       const { data, error } = await supabase
         .from('empresas')
         .select('*')
         .order('nombre', { ascending: true });
 
       if (error) {
-        console.error('Supabase error:', error);
         throw error;
       }
       
-      console.log('Empresas fetched:', data);
-      setEmpresas(data || []);
+      if (isMounted.current) {
+        setEmpresas(data || []);
+      }
     } catch (error: any) {
       console.error('Error fetching empresas:', error);
-      setError('Error al cargar las empresas. Por favor, intente de nuevo.');
-      toast({
-        title: 'Error',
-        description: 'Error al cargar las empresas',
-        variant: 'destructive',
-      });
+      if (isMounted.current) {
+        setError('Error al cargar las empresas. Por favor, intente de nuevo.');
+        toast({
+          title: 'Error',
+          description: 'Error al cargar las empresas',
+          variant: 'destructive',
+        });
+      }
     } finally {
-      setLoading(false);
+      if (isMounted.current) {
+        setLoading(false);
+      }
     }
   }, [toast]);
 
@@ -67,7 +74,7 @@ export const useEmpresas = () => {
         .eq('id', id);
 
       if (error) {
-        // Revert on error
+        // Revert on error by refetching
         fetchEmpresas();
         throw error;
       }
@@ -86,22 +93,31 @@ export const useEmpresas = () => {
     }
   }, [fetchEmpresas, toast]);
 
-  // Handle success after form submission
-  const handleFormSuccess = useCallback(() => {
-    fetchEmpresas();
-    setOpenEditDialog(false);
-    setOpenNewDialog(false);
-  }, [fetchEmpresas]);
+  // Handle success after form submission with debouncing
+  const handleFormSuccess = useCallback(debounce(() => {
+    if (isMounted.current) {
+      fetchEmpresas();
+      setOpenEditDialog(false);
+      setOpenNewDialog(false);
+    }
+  }, 300), [fetchEmpresas]);
 
-  // Edit empresa
-  const handleEdit = useCallback((empresa: Empresa) => {
-    setSelectedEmpresa(empresa);
-    setOpenEditDialog(true);
-  }, []);
+  // Edit empresa - with debouncing to prevent double clicks
+  const handleEdit = useCallback(debounce((empresa: Empresa) => {
+    if (isMounted.current) {
+      setSelectedEmpresa(empresa);
+      setOpenEditDialog(true);
+    }
+  }, 300), []);
 
-  // Load data on component mount
+  // Load data on component mount and cleanup on unmount
   useEffect(() => {
+    isMounted.current = true;
     fetchEmpresas();
+    
+    return () => {
+      isMounted.current = false;
+    };
   }, [fetchEmpresas]);
 
   return {

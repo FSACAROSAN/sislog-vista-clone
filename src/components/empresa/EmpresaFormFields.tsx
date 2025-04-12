@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { memo } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { EmpresaFormValues } from './schema';
 import {
@@ -22,34 +22,43 @@ interface EmpresaFormFieldsProps {
   form: UseFormReturn<EmpresaFormValues>;
 }
 
-const EmpresaFormFields: React.FC<EmpresaFormFieldsProps> = ({ form }) => {
+const EmpresaFormFields: React.FC<EmpresaFormFieldsProps> = memo(({ form }) => {
   return (
     <>
       <FormField
         control={form.control}
         name="nombre"
         render={({ field }) => (
-          <FormItem>
-            <FormLabel>Nombre de la empresa*</FormLabel>
+          <FormItem className="space-y-1">
+            <FormLabel className="text-xs">Nombre de la empresa*</FormLabel>
             <FormControl>
-              <Input placeholder="Ingrese el nombre de la empresa" {...field} />
+              <Input 
+                placeholder="Ingrese el nombre de la empresa" 
+                {...field} 
+                className="h-8 text-sm"
+              />
             </FormControl>
-            <FormMessage />
+            <FormMessage className="text-xs" />
           </FormItem>
         )}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <FormField
           control={form.control}
           name="correo"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Correo electrónico</FormLabel>
+            <FormItem className="space-y-1">
+              <FormLabel className="text-xs">Correo electrónico</FormLabel>
               <FormControl>
-                <Input placeholder="correo@empresa.com" {...field} value={field.value || ''} />
+                <Input 
+                  placeholder="correo@empresa.com" 
+                  {...field} 
+                  value={field.value || ''} 
+                  className="h-8 text-sm"
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />
@@ -58,12 +67,17 @@ const EmpresaFormFields: React.FC<EmpresaFormFieldsProps> = ({ form }) => {
           control={form.control}
           name="telefono"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Teléfono</FormLabel>
+            <FormItem className="space-y-1">
+              <FormLabel className="text-xs">Teléfono</FormLabel>
               <FormControl>
-                <Input placeholder="+1 (555) 123-4567" {...field} value={field.value || ''} />
+                <Input 
+                  placeholder="+1 (555) 123-4567" 
+                  {...field} 
+                  value={field.value || ''} 
+                  className="h-8 text-sm"
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage className="text-xs" />
             </FormItem>
           )}
         />
@@ -73,14 +87,14 @@ const EmpresaFormFields: React.FC<EmpresaFormFieldsProps> = ({ form }) => {
         control={form.control}
         name="estado"
         render={({ field }) => (
-          <FormItem>
-            <FormLabel>Estado</FormLabel>
+          <FormItem className="space-y-1">
+            <FormLabel className="text-xs">Estado</FormLabel>
             <Select 
               onValueChange={field.onChange} 
               defaultValue={field.value}
             >
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="h-8 text-sm">
                   <SelectValue placeholder="Seleccione un estado" />
                 </SelectTrigger>
               </FormControl>
@@ -89,12 +103,13 @@ const EmpresaFormFields: React.FC<EmpresaFormFieldsProps> = ({ form }) => {
                 <SelectItem value="Inactivo">Inactivo</SelectItem>
               </SelectContent>
             </Select>
-            <FormMessage />
+            <FormMessage className="text-xs" />
           </FormItem>
         )}
       />
     </>
   );
-};
+});
 
+EmpresaFormFields.displayName = 'EmpresaFormFields';
 export default EmpresaFormFields;

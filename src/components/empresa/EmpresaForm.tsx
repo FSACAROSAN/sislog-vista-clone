@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import { Empresa } from '@/types/empresa';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
@@ -13,16 +13,21 @@ interface EmpresaFormProps {
   onCancel?: () => void;
 }
 
-const EmpresaForm: React.FC<EmpresaFormProps> = ({ 
+const EmpresaForm: React.FC<EmpresaFormProps> = memo(({ 
   empresa, 
   onSuccess,
   onCancel
 }) => {
   const { form, isSubmitting, onSubmit } = useEmpresaForm({ empresa, onSuccess });
 
+  const handleCancel = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onCancel) onCancel();
+  }, [onCancel]);
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <EmpresaFormFields form={form} />
 
         <div className="flex justify-end gap-2">
@@ -30,16 +35,21 @@ const EmpresaForm: React.FC<EmpresaFormProps> = ({
             <Button 
               type="button" 
               variant="outline" 
-              onClick={onCancel}
+              onClick={handleCancel}
               disabled={isSubmitting}
+              className="h-8 text-xs"
             >
               Cancelar
             </Button>
           )}
-          <Button type="submit" disabled={isSubmitting}>
+          <Button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="h-8 text-xs"
+          >
             {isSubmitting ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-1 h-3 w-3 animate-spin" />
                 Guardando...
               </>
             ) : (
@@ -50,6 +60,7 @@ const EmpresaForm: React.FC<EmpresaFormProps> = ({
       </form>
     </Form>
   );
-};
+});
 
+EmpresaForm.displayName = 'EmpresaForm';
 export default EmpresaForm;

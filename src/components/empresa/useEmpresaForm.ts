@@ -1,11 +1,12 @@
 
-import { useState } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { supabase } from '@/integrations/supabase/client';
 import { Empresa } from '@/types/empresa';
 import { useToast } from '@/hooks/use-toast';
 import { empresaFormSchema, EmpresaFormValues, defaultValues } from './schema';
+import { debounce } from 'lodash';
 
 interface UseEmpresaFormProps {
   empresa?: Empresa | null;
@@ -15,6 +16,7 @@ interface UseEmpresaFormProps {
 export const useEmpresaForm = ({ empresa, onSuccess }: UseEmpresaFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const submittedRef = useRef(false);
 
   // Initialize form with default values or existing empresa data
   const form = useForm<EmpresaFormValues>({
@@ -27,7 +29,10 @@ export const useEmpresaForm = ({ empresa, onSuccess }: UseEmpresaFormProps) => {
     } : defaultValues,
   });
 
-  const onSubmit = async (values: EmpresaFormValues) => {
+  const onSubmit = useCallback(async (values: EmpresaFormValues) => {
+    if (submittedRef.current) return;
+    submittedRef.current = true;
+    
     try {
       setIsSubmitting(true);
 
@@ -70,7 +75,13 @@ export const useEmpresaForm = ({ empresa, onSuccess }: UseEmpresaFormProps) => {
       }
 
       form.reset();
-      onSuccess?.();
+      
+      // Use setTimeout to avoid running onSuccess immediately
+      // which could cause UI updates during form submission
+      setTimeout(() => {
+        onSuccess?.();
+        submittedRef.current = false;
+      }, 100);
 
     } catch (error: any) {
       console.error('Error saving empresa:', error);
@@ -79,10 +90,11 @@ export const useEmpresaForm = ({ empresa, onSuccess }: UseEmpresaFormProps) => {
         description: error.message || 'Error al guardar la empresa',
         variant: 'destructive',
       });
+      submittedRef.current = false;
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [empresa, form, onSuccess, toast]);
 
   return {
     form,

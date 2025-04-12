@@ -1,5 +1,5 @@
 
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import PageHeader from '@/components/PageHeader';
 import { Building2, AlertCircle } from 'lucide-react';
 import { useEmpresas } from '@/hooks/useEmpresas';
@@ -25,21 +25,25 @@ const EmpresaPage = memo(() => {
     formatDate
   } = useEmpresas();
 
+  const handleOpenNewDialog = useCallback(() => {
+    setOpenNewDialog(true);
+  }, [setOpenNewDialog]);
+
   return (
     <div className="flex flex-col h-full">
       <PageHeader title="Empresa" subtitle="Gestión de información de la empresa" icon={<Building2 size={24} />} />
       
-      <div className="container py-6">
+      <div className="container py-4">
         {error && (
-          <Alert variant="destructive" className="mb-6">
+          <Alert variant="destructive" className="mb-4">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
         
-        <Card className="mb-6">
-          <CardHeader className="flex flex-row items-center justify-between">
+        <Card className="mb-4 shadow-sm">
+          <CardHeader className="py-3">
             <div></div>
           </CardHeader>
           <CardContent>
@@ -50,7 +54,7 @@ const EmpresaPage = memo(() => {
               onDelete={handleDelete} 
               formatDate={formatDate} 
               onRefresh={handleFormSuccess} 
-              openNewDialog={() => setOpenNewDialog(true)} 
+              openNewDialog={handleOpenNewDialog} 
             />
           </CardContent>
         </Card>

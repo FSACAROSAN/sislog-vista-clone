@@ -33,13 +33,13 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = memo(({
   tipoDocumentoRef,
 }) => {
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-1">
       <FormField
         control={control}
         name="tipo_documento_id"
         render={({ field }) => (
           <FormItem className="space-y-0.5">
-            <FormLabel>Tipo de Documento *</FormLabel>
+            <FormLabel className="text-xs">Tipo de Documento *</FormLabel>
             <Select
               disabled={loading}
               onValueChange={field.onChange}
@@ -47,7 +47,7 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = memo(({
               value={field.value}
             >
               <FormControl>
-                <SelectTrigger ref={tipoDocumentoRef} className="h-8">
+                <SelectTrigger ref={tipoDocumentoRef} className="h-7 text-xs">
                   <SelectValue placeholder="Seleccione un tipo de documento" />
                 </SelectTrigger>
               </FormControl>
@@ -56,29 +56,30 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = memo(({
                   <SelectItem
                     key={tipo.tipo_documento_id}
                     value={tipo.tipo_documento_id}
+                    className="text-xs h-7"
                   >
                     {tipo.nombre} ({tipo.sigla})
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            <FormMessage />
+            <FormMessage className="text-xs" />
           </FormItem>
         )}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
         <div className="col-span-2">
           <FormField
             control={control}
             name="documento"
             render={({ field }) => (
               <FormItem className="space-y-0.5">
-                <FormLabel>Documento *</FormLabel>
+                <FormLabel className="text-xs">Documento *</FormLabel>
                 <FormControl>
-                  <Input disabled={loading} placeholder="Documento" {...field} />
+                  <Input disabled={loading} placeholder="Documento" {...field} className="h-7 text-xs" />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
@@ -90,11 +91,11 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = memo(({
             name="dv"
             render={({ field }) => (
               <FormItem className="space-y-0.5">
-                <FormLabel>DV</FormLabel>
+                <FormLabel className="text-xs">DV</FormLabel>
                 <FormControl>
-                  <Input disabled={loading} maxLength={1} placeholder="DV" {...field} />
+                  <Input disabled={loading} maxLength={1} placeholder="DV" {...field} className="h-7 text-xs" />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-xs" />
               </FormItem>
             )}
           />
