@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { memo } from "react";
 import { Control } from "react-hook-form";
 import {
   FormControl,
@@ -26,14 +26,14 @@ interface DocumentoFieldsProps {
   tipoDocumentoRef?: React.RefObject<HTMLButtonElement>;
 }
 
-const DocumentoFields: React.FC<DocumentoFieldsProps> = ({
+const DocumentoFields: React.FC<DocumentoFieldsProps> = memo(({
   control,
   tiposDocumento,
   loading,
   tipoDocumentoRef,
 }) => {
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       <FormField
         control={control}
         name="tipo_documento_id"
@@ -47,7 +47,7 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = ({
               value={field.value}
             >
               <FormControl>
-                <SelectTrigger ref={tipoDocumentoRef} className="h-9">
+                <SelectTrigger ref={tipoDocumentoRef} className="h-8">
                   <SelectValue placeholder="Seleccione un tipo de documento" />
                 </SelectTrigger>
               </FormControl>
@@ -67,7 +67,7 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = ({
         )}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <div className="col-span-2">
           <FormField
             control={control}
@@ -102,6 +102,8 @@ const DocumentoFields: React.FC<DocumentoFieldsProps> = ({
       </div>
     </div>
   );
-};
+});
+
+DocumentoFields.displayName = "DocumentoFields";
 
 export default DocumentoFields;

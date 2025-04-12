@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { memo } from "react";
 import { Control } from "react-hook-form";
 import {
   FormControl,
@@ -18,7 +18,7 @@ interface BasicInfoFieldsProps {
   layout?: "default" | "single-line";
 }
 
-const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
+const BasicInfoFields: React.FC<BasicInfoFieldsProps> = memo(({
   control,
   loading,
   layout = "default",
@@ -51,7 +51,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
                   disabled={loading} 
                   placeholder="Dirección" 
                   {...field} 
-                  className="min-h-[52px]" 
+                  className="min-h-[36px]" 
                   rows={1} 
                 />
               </FormControl>
@@ -65,7 +65,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <FormField
           control={control}
           name="dv"
@@ -106,7 +106,7 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
                 disabled={loading} 
                 placeholder="Dirección" 
                 {...field} 
-                className="min-h-[52px]" 
+                className="min-h-[36px]" 
                 rows={1}
               />
             </FormControl>
@@ -116,6 +116,8 @@ const BasicInfoFields: React.FC<BasicInfoFieldsProps> = ({
       />
     </>
   );
-};
+});
+
+BasicInfoFields.displayName = "BasicInfoFields";
 
 export default BasicInfoFields;

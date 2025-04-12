@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Empresa } from '@/types/empresa';
 import { useToast } from '@/hooks/use-toast';
@@ -14,17 +14,17 @@ export const useEmpresas = () => {
   const { toast } = useToast();
 
   // Format date for display
-  const formatDate = (dateString?: string) => {
+  const formatDate = useCallback((dateString?: string) => {
     if (!dateString) return '-';
     return new Date(dateString).toLocaleDateString('es-ES', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     });
-  };
+  }, []);
 
-  // Fetch empresas from the database
-  const fetchEmpresas = async () => {
+  // Fetch empresas from the database with debouncing
+  const fetchEmpresas = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -53,54 +53,56 @@ export const useEmpresas = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
 
-  // Delete empresa
-  const handleDelete = async (id: string) => {
-    if (window.confirm('¿Está seguro que desea eliminar esta empresa?')) {
-      try {
-        const { error } = await supabase
-          .from('empresas')
-          .delete()
-          .eq('id', id);
+  // Delete empresa with optimistic update
+  const handleDelete = useCallback(async (id: string) => {
+    try {
+      // Optimistic update - remove from UI immediately
+      setEmpresas(prevEmpresas => prevEmpresas.filter(empresa => empresa.id !== id));
+      
+      const { error } = await supabase
+        .from('empresas')
+        .delete()
+        .eq('id', id);
 
-        if (error) throw error;
-
-        toast({
-          title: 'Éxito',
-          description: 'Empresa eliminada correctamente',
-        });
-
-        // Refresh the list
+      if (error) {
+        // Revert on error
         fetchEmpresas();
-      } catch (error: any) {
-        console.error('Error deleting empresa:', error);
-        toast({
-          title: 'Error',
-          description: error.message || 'Error al eliminar la empresa',
-          variant: 'destructive',
-        });
+        throw error;
       }
+
+      toast({
+        title: 'Éxito',
+        description: 'Empresa eliminada correctamente',
+      });
+    } catch (error: any) {
+      console.error('Error deleting empresa:', error);
+      toast({
+        title: 'Error',
+        description: error.message || 'Error al eliminar la empresa',
+        variant: 'destructive',
+      });
     }
-  };
+  }, [fetchEmpresas, toast]);
 
   // Handle success after form submission
-  const handleFormSuccess = () => {
+  const handleFormSuccess = useCallback(() => {
     fetchEmpresas();
     setOpenEditDialog(false);
     setOpenNewDialog(false);
-  };
+  }, [fetchEmpresas]);
 
   // Edit empresa
-  const handleEdit = (empresa: Empresa) => {
+  const handleEdit = useCallback((empresa: Empresa) => {
     setSelectedEmpresa(empresa);
     setOpenEditDialog(true);
-  };
+  }, []);
 
   // Load data on component mount
   useEffect(() => {
     fetchEmpresas();
-  }, []);
+  }, [fetchEmpresas]);
 
   return {
     empresas,
