@@ -71,8 +71,8 @@ const EmpresaPage = memo(() => {
         </Card>
       </div>
 
-      {/* Dialogs */}
-      {openEditDialog && (
+      {/* Dialogs - Only render when needed */}
+      {openEditDialog && selectedEmpresa && (
         <EmpresaEditDialog 
           open={openEditDialog} 
           onOpenChange={setOpenEditDialog} 
