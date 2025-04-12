@@ -1,12 +1,11 @@
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { supabase } from '@/integrations/supabase/client';
 import { Empresa } from '@/types/empresa';
 import { useToast } from '@/hooks/use-toast';
 import { empresaFormSchema, EmpresaFormValues, defaultValues } from './schema';
-import { debounce } from 'lodash';
 
 interface UseEmpresaFormProps {
   empresa?: Empresa | null;
@@ -17,6 +16,7 @@ export const useEmpresaForm = ({ empresa, onSuccess }: UseEmpresaFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const submittedRef = useRef(false);
+  const isMounted = useRef(true);
 
   // Initialize form with default values or existing empresa data
   const form = useForm<EmpresaFormValues>({
@@ -28,6 +28,13 @@ export const useEmpresaForm = ({ empresa, onSuccess }: UseEmpresaFormProps) => {
       estado: empresa.estado || 'Activo',
     } : defaultValues,
   });
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   const onSubmit = useCallback(async (values: EmpresaFormValues) => {
     if (submittedRef.current) return;
@@ -76,23 +83,30 @@ export const useEmpresaForm = ({ empresa, onSuccess }: UseEmpresaFormProps) => {
 
       form.reset();
       
-      // Use setTimeout to avoid running onSuccess immediately
-      // which could cause UI updates during form submission
-      setTimeout(() => {
-        onSuccess?.();
-        submittedRef.current = false;
-      }, 100);
+      // Safely call onSuccess without causing UI freeze
+      if (isMounted.current) {
+        setTimeout(() => {
+          if (isMounted.current) {
+            onSuccess?.();
+            submittedRef.current = false;
+          }
+        }, 50);
+      }
 
     } catch (error: any) {
       console.error('Error saving empresa:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Error al guardar la empresa',
-        variant: 'destructive',
-      });
-      submittedRef.current = false;
+      if (isMounted.current) {
+        toast({
+          title: 'Error',
+          description: error.message || 'Error al guardar la empresa',
+          variant: 'destructive',
+        });
+        submittedRef.current = false;
+      }
     } finally {
-      setIsSubmitting(false);
+      if (isMounted.current) {
+        setIsSubmitting(false);
+      }
     }
   }, [empresa, form, onSuccess, toast]);
 

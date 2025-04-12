@@ -1,5 +1,5 @@
 
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import { Empresa } from '@/types/empresa';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
@@ -22,12 +22,29 @@ const EmpresaForm: React.FC<EmpresaFormProps> = memo(({
 
   const handleCancel = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     if (onCancel) onCancel();
   }, [onCancel]);
 
+  const buttonText = useMemo(() => 
+    empresa?.id ? 'Actualizar empresa' : 'Crear empresa', 
+  [empresa?.id]);
+
+  const submitButtonContent = useMemo(() => {
+    if (isSubmitting) {
+      return (
+        <>
+          <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+          Guardando...
+        </>
+      );
+    }
+    return buttonText;
+  }, [isSubmitting, buttonText]);
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
         <EmpresaFormFields form={form} />
 
         <div className="flex justify-end gap-2">
@@ -37,7 +54,7 @@ const EmpresaForm: React.FC<EmpresaFormProps> = memo(({
               variant="outline" 
               onClick={handleCancel}
               disabled={isSubmitting}
-              className="h-8 text-xs"
+              className="h-7 text-xs"
             >
               Cancelar
             </Button>
@@ -45,16 +62,9 @@ const EmpresaForm: React.FC<EmpresaFormProps> = memo(({
           <Button 
             type="submit" 
             disabled={isSubmitting}
-            className="h-8 text-xs"
+            className="h-7 text-xs"
           >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-                Guardando...
-              </>
-            ) : (
-              empresa?.id ? 'Actualizar empresa' : 'Crear empresa'
-            )}
+            {submitButtonContent}
           </Button>
         </div>
       </form>

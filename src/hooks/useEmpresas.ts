@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Empresa } from '@/types/empresa';
 import { useToast } from '@/hooks/use-toast';
@@ -14,6 +14,7 @@ export const useEmpresas = () => {
   const [openNewDialog, setOpenNewDialog] = useState(false);
   const isMounted = useRef(true);
   const { toast } = useToast();
+  const isProcessingRef = useRef(false);
 
   // Format date for display
   const formatDate = useCallback((dateString?: string) => {
@@ -25,11 +26,12 @@ export const useEmpresas = () => {
     });
   }, []);
 
-  // Fetch empresas from the database with debouncing
+  // Fetch empresas from the database
   const fetchEmpresas = useCallback(async () => {
-    if (!isMounted.current) return;
+    if (!isMounted.current || isProcessingRef.current) return;
     
     try {
+      isProcessingRef.current = true;
       setLoading(true);
       setError(null);
       
@@ -38,9 +40,7 @@ export const useEmpresas = () => {
         .select('*')
         .order('nombre', { ascending: true });
 
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
       
       if (isMounted.current) {
         setEmpresas(data || []);
@@ -58,12 +58,18 @@ export const useEmpresas = () => {
     } finally {
       if (isMounted.current) {
         setLoading(false);
+        setTimeout(() => {
+          isProcessingRef.current = false;
+        }, 300);
       }
     }
   }, [toast]);
 
   // Delete empresa with optimistic update
   const handleDelete = useCallback(async (id: string) => {
+    if (isProcessingRef.current) return;
+    isProcessingRef.current = true;
+    
     try {
       // Optimistic update - remove from UI immediately
       setEmpresas(prevEmpresas => prevEmpresas.filter(empresa => empresa.id !== id));
@@ -90,25 +96,28 @@ export const useEmpresas = () => {
         description: error.message || 'Error al eliminar la empresa',
         variant: 'destructive',
       });
+    } finally {
+      setTimeout(() => {
+        isProcessingRef.current = false;
+      }, 300);
     }
   }, [fetchEmpresas, toast]);
 
   // Handle success after form submission with debouncing
   const handleFormSuccess = useCallback(debounce(() => {
-    if (isMounted.current) {
-      fetchEmpresas();
+    if (isMounted.current && !isProcessingRef.current) {
       setOpenEditDialog(false);
       setOpenNewDialog(false);
+      fetchEmpresas();
     }
   }, 300), [fetchEmpresas]);
 
-  // Edit empresa - with debouncing to prevent double clicks
-  const handleEdit = useCallback(debounce((empresa: Empresa) => {
-    if (isMounted.current) {
-      setSelectedEmpresa(empresa);
-      setOpenEditDialog(true);
-    }
-  }, 300), []);
+  // Edit empresa with debouncing to prevent double clicks
+  const handleEdit = useCallback((empresa: Empresa) => {
+    if (isProcessingRef.current) return;
+    setSelectedEmpresa(empresa);
+    setOpenEditDialog(true);
+  }, []);
 
   // Load data on component mount and cleanup on unmount
   useEffect(() => {
@@ -120,8 +129,11 @@ export const useEmpresas = () => {
     };
   }, [fetchEmpresas]);
 
+  // Memoize the empresas to prevent unnecessary re-renders
+  const memoizedEmpresas = useMemo(() => empresas, [empresas]);
+
   return {
-    empresas,
+    empresas: memoizedEmpresas,
     loading,
     error,
     selectedEmpresa,
