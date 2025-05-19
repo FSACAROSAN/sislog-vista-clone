@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Pais } from '@/types/pais';
 import { Pencil, Trash2, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -53,18 +53,78 @@ const PaisesTable: React.FC<PaisesTableProps> = ({
   onPageSizeChange
 }) => {
   const [openAlert, setOpenAlert] = React.useState<string | null>(null);
+  const [visibleColumns, setVisibleColumns] = useState({
+    nombre_es: true,
+    nombre_en: true,
+    iso2: true,
+    iso3: true,
+    codigo: true,
+    estado: true
+  });
+
+  // Ajusta las columnas visibles según el ancho de la pantalla
+  React.useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      
+      if (width < 640) { // Móvil
+        setVisibleColumns({
+          nombre_es: true,
+          nombre_en: false,
+          iso2: true,
+          iso3: false,
+          codigo: false,
+          estado: true
+        });
+      } else if (width < 768) { // Tablet pequeña
+        setVisibleColumns({
+          nombre_es: true,
+          nombre_en: true,
+          iso2: true,
+          iso3: false,
+          codigo: false,
+          estado: true
+        });
+      } else if (width < 1024) { // Tablet grande
+        setVisibleColumns({
+          nombre_es: true,
+          nombre_en: true,
+          iso2: true,
+          iso3: true,
+          codigo: false,
+          estado: true
+        });
+      } else { // Desktop
+        setVisibleColumns({
+          nombre_es: true,
+          nombre_en: true,
+          iso2: true,
+          iso3: true,
+          codigo: true,
+          estado: true
+        });
+      }
+    };
+
+    handleResize(); // Ejecutar al montar
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
-    <div className="rounded-md border">
+    <div onClick={(e) => e.stopPropagation()} className="rounded-md border overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Nombre (ES)</TableHead>
-            <TableHead>Nombre (EN)</TableHead>
-            <TableHead>ISO2</TableHead>
-            <TableHead>ISO3</TableHead>
-            <TableHead>Código</TableHead>
-            <TableHead>Estado</TableHead>
+            {visibleColumns.nombre_es && <TableHead>Nombre (ES)</TableHead>}
+            {visibleColumns.nombre_en && <TableHead>Nombre (EN)</TableHead>}
+            {visibleColumns.iso2 && <TableHead>ISO2</TableHead>}
+            {visibleColumns.iso3 && <TableHead>ISO3</TableHead>}
+            {visibleColumns.codigo && <TableHead>Código</TableHead>}
+            {visibleColumns.estado && <TableHead>Estado</TableHead>}
             <TableHead className="text-right">Acciones</TableHead>
           </TableRow>
         </TableHeader>
@@ -86,18 +146,20 @@ const PaisesTable: React.FC<PaisesTableProps> = ({
           ) : (
             paises.map((pais) => (
               <TableRow key={pais.id}>
-                <TableCell className="font-medium">{pais.nombre_es}</TableCell>
-                <TableCell>{pais.nombre_en}</TableCell>
-                <TableCell>{pais.iso2}</TableCell>
-                <TableCell>{pais.iso3}</TableCell>
-                <TableCell>{pais.codigo}</TableCell>
-                <TableCell>
-                  <span className={`px-2 py-1 rounded-full text-xs ${
-                    pais.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                  }`}>
-                    {pais.estado || 'Activo'}
-                  </span>
-                </TableCell>
+                {visibleColumns.nombre_es && <TableCell className="font-medium">{pais.nombre_es}</TableCell>}
+                {visibleColumns.nombre_en && <TableCell>{pais.nombre_en}</TableCell>}
+                {visibleColumns.iso2 && <TableCell>{pais.iso2}</TableCell>}
+                {visibleColumns.iso3 && <TableCell>{pais.iso3}</TableCell>}
+                {visibleColumns.codigo && <TableCell>{pais.codigo}</TableCell>}
+                {visibleColumns.estado && (
+                  <TableCell>
+                    <span className={`px-2 py-1 rounded-full text-xs ${
+                      pais.estado === 'Activo' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                    }`}>
+                      {pais.estado || 'Activo'}
+                    </span>
+                  </TableCell>
+                )}
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
