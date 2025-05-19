@@ -1,84 +1,61 @@
 
-import React, { memo, useCallback } from 'react';
-import { Edit, Trash2, MoreHorizontal } from 'lucide-react';
+import React, { memo } from 'react';
 import { Empresa } from '@/types/empresa';
 import { TableRow, TableCell } from '@/components/ui/table';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from '@/components/ui/button';
+import { Edit, Trash2 } from 'lucide-react';
 
-interface EmpresaRowProps { 
-  empresa: Empresa; 
-  formatDate: (dateString?: string) => string; 
-  onEdit: (empresa: Empresa) => void; 
+interface EmpresaTableRowProps {
+  empresa: Empresa;
+  formatDate: (dateString?: string) => string;
+  onEdit: (empresa: Empresa) => void;
   openAlert: string | null;
   setOpenAlert: (id: string | null) => void;
 }
 
-const EmpresaTableRow = memo(({ 
-  empresa, 
-  formatDate, 
-  onEdit, 
-  setOpenAlert 
-}: EmpresaRowProps) => {
-  const handleEdit = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onEdit(empresa);
-  }, [empresa, onEdit]);
-
-  const handleOpenAlert = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setOpenAlert(empresa.id);
-  }, [empresa.id, setOpenAlert]);
-
+const EmpresaTableRow = memo(({
+  empresa,
+  formatDate,
+  onEdit,
+  openAlert,
+  setOpenAlert
+}: EmpresaTableRowProps) => {
   return (
     <TableRow key={empresa.id}>
       <TableCell className="font-medium">{empresa.nombre}</TableCell>
       <TableCell>{empresa.correo || '-'}</TableCell>
       <TableCell>{empresa.telefono || '-'}</TableCell>
       <TableCell>
-        <span className={`px-2 py-1 rounded-full text-xs ${
+        <div className={`inline-block px-2 py-1 rounded-full text-xs ${
           empresa.estado === 'Activo' 
             ? 'bg-green-100 text-green-800' 
-            : 'bg-red-100 text-red-800'
+            : 'bg-gray-100 text-gray-800'
         }`}>
           {empresa.estado || 'Inactivo'}
-        </span>
+        </div>
       </TableCell>
       <TableCell>{formatDate(empresa.fecha_creacion)}</TableCell>
       <TableCell className="text-right">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}>
-            <Button variant="ghost" size="icon">
-              <MoreHorizontal size={16} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-40 bg-white z-[999]">
-            <DropdownMenuItem 
-              onClick={handleEdit} 
-              className="cursor-pointer"
-            >
-              <Edit size={16} className="mr-2 text-gray-500" />
-              <span>Editar</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem 
-              onClick={handleOpenAlert} 
-              className="cursor-pointer text-red-600 focus:text-red-600"
-            >
-              <Trash2 size={16} className="mr-2 text-red-500" />
-              <span>Eliminar</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex justify-end gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => onEdit(empresa)}
+            className="h-8 w-8 p-0"
+          >
+            <Edit className="h-4 w-4" />
+            <span className="sr-only">Editar</span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
+            onClick={() => setOpenAlert(empresa.id)}
+          >
+            <Trash2 className="h-4 w-4" />
+            <span className="sr-only">Eliminar</span>
+          </Button>
+        </div>
       </TableCell>
     </TableRow>
   );

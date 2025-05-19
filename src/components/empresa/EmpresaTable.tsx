@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import TablePagination from '@/components/ui/table-pagination';
 import DeleteDialog from '@/components/common/DeleteDialog';
 import { 
   EmpresaTableRow, 
@@ -38,6 +39,8 @@ const EmpresaTable: React.FC<EmpresaTableProps> = memo(({
 }) => {
   const [openAlert, setOpenAlert] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   
   const filteredEmpresas = useMemo(() => {
     return empresas.filter(empresa => 
@@ -47,12 +50,27 @@ const EmpresaTable: React.FC<EmpresaTableProps> = memo(({
     );
   }, [empresas, searchTerm]);
 
+  const paginatedEmpresas = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    return filteredEmpresas.slice(startIndex, startIndex + pageSize);
+  }, [filteredEmpresas, currentPage, pageSize]);
+
   const selectedEmpresa = useMemo(() => {
     return empresas.find(empresa => empresa.id === openAlert) || null;
   }, [openAlert, empresas]);
 
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page when searching
+  }, []);
+
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
+
+  const handlePageSizeChange = useCallback((size: number) => {
+    setPageSize(size);
+    setCurrentPage(1); // Reset to first page when changing page size
   }, []);
 
   const handleDelete = useCallback(() => {
@@ -91,7 +109,7 @@ const EmpresaTable: React.FC<EmpresaTableProps> = memo(({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredEmpresas.map((empresa) => (
+              {paginatedEmpresas.map((empresa) => (
                 <EmpresaTableRow 
                   key={empresa.id}
                   empresa={empresa}
@@ -103,6 +121,15 @@ const EmpresaTable: React.FC<EmpresaTableProps> = memo(({
               ))}
             </TableBody>
           </Table>
+          
+          <TablePagination
+            currentPage={currentPage}
+            totalItems={filteredEmpresas.length}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+            onPageSizeChange={handlePageSizeChange}
+            pageSizeOptions={[5, 10, 25, 50]}
+          />
         </div>
       )}
 
