@@ -4,7 +4,9 @@ import { usePaises } from '@/hooks/usePaises';
 import PaisesHeader from '@/components/paises/PaisesHeader';
 import PaisesSearch from '@/components/paises/PaisesSearch';
 import PaisesTable from '@/components/paises/PaisesTable';
+import PaisesCards from '@/components/paises/PaisesCards';
 import PageHeader from '@/components/PageHeader';
+import TablePagination from '@/components/ui/table-pagination';
 import { Map } from 'lucide-react';
 
 const PaisesPage: React.FC = () => {
@@ -52,6 +54,7 @@ const PaisesPage: React.FC = () => {
             openDialog={() => setIsDialogOpen(true)} 
           />
 
+          {/* Vista de tabla para desktop */}
           <PaisesTable 
             paises={paises} 
             loading={loading} 
@@ -66,6 +69,30 @@ const PaisesPage: React.FC = () => {
             onPageChange={handlePageChange} 
             onPageSizeChange={handlePageSizeChange} 
           />
+
+          {/* Vista de tarjetas para móvil */}
+          <div className="md:hidden">
+            <PaisesCards 
+              paises={paises} 
+              loading={loading} 
+              onEdit={pais => {
+                setSelectedPais(pais);
+                setIsDialogOpen(true);
+              }} 
+              onDelete={handleDelete} 
+            />
+            
+            <div className="mt-4">
+              <TablePagination
+                currentPage={currentPage}
+                totalItems={totalItems}
+                pageSize={pageSize}
+                onPageChange={handlePageChange}
+                onPageSizeChange={handlePageSizeChange}
+                pageSizeOptions={[5, 10, 25, 50]}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
