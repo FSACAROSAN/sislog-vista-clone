@@ -165,6 +165,7 @@ export type Database = {
       ge_tercero: {
         Row: {
           cliente: boolean | null
+          company_id: string | null
           conductor: boolean | null
           created_at: string | null
           direccion: string | null
@@ -183,9 +184,11 @@ export type Database = {
           tipo_documento_id: string | null
           transporte: boolean | null
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
           cliente?: boolean | null
+          company_id?: string | null
           conductor?: boolean | null
           created_at?: string | null
           direccion?: string | null
@@ -204,9 +207,11 @@ export type Database = {
           tipo_documento_id?: string | null
           transporte?: boolean | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
           cliente?: boolean | null
+          company_id?: string | null
           conductor?: boolean | null
           created_at?: string | null
           direccion?: string | null
@@ -225,8 +230,16 @@ export type Database = {
           tipo_documento_id?: string | null
           transporte?: boolean | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "ge_tercero_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "ge_tercero_tipo_documento_id_fkey"
             columns: ["tipo_documento_id"]
